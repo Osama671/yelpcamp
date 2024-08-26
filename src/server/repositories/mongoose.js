@@ -1,18 +1,33 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
+import cities from "../../seeds/cities.js";
+import { faker } from "@faker-js/faker";
 
-main().catch(err => console.log(err));
+main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/MyProject');
+  await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
 }
 
-const kittySchema = new mongoose.Schema({
+const campgroundSchema = new mongoose.Schema({
   title: String,
   price: String,
   description: String,
-  location: String, 
+  location: String,
 });
 
-const Kitten = mongoose.model('Kitten', kittySchema);
-const silence = new Kitten({ title: "test", price: "5", description: "ayaya", location: "over dere"});
-console.log(silence.title, silence.price, silence.description, silence.location); 
+const Campground = mongoose.model("campground", campgroundSchema);
+
+async function seedCampgrounds() {
+  await Campground.deleteMany({});
+  Array(50)
+    .fill(undefined)
+    .map(async (_, i) => {
+      const random = Math.floor(Math.random() * 1000);
+      const newCampground = new Campground({
+        location: `${cities[random].city}, ${cities[random].state}`,
+        description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
+      });
+      await newCampground.save();
+    });
+}
+seedCampgrounds();
