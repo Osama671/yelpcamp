@@ -1,4 +1,5 @@
 import App from "./App.tsx";
+import Campgrounds from "./components/campgrounds.tsx"
 import Profile from "./components/Profile.tsx"
 
 const routes = [
@@ -7,6 +8,10 @@ const routes = [
     path: "profile",
     element: <Profile />,
     // errorElement: <FourOhFour />,
+  },
+  {
+    path: "campgrounds",
+    element: <Campgrounds />
   },
   { path: "/*", element: <App /> },
 ];

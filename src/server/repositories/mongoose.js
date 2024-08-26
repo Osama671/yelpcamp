@@ -19,7 +19,7 @@ const Campground = mongoose.model("campground", campgroundSchema);
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
-  Array(50)
+  Array(2)
     .fill(undefined)
     .map(async (_, i) => {
       const random = Math.floor(Math.random() * 1000);
@@ -31,3 +31,8 @@ async function seedCampgrounds() {
     });
 }
 seedCampgrounds();
+
+export async function findAllCampgrounds(){
+  return await Campground.find({})
+}
+

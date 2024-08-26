@@ -1,3 +1,6 @@
+import {findAllCampgrounds} from "./repositories/mongoose.js"
+
+import bodyParser from "body-parser"
 import {Router} from "express"
 import express from "express"
 import cors from "cors"
@@ -6,13 +9,19 @@ const app = express()
 const PORT = process.env.PORT || 8080;
 // app.use(express.static(path.join(__dirname, 'src')))
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors())
 
 app.get('/api/data', (req, res) => {
     console.log("Test")
   res.json({message: "Hey"})
+})
+
+app.get('/api/campgrounds', async(req, res) => {
+  const test = await findAllCampgrounds()
+  res.json(test)
+  console.log(test)
 })
 
 app.listen(PORT, () => {
