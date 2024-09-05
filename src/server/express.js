@@ -1,4 +1,4 @@
-import {findAllCampgrounds, findCampgroundById} from "./repositories/mongoose.js"
+import {findAllCampgrounds, findCampgroundById, createCampground} from "./repositories/mongoose.js"
 
 import bodyParser from "body-parser"
 import {Router} from "express"
@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8080;
 // app.use(express.static(path.join(__dirname, 'src')))
 
 // app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors())
 
 app.get('/api/data', (req, res) => {
@@ -21,14 +21,19 @@ app.get('/api/data', (req, res) => {
 app.get('/api/campgrounds', async(req, res) => {
   const campgrounds = await findAllCampgrounds()
   res.json(campgrounds)
-  console.log(campgrounds)
 })
 
 app.get('/api/campgrounds/:id', async(req, res) => {
   const {id} = req.params
   const campground = await findCampgroundById(id)
   res.json(campground)
-  console.log("Heya")
+})
+
+app.post('/api/campgrounds', async(req, res) => {
+  const {location, description} = req.body
+  createCampground(location, description)
+  res.redirect("/")
+  console.log("Campground added!")
 })
 
 app.listen(PORT, () => {

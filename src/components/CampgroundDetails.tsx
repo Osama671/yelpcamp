@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function CampgroundDetails() {
-  const [campground, setCampground] = useState("");
+  const [campground, setCampground] = useState({description: "", location: ""});
   const { id } = useParams();
 
   useEffect(() => {
@@ -14,11 +14,11 @@ export default function CampgroundDetails() {
       setCampground(response.data);
     }
     getCampground();
-  }, []);
+  }, [id]);
 
   return (
     <>
-      <h1>Hi!</h1>
+      <h1>Campground Details:</h1>
       <h2>Location: {campground.location} </h2>
       <h2>Decription: {campground.description}</h2>
     </>

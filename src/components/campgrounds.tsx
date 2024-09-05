@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Campgrounds() {
@@ -13,8 +14,9 @@ export default function Campgrounds() {
   }, []);
   return (
     <>
-      {console.log("outside", campgrounds)}
       <h1>All Campgrounds:</h1>
+    <p><Link to="/newcampground">Add new Campground</Link></p>
+
       {campgrounds.map((ele, i) => (
         <li>{ele.location}</li>
       ))}

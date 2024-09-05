@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import cities from "../../seeds/cities.js";
 import { faker } from "@faker-js/faker";
 
-const seedAmount = 2
+const seedAmount = 2;
 
 main().catch((err) => console.log(err));
 
@@ -34,11 +34,18 @@ async function seedCampgrounds() {
 }
 seedCampgrounds();
 
-export async function findAllCampgrounds(){
-  return await Campground.find({})
+export async function findAllCampgrounds() {
+  return await Campground.find({});
 }
 
-export async function findCampgroundById(id){
-  return await Campground.findById(id)
+export async function findCampgroundById(id) {
+  return await Campground.findById(id);
 }
 
+export async function createCampground(location, description){
+  const newCampground = new Campground({
+    location: `${location}`,
+    description: `${description}`,
+  });
+  await newCampground.save()
+}
