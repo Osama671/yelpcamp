@@ -1,4 +1,4 @@
-import {findAllCampgrounds} from "./repositories/mongoose.js"
+import {findAllCampgrounds, findCampgroundById} from "./repositories/mongoose.js"
 
 import bodyParser from "body-parser"
 import {Router} from "express"
@@ -19,9 +19,16 @@ app.get('/api/data', (req, res) => {
 })
 
 app.get('/api/campgrounds', async(req, res) => {
-  const test = await findAllCampgrounds()
-  res.json(test)
-  console.log(test)
+  const campgrounds = await findAllCampgrounds()
+  res.json(campgrounds)
+  console.log(campgrounds)
+})
+
+app.get('/api/campgrounds/:id', async(req, res) => {
+  const {id} = req.params
+  const campground = await findCampgroundById(id)
+  res.json(campground)
+  console.log("Heya")
 })
 
 app.listen(PORT, () => {

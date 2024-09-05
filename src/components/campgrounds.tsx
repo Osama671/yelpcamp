@@ -6,20 +6,17 @@ export default function Campgrounds() {
 
   useEffect(() => {
     async function getAPI() {
-      console.log("Test1");
-      let info = await axios.get("http://localhost:8080/api/campgrounds");
-      setCampgrounds((old) => info.data);
-      //   setData(await axios.get("http://localhost:8080/api/campgrounds"));
-      console.log("Test2");
+      const info = await axios.get("http://localhost:8080/api/campgrounds");
+      setCampgrounds(info.data);
     }
     getAPI();
   }, []);
   return (
     <>
       {console.log("outside", campgrounds)}
-      <h1>Hello!</h1>
+      <h1>All Campgrounds:</h1>
       {campgrounds.map((ele, i) => (
-        <p>{ele.description}</p>
+        <li>{ele.location}</li>
       ))}
     </>
   );

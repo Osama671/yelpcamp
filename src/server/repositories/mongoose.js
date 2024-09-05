@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import cities from "../../seeds/cities.js";
 import { faker } from "@faker-js/faker";
 
+const seedAmount = 2
+
 main().catch((err) => console.log(err));
 
 async function main() {
@@ -19,7 +21,7 @@ const Campground = mongoose.model("campground", campgroundSchema);
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
-  Array(2)
+  Array(seedAmount)
     .fill(undefined)
     .map(async (_, i) => {
       const random = Math.floor(Math.random() * 1000);
@@ -34,5 +36,9 @@ seedCampgrounds();
 
 export async function findAllCampgrounds(){
   return await Campground.find({})
+}
+
+export async function findCampgroundById(id){
+  return await Campground.findById(id)
 }
 

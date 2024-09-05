@@ -1,5 +1,7 @@
 import App from "./App.tsx";
-import Campgrounds from "./components/campgrounds.tsx"
+import Campgrounds from "./components/Campgrounds.tsx"
+import CampgroundDetails from "./components/CampgroundDetails.tsx"
+import FourOhFour from "./components/FourOhFour.tsx"
 import Profile from "./components/Profile.tsx"
 
 const routes = [
@@ -13,7 +15,11 @@ const routes = [
     path: "campgrounds",
     element: <Campgrounds />
   },
-  { path: "/*", element: <App /> },
+  {
+    path: "campground/:id",
+    element: <CampgroundDetails />
+  },
+  { path: "/*", element: <FourOhFour /> },
 ];
 
 export default routes;
