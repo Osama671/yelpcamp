@@ -12,13 +12,20 @@ export default function Campgrounds() {
     }
     getAPI();
   }, []);
+  console.log(campgrounds)
+
   return (
     <>
       <h1>All Campgrounds:</h1>
-    <p><Link to="/newcampground">Add new Campground</Link></p>
+      <p>
+        <Link to="/newcampground">Add new Campground</Link>
+      </p>
 
       {campgrounds.map((ele, i) => (
-        <li>{ele.location}</li>
+        <li>
+          <Link to={`/campground/${ele._id}`}>{ele.location}</Link>
+        </li>
+
       ))}
     </>
   );

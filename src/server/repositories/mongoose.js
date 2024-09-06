@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import cities from "../../seeds/cities.js";
 import { faker } from "@faker-js/faker";
 
@@ -42,10 +42,19 @@ export async function findCampgroundById(id) {
   return await Campground.findById(id);
 }
 
-export async function createCampground(location, description){
+export async function createCampground(location, description) {
   const newCampground = new Campground({
     location: `${location}`,
     description: `${description}`,
   });
-  await newCampground.save()
+  await newCampground.save();
+}
+
+export async function editCampground(id, location, description) {
+  const update = { location: location, description: description };
+  await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
+}
+
+export async function deleteCampgroundById(id) {
+  await Campground.findOneAndDelete({ _id: id });
 }
