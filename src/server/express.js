@@ -39,9 +39,9 @@ app.get("/api/campgrounds/:id/edit", async (req, res) => {
 
 app.post("/api/campgrounds/:id/edit", async (req, res) => {
   const { id } = req.params;
-  const { location, description } = req.body;
-  await editCampground(id, location, description);
-  res.redirect("/campgrounds");
+  const { location, description, price, title, imageurl } = req.body;
+  await editCampground(id, location, description, price, title, imageurl);
+  res.redirect(`/campground/${id}`);
 });
 
 app.get("/api/campgrounds/:id", async (req, res) => {
@@ -51,8 +51,8 @@ app.get("/api/campgrounds/:id", async (req, res) => {
 });
 
 app.post("/api/campgrounds", async (req, res) => {
-  const { location, description } = req.body;
-  createCampground(location, description);
+  const { location, description, price, title, imageurl } = req.body;
+  createCampground(location, description, price, title, imageurl);
   res.redirect("/");
   console.log("Campground added!");
 });

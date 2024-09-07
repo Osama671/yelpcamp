@@ -26,13 +26,13 @@ async function seedCampgrounds() {
     .fill(undefined)
     .map(async (_, i) => {
       const random = Math.floor(Math.random() * 1000);
-      const randomPrice = Math.floor(Math.random() * 30) + 5
+      const randomPrice = Math.floor(Math.random() * 30) + 5;
       const newCampground = new Campground({
         title: `Title${i}`,
         location: `${cities[random].city}, ${cities[random].state}`,
         description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
         image: `https://picsum.photos/400?random=${Math.random()}`,
-        price: randomPrice
+        price: randomPrice,
       });
       await newCampground.save();
     });
@@ -47,16 +47,38 @@ export async function findCampgroundById(id) {
   return await Campground.findById(id);
 }
 
-export async function createCampground(location, description) {
+export async function createCampground(
+  location,
+  description,
+  price,
+  title,
+  imageurl
+) {
   const newCampground = new Campground({
     location: `${location}`,
     description: `${description}`,
+    price: price,
+    title: `${title}`,
+    image: `${imageurl}`,
   });
   await newCampground.save();
 }
 
-export async function editCampground(id, location, description) {
-  const update = { location: location, description: description };
+export async function editCampground(
+  id,
+  location,
+  description,
+  price,
+  title,
+  imageurl
+) {
+  const update = {
+    location: location,
+    description: description,
+    price: price,
+    title: title,
+    image: imageurl,
+  };
   await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
 }
 
