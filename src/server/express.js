@@ -5,7 +5,7 @@ import {
   editCampground,
   deleteCampgroundById,
 } from "./repositories/mongoose.js";
-
+import morgan from "morgan"
 import bodyParser from "body-parser";
 import { Router } from "express";
 import express from "express";
@@ -15,9 +15,11 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 // app.use(express.static(path.join(__dirname, 'src')))
 
+app.use(morgan('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
 
 app.get("/api/data", (req, res) => {
   console.log("Test");

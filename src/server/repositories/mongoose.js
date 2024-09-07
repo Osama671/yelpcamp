@@ -12,7 +12,8 @@ async function main() {
 
 const campgroundSchema = new mongoose.Schema({
   title: String,
-  price: String,
+  image: String,
+  price: Number,
   description: String,
   location: String,
 });
@@ -25,9 +26,13 @@ async function seedCampgrounds() {
     .fill(undefined)
     .map(async (_, i) => {
       const random = Math.floor(Math.random() * 1000);
+      const randomPrice = Math.floor(Math.random() * 30) + 5
       const newCampground = new Campground({
+        title: `Title${i}`,
         location: `${cities[random].city}, ${cities[random].state}`,
         description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
+        image: `https://picsum.photos/400?random=${Math.random()}`,
+        price: randomPrice
       });
       await newCampground.save();
     });

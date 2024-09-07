@@ -1,32 +1,36 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import Navbar from "./Navbar.tsx";
+import Footer from "./Footer.tsx";
+import CampgroundCard from "./CampgroundCard.tsx";
 
 export default function Campgrounds() {
   const [campgrounds, setCampgrounds] = useState([]);
 
   useEffect(() => {
     async function getAPI() {
-      const info = await axios.get("http://localhost:8080/api/campgrounds");
+      const info = await axios.get(`/api/campgrounds`);
       setCampgrounds(info.data);
     }
     getAPI();
   }, []);
-  console.log(campgrounds)
 
   return (
     <>
-      <h1>All Campgrounds:</h1>
-      <p>
-        <Link to="/newcampground">Add new Campground</Link>
-      </p>
-
-      {campgrounds.map((ele, i) => (
-        <li>
-          <Link to={`/campground/${ele._id}`}>{ele.location}</Link>
-        </li>
-
-      ))}
+      <Navbar />
+      <main className="mt-3 vh-100">
+        <h1>All Campgrounds:</h1>
+        {campgrounds.length === 0 || campgrounds.map((campground) => (
+          <CampgroundCard campground={campground} />
+        ))}
+        {campgrounds.map((ele, i) => (
+          <li>
+            <Link to={`/campground/${ele._id}`}>{ele.location}</Link>
+          </li>
+        ))}
+      </main>
+      <Footer />
     </>
   );
 }

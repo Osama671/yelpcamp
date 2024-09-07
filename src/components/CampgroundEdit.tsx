@@ -8,7 +8,7 @@ export default function CampgroundEdit() {
 
   useEffect(() => {
     async function getAPI() {
-      const info = await axios.get(`http://localhost:8080/api/campgrounds/${id}/edit`);
+      const info = await axios.get(`/api/campgrounds/${id}/edit`);
       setCampgrounds(info.data);
     }
     getAPI();
