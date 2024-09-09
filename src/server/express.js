@@ -53,8 +53,6 @@ app.get("/api/campgrounds/:id", async (req, res, next) => {
 app.post("/api/campgrounds", async (req, res) => {
   const { location, description, price, title, imageurl } = req.body;
   createCampground(location, description, price, title, imageurl);
-  res.redirect("/");
-  console.log("Campground added!");
 });
 
 app.delete("/api/campgrounds/:id", async (req, res) => {

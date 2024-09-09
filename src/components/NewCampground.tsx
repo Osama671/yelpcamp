@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import errorValidation from "./error/errorValidation.js";
+import axios from "axios";
+
 const validate = (values) => {
   const errors = {};
   if (!values.title) {
@@ -34,6 +35,8 @@ const validate = (values) => {
 };
 
 export default function NewCampground() {
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -43,8 +46,13 @@ export default function NewCampground() {
       description: "",
     },
     validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      // alert(JSON.stringify(values, null, 2));
+      const response = await axios.post("/api/campgrounds", values);
+      console.log(response.status)
+      if (response.status === 200) {
+        navigate("/campgrounds");
+      }
     },
   });
   return (
@@ -54,11 +62,7 @@ export default function NewCampground() {
         <Link to="/">Home Page</Link>
       </p>
       <div className="col-6 offset-3">
-        <form
-          action="/api/campgrounds"
-          method="POST"
-          onSubmit={formik.handleSubmit}
-        >
+        <form onSubmit={formik.handleSubmit}>
           <div className="mb-3">
             <label className="form-label" htmlFor="title">
               Title
@@ -108,7 +112,9 @@ export default function NewCampground() {
             />
           </div>
           {formik.touched.price && formik.errors.price ? (
-            <div style={{ color: "red", marginBottom: "1em" }}>{formik.errors.price}</div>
+            <div style={{ color: "red", marginBottom: "1em" }}>
+              {formik.errors.price}
+            </div>
           ) : null}
           <div className="mb-3 mt-3">
             <label className="form-label" htmlFor="imageurl">
