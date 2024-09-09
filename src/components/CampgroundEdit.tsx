@@ -46,7 +46,6 @@ export default function CampgroundEdit() {
           <div className="input-group mb-3">
             <span className="input-group-text">$</span>
             <input
-              placeholder="0.00"
               type="text"
               className="form-control"
               aria-label="Amount (to the nearest dollar)"
