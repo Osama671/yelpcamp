@@ -11,6 +11,7 @@ import express from "express";
 import cors from "cors";
 import ExpressError from "../util/ExpressError.js";
 import catchAsync from "../util/catchAsync.js";
+import Joi from "joi"
 const app = express();
 const PORT = process.env.PORT || 8080;
 // app.use(express.static(path.join(__dirname, 'src')))
@@ -50,6 +51,18 @@ app.get("/api/campgrounds/:id", catchAsync(async (req, res, next) => {
 }));
 
 app.post("/api/campgrounds", catchAsync(async (req, res, next) => {
+  const campgroundSchema = Joi.object({
+    location: Joi.string().required(),
+    description: Joi.string().required(),
+    price: Joi.number().required().min(10),
+    title: Joi.string().required(),
+    description: Joi.string().required()
+  }).required()
+  const result = campgroundSchema.validate(req.body)
+  console.log(result)
+  if(result.error){
+    throw new ExpressError(result.error.details, 400)
+  }
   const { location, description, price, title, imageurl } = req.body;
   
   createCampground(location, description, price, title, imageurl);
@@ -58,7 +71,7 @@ app.post("/api/campgrounds", catchAsync(async (req, res, next) => {
 app.delete("/api/campgrounds/:id", catchAsync(async (req, res) => {
   const { id } = req.params;
   await deleteCampgroundById(id);
-  res.status(200).json({ message: `Campground ID ${id} Deleted!` });
+  res.status(200).json({ message: `Campground ID ${id} Deleted.` });
 }));
 
 app.get(
@@ -70,7 +83,7 @@ app.get(
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Internal Server Error" } = err;
-  res.send(`Error: ${message} \n status: ${status}`)
+  res.status(status).send(message)
 });
 
 app.listen(PORT, () => {

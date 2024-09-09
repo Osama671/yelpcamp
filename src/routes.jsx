@@ -3,7 +3,7 @@ import Campgrounds from "./components/Campgrounds.tsx";
 import CampgroundDetails from "./components/CampgroundDetails.tsx";
 import FourOhFour from "./components/FourOhFour.tsx";
 import NewCampground from "./components/NewCampground.tsx";
-import CampgroundEdit from "./components/CampgroundEdit.tsx"
+import CampgroundEdit from "./components/CampgroundEdit.tsx";
 import Profile from "./components/Profile.tsx";
 
 const routes = [
@@ -23,6 +23,7 @@ const routes = [
     element: <CampgroundDetails />,
   },
   { path: "campground/:id/edit", element: <CampgroundEdit /> },
+
   { path: "/*", element: <FourOhFour /> },
 ];
 
