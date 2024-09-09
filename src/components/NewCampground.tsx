@@ -48,11 +48,11 @@ export default function NewCampground() {
     validate,
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
+      console.log("BEFORE")
       const response = await axios.post("/api/campgrounds", values);
+      console.log("AFter")
       console.log(response.status)
-      if (response.status === 200) {
-        navigate("/campgrounds");
-      }
+      if(response) navigate("/campgrounds")
     },
   });
   return (
