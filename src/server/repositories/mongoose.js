@@ -1,6 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 import cities from "../../seeds/cities.js";
 import { faker } from "@faker-js/faker";
+import Review from "./review.js";
 
 const seedAmount = 2;
 
@@ -10,7 +11,7 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
 }
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const campgroundSchema = new Schema({
   title: String,
@@ -18,13 +19,22 @@ const campgroundSchema = new Schema({
   price: Number,
   description: String,
   location: String,
-  reviews: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Review'
-  }]
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+});
+
+campgroundSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Review.deleteMany({ _id: { $in: doc.reviews } });
+  }
 });
 
 const Campground = mongoose.model("campground", campgroundSchema);
+
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
@@ -50,7 +60,7 @@ export async function findAllCampgrounds() {
 }
 
 export async function findCampgroundById(id) {
-  return await Campground.findById(id).populate('reviews');
+  return await Campground.findById(id).populate("reviews");
 }
 
 export async function createCampground(
@@ -88,6 +98,14 @@ export async function editCampground(
   await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
 }
 
-export async function deleteCampgroundById(id) {
-  await Campground.findOneAndDelete({ _id: id });
+export async function deleteReviewInCampground(id, reviewid) {
+  await Campground.findOneAndUpdate(
+    { _id: id },
+    { $pull: { reviews: reviewid } }
+  );
 }
+
+export async function deleteCampgroundById(id) {
+  await Campground.findByIdAndDelete({ _id: id });
+}
+

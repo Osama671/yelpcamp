@@ -21,14 +21,23 @@ export default function CampgroundDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  async function getCampground() {
+    const response = await axios.get(`/api/campgrounds/${id}`);
+    console.log(response.data)
+    setCampground(response.data);
+  }
+
   const deleteCampground = async () => {
     const response = await axios.delete(`/api/campgrounds/${id}`);
     if (response.status === 200) navigate("/campgrounds");
   };
 
-  const handleSubmitReview = async () => {
-    const response = await axios.post(`/api/campgrounds/${id}/review`);
-    if (response.status === 200) navigate(`campground/${id}`);
+
+  const handleDeleteReview = async (reviewid: string) => {
+    const response = await axios.delete(
+      `/api/campgrounds/${id}/review/${reviewid}`
+    );
+    getCampground()
   };
 
   const formik = useFormik({
@@ -42,25 +51,20 @@ export default function CampgroundDetails() {
         `/api/campgrounds/${id}/review`,
         values
       );
-      navigate("/campgrounds");
-      console.log(response.status);
+      getCampground()
     },
   });
 
   useEffect(() => {
-    async function getCampground() {
-      const response = await axios.get(`/api/campgrounds/${id}`);
-      setCampground(response.data);
-    }
+    
     getCampground();
   }, [id]);
-  console.log(campground);
   return (
     <>
       <Navbar />
       <main>
-        <div className="row">
-          <div className="col-6 offset-3">
+        <div className="row m-5">
+          <div className="col-6">
             <div className="card">
               <img src={campground.image} className="card-img-top" alt="..." />
               <div className="card-body">
@@ -90,6 +94,8 @@ export default function CampgroundDetails() {
                 <Link to="/campgrounds">All Campgrounds </Link>
               </div>
             </div>
+          </div>
+          <div className="col-6">
             <form onSubmit={formik.handleSubmit} className="mb-3">
               <h2>Leave a review</h2>
               <div className="mb-3">
@@ -130,15 +136,23 @@ export default function CampgroundDetails() {
                 </button>
               </div>
             </form>
-            <div className="mb-3">
-              {Object.keys(campground).length === 0 ||
-                campground.reviews.map((review) => (
-                  <div>
-                    <p>rating: {review.rating}</p>
+
+            {Object.keys(campground).length === 0 ||
+              campground.reviews.map((review) => (
+                <div className="mb-3 card" key={review._id}>
+                  <div className="card-body">
+                    <h5>rating: {review.rating}</h5>
                     <p>Review: {review.review}</p>
+
+                    <button
+                      onClick={() => handleDeleteReview(review._id)}
+                      className="btn btn-sm btn-danger"
+                    >
+                      Delete
+                    </button>
                   </div>
-                ))}
-            </div>
+                </div>
+              ))}
           </div>
         </div>
       </main>

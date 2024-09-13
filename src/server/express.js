@@ -4,6 +4,7 @@ import {
   createCampground,
   editCampground,
   deleteCampgroundById,
+  deleteReviewInCampground
 } from "./repositories/mongoose.js";
 import Review from "./repositories/review.js";
 import morgan from "morgan";
@@ -25,7 +26,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get("/api/data", (req, res) => {
-  console.log("Test");
   res.json({ message: "Hey" });
 });
 
@@ -62,7 +62,6 @@ app.get(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await findCampgroundById(id);
-    console.log(campground)
     res.json(campground);
   })
 );
@@ -88,13 +87,19 @@ app.delete(
 
 app.post("/api/campgrounds/:id/review", validateReview, async (req, res) => {
   const campground = await findCampgroundById(req.params.id);
-  console.log(campground)
-  const {review, rating} = req.body
-  const newReview = new Review({review: review, rating: rating})
+  const { review, rating } = req.body;
+  const newReview = new Review({ review: review, rating: rating });
   campground.reviews.push(newReview);
-  await newReview.save()
+  await newReview.save();
   await campground.save();
   res.status(200).send("Review Added!");
+});
+
+app.delete("/api/campgrounds/:id/review/:reviewid", async (req, res) => {
+  const { id, reviewid } = req.params;
+  await deleteReviewInCampground(id, reviewid)
+  await Review.findByIdAndDelete(reviewid)
+  res.send("Review Deleted")
 });
 
 app.get(
