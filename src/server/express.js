@@ -5,6 +5,7 @@ import {
   editCampground,
   deleteCampgroundById,
 } from "./repositories/mongoose.js";
+import Review from "./repositories/review.js";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import express from "express";
@@ -14,14 +15,11 @@ import catchAsync from "../util/catchAsync.js";
 import validateCampground from "./repositories/schemas/schema.js";
 const app = express();
 const PORT = process.env.PORT || 8080;
-// app.use(express.static(path.join(__dirname, 'src')))
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-
-
 
 app.get("/api/data", (req, res) => {
   console.log("Test");
@@ -66,11 +64,12 @@ app.get(
 );
 
 app.post(
-  "/api/campgrounds", validateCampground,
+  "/api/campgrounds",
+  validateCampground,
   catchAsync(async (req, res, next) => {
     const { location, description, price, title, imageurl } = req.body;
     await createCampground(location, description, price, title, imageurl);
-    res.redirect('/campgrounds')
+    res.redirect("/campgrounds");
   })
 );
 
@@ -82,6 +81,16 @@ app.delete(
     res.status(200).json({ message: `Campground ID ${id} Deleted.` });
   })
 );
+
+app.post("/api/campgrounds/:id/review", async(req, res) => {
+  const campground = await findCampgroundById(req.params.id)
+  const result = [req.body.review, parseInt(req.body.rating)]
+  const review = new Review(result)
+  res.send(result)
+  campground.reviews.push(review)
+  review.save()
+  campground.save()
+});
 
 app.get(
   "/error",

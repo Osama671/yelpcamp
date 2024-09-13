@@ -56,6 +56,36 @@ export default function CampgroundDetails() {
                 <Link to="/campgrounds">All Campgrounds </Link>
               </div>
             </div>
+            <form className="mb-3">
+              <h2>Leave a review</h2>
+              <div className="mb-3">
+                <label className="form-label" htmlFor="rating">
+                  Rating
+                </label>
+                <input
+                  className="form-range"
+                  type="range"
+                  min={1}
+                  max={5}
+                  name="rating"
+                  id="rating"
+                ></input>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label" htmlFor="review">
+                  Review
+                </label>
+                <textarea
+                  className="form-control"
+                  rows={3}
+                  cols={30}
+                  name="review"
+                  id="review"
+                />
+                <button className="btn btn-success">Submit Review</button>
+              </div>
+            </form>
           </div>
         </div>
       </main>

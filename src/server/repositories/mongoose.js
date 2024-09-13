@@ -10,12 +10,18 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
 }
 
-const campgroundSchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+
+const campgroundSchema = new Schema({
   title: String,
   image: String,
   price: Number,
   description: String,
   location: String,
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Review'
+  }]
 });
 
 const Campground = mongoose.model("campground", campgroundSchema);
