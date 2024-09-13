@@ -34,17 +34,16 @@ export default function CampgroundDetails() {
   const formik = useFormik({
     initialValues: {
       review: "",
+      rating: 1,
     },
     validate,
     onSubmit: async (values) => {
-      
       const response = await axios.post(
         `/api/campgrounds/${id}/review`,
         values
       );
       navigate("/campgrounds");
       console.log(response.status);
-      
     },
   });
 
@@ -55,6 +54,7 @@ export default function CampgroundDetails() {
     }
     getCampground();
   }, [id]);
+  console.log(campground);
   return (
     <>
       <Navbar />
@@ -103,6 +103,8 @@ export default function CampgroundDetails() {
                   max={5}
                   name="rating"
                   id="rating"
+                  onChange={formik.handleChange}
+                  value={formik.values.rating}
                 ></input>
               </div>
 
@@ -123,9 +125,20 @@ export default function CampgroundDetails() {
                 {formik.touched.review && formik.errors.review ? (
                   <div style={{ color: "red" }}>{formik.errors.review}</div>
                 ) : null}
-                <button type="submit" className="btn btn-success">Submit Review</button>
+                <button type="submit" className="btn btn-success">
+                  Submit Review
+                </button>
               </div>
             </form>
+            <div className="mb-3">
+              {Object.keys(campground).length === 0 ||
+                campground.reviews.map((review) => (
+                  <div>
+                    <p>rating: {review.rating}</p>
+                    <p>Review: {review.review}</p>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </main>

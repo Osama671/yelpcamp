@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
 const reviewSchema = mongoose.Schema({
-    body: String,
-    rating: Number,
-})
+  review: String,
+  rating: Number,
+});
 
-const Review = mongoose.model("Review", reviewSchema)
+const Review = mongoose.model("Review", reviewSchema);
 
-export default Review
+// async function createReview(review, rating) {
+//   const newReview = new Review({
+//     review: review,
+//     rating: rating,
+//   });
+//   return newReview
+// }
+
+export default Review;

@@ -50,7 +50,7 @@ export async function findAllCampgrounds() {
 }
 
 export async function findCampgroundById(id) {
-  return await Campground.findById(id);
+  return await Campground.findById(id).populate('reviews');
 }
 
 export async function createCampground(

@@ -62,6 +62,7 @@ app.get(
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await findCampgroundById(id);
+    console.log(campground)
     res.json(campground);
   })
 );
@@ -87,10 +88,11 @@ app.delete(
 
 app.post("/api/campgrounds/:id/review", validateReview, async (req, res) => {
   const campground = await findCampgroundById(req.params.id);
-  const result = [req.body.review, parseInt(req.body.rating)];
-  const review = new Review(result);
-  campground.reviews.push(review);
-  await review.save();
+  console.log(campground)
+  const {review, rating} = req.body
+  const newReview = new Review({review: review, rating: rating})
+  campground.reviews.push(newReview);
+  await newReview.save()
   await campground.save();
   res.status(200).send("Review Added!");
 });
