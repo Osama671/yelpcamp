@@ -1,4 +1,5 @@
 import Joi from "joi";
+import ExpressError from "../../../util/ExpressError.js";
 const validateCampground = (req, res, next) => {
     const campgroundSchema = Joi.object({
       location: Joi.string().required(),
@@ -17,4 +18,19 @@ const validateCampground = (req, res, next) => {
     }
   };
 
-export default validateCampground
+const validateReview = (req, res, next) => {
+  const reviewSchema = Joi.object({
+    review: Joi.string().required(),
+    rating: Joi.number().required().min(1).max(5)
+  }).required()
+  const result = reviewSchema.validate(req.body);
+    console.log(result);
+    if (result.error) {
+      throw new ExpressError(result.error.details, 401);
+    } else {
+      console.log("Next")
+      next();
+    }
+}
+
+export {validateCampground, validateReview}

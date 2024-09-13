@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.review) {
+    errors.review = "Required";
+  } else if (values.review.length >= 10) {
+    errors.review = "Must be less than 10 characters";
+  }
+
+  return errors;
+};
 
 export default function CampgroundDetails() {
   const [campground, setCampground] = useState({});
@@ -13,6 +25,28 @@ export default function CampgroundDetails() {
     const response = await axios.delete(`/api/campgrounds/${id}`);
     if (response.status === 200) navigate("/campgrounds");
   };
+
+  const handleSubmitReview = async () => {
+    const response = await axios.post(`/api/campgrounds/${id}/review`);
+    if (response.status === 200) navigate(`campground/${id}`);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      review: "",
+    },
+    validate,
+    onSubmit: async (values) => {
+      
+      const response = await axios.post(
+        `/api/campgrounds/${id}/review`,
+        values
+      );
+      navigate("/campgrounds");
+      console.log(response.status);
+      
+    },
+  });
 
   useEffect(() => {
     async function getCampground() {
@@ -56,7 +90,7 @@ export default function CampgroundDetails() {
                 <Link to="/campgrounds">All Campgrounds </Link>
               </div>
             </div>
-            <form className="mb-3">
+            <form onSubmit={formik.handleSubmit} className="mb-3">
               <h2>Leave a review</h2>
               <div className="mb-3">
                 <label className="form-label" htmlFor="rating">
@@ -82,8 +116,14 @@ export default function CampgroundDetails() {
                   cols={30}
                   name="review"
                   id="review"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.review}
                 />
-                <button className="btn btn-success">Submit Review</button>
+                {formik.touched.review && formik.errors.review ? (
+                  <div style={{ color: "red" }}>{formik.errors.review}</div>
+                ) : null}
+                <button type="submit" className="btn btn-success">Submit Review</button>
               </div>
             </form>
           </div>

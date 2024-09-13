@@ -12,7 +12,10 @@ import express from "express";
 import cors from "cors";
 import ExpressError from "../util/ExpressError.js";
 import catchAsync from "../util/catchAsync.js";
-import validateCampground from "./repositories/schemas/schema.js";
+import {
+  validateCampground,
+  validateReview,
+} from "./repositories/schemas/schema.js";
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -82,14 +85,14 @@ app.delete(
   })
 );
 
-app.post("/api/campgrounds/:id/review", async(req, res) => {
-  const campground = await findCampgroundById(req.params.id)
-  const result = [req.body.review, parseInt(req.body.rating)]
-  const review = new Review(result)
-  res.send(result)
-  campground.reviews.push(review)
-  review.save()
-  campground.save()
+app.post("/api/campgrounds/:id/review", validateReview, async (req, res) => {
+  const campground = await findCampgroundById(req.params.id);
+  const result = [req.body.review, parseInt(req.body.rating)];
+  const review = new Review(result);
+  campground.reviews.push(review);
+  await review.save();
+  await campground.save();
+  res.status(200).send("Review Added!");
 });
 
 app.get(
