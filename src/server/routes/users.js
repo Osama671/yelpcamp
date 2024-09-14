@@ -14,7 +14,16 @@ router.post(
     const { username, password, email } = req.body;
     const user = new User({ email, username });
     const registeredUser = await User.register(user, password);
-    console.log(registeredUser);
+    await new Promise((resolve, reject) => {
+      req.login(registeredUser, (err) => {
+        if (err) {
+          console.log("ERROR: ", err);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+
     res.status(200).send("User Registered");
   })
 );
@@ -50,7 +59,10 @@ router.get("/auth/check", (req, res) => {
   }
 });
 
-router.get("/auth/getuser", (req,res) => {
-    res.json(req.user)
-})
+router.get("/auth/getuser", (req, res) => {
+    console.log("Express user:", req.user)
+  res.json(req.user);
+});
 export default router;
+
+

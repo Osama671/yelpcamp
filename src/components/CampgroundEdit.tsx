@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 
@@ -37,8 +37,27 @@ const validate = (values) => {
 
 export default function CampgroundEdit() {
   const [campground, setCampground] = useState([]);
+  const [currentUser, setCurrentUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
   const { id } = useParams();
   const navigate = useNavigate();
+
+  async function getCurrentUser() {
+    const response = await axios.get("/api/auth/getuser");
+    setCurrentUser(response.data._id);
+  }
+
+  async function getCampgroundInfo() {
+    const info = await axios.get(`/api/campgrounds/${id}/edit`);
+    setCampground(info.data);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getCurrentUser();
+    getCampgroundInfo();
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
@@ -59,16 +78,17 @@ export default function CampgroundEdit() {
     },
   });
 
-  useEffect(() => {
-    async function getAPI() {
-      const info = await axios.get(`/api/campgrounds/${id}/edit`);
-      setCampground(info.data);
-    }
-    getAPI();
-  }, [id]);
   return (
     <>
-      <h1 className="text-center">Edit Campground:</h1>
+      {isLoading ? null : (
+        <>
+          {console.log("campground.author:", campground.author._id)}
+          {console.log("currentUser:", currentUser)}
+          {campground.author._id !== currentUser ? (
+            <Navigate to="/campgrounds" />
+          ) : (
+            <>
+              <h1 className="text-center">Edit Campground:</h1>
       <p className="text-center"></p>
       <div className="col-6 offset-3">
         <form onSubmit={formik.handleSubmit}>
@@ -170,19 +190,10 @@ export default function CampgroundEdit() {
           <Link to="/campgrounds">Back to Campgrounds</Link>
         </div>
       </div>
-
-      {/* <h2>Edit Campground:</h2>
-      <form action={`/api/campgrounds/${id}/edit`} method="POST">
-      <div>
-        <label htmlFor="location">Location: </label>
-        <input type="text" id="location" name="location"/>
-        <br/>
-        <label htmlFor="description">Description: </label>
-        <input type="text" id="description" name="description"/>
-        <br/>
-      <button type="submit">Update Campground</button>
-      </div>
-      </form> */}
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }

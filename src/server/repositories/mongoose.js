@@ -2,6 +2,7 @@ import mongoose, { mongo } from "mongoose";
 import cities from "../../seeds/cities.js";
 import { faker } from "@faker-js/faker";
 import Review from "./review.js";
+import ExpressError from "../../util/ExpressError.js";
 
 const seedAmount = 2;
 
@@ -19,6 +20,10 @@ const campgroundSchema = new Schema({
   price: Number,
   description: String,
   location: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -49,6 +54,7 @@ async function seedCampgrounds() {
         description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
         image: `https://picsum.photos/400?random=${Math.random()}`,
         price: randomPrice,
+        author: "66e607e21575667c3d0a7dc6",
       });
       await newCampground.save();
     });
@@ -60,7 +66,7 @@ export async function findAllCampgrounds() {
 }
 
 export async function findCampgroundById(id) {
-  return await Campground.findById(id).populate("reviews");
+  return await Campground.findById(id).populate("reviews").populate("author");
 }
 
 export async function createCampground(
@@ -68,7 +74,8 @@ export async function createCampground(
   description,
   price,
   title,
-  imageurl
+  imageurl,
+  id
 ) {
   const newCampground = new Campground({
     location: `${location}`,
@@ -76,6 +83,7 @@ export async function createCampground(
     price: price,
     title: `${title}`,
     image: `${imageurl}`,
+    author: id,
   });
   await newCampground.save();
 }
@@ -86,7 +94,8 @@ export async function editCampground(
   description,
   price,
   title,
-  imageurl
+  imageurl,
+  userid
 ) {
   const update = {
     location: location,
@@ -95,6 +104,11 @@ export async function editCampground(
     title: title,
     image: imageurl,
   };
+  const campground = await findCampgroundById(id)
+  if(!campground) throw new ExpressError("Campground not found", 500)
+  if(!campground.author.equals(userid)){
+    return new ExpressError("You are not the author of this campground", 403)
+  }
   await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
 }
 
@@ -105,7 +119,12 @@ export async function deleteReviewInCampground(id, reviewid) {
   );
 }
 
-export async function deleteCampgroundById(id) {
+export async function deleteCampgroundById(id, userid) {
+  const campground = await findCampgroundById(id)
+  if(!campground) throw new ExpressError("Campground not found", 500)
+  if(!campground.author.equals(userid)){
+    return new ExpressError("You are not the author of this campground", 403)
+  }
   await Campground.findByIdAndDelete({ _id: id });
 }
 
