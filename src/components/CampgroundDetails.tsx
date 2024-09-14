@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
+import SuccessToast from "../components/toasts/SuccessToast.tsx";
 
 const validate = (values) => {
   const errors = {};
@@ -23,7 +24,7 @@ export default function CampgroundDetails() {
 
   async function getCampground() {
     const response = await axios.get(`/api/campgrounds/${id}`);
-    console.log(response.data)
+    console.log(response.data);
     setCampground(response.data);
   }
 
@@ -32,12 +33,11 @@ export default function CampgroundDetails() {
     if (response.status === 200) navigate("/campgrounds");
   };
 
-
   const handleDeleteReview = async (reviewid: string) => {
     const response = await axios.delete(
       `/api/campgrounds/${id}/review/${reviewid}`
     );
-    getCampground()
+    getCampground();
   };
 
   const formik = useFormik({
@@ -51,17 +51,17 @@ export default function CampgroundDetails() {
         `/api/campgrounds/${id}/review`,
         values
       );
-      getCampground()
+      getCampground();
     },
   });
 
   useEffect(() => {
-    
     getCampground();
   }, [id]);
   return (
     <>
       <Navbar />
+      
       <main>
         <div className="row m-5">
           <div className="col-6">
