@@ -5,6 +5,9 @@ import cors from "cors";
 import session from "express-session";
 import campgroundRouter from "./routes/campgrounds.js";
 import reviewRouter from "./routes/reviews.js";
+import passport from "passport";
+import LocalStrategy from "passport-local"
+import User from "./repositories/user.js"
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -25,11 +28,20 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 
+// Passport config
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
 app.use("/api/campgrounds", campgroundRouter);
 app.use("/api/campgrounds/:id/review", reviewRouter);
 
-app.get("/api/test", (req, res) => {
-  res.json({ message: "Hey" });
+app.get("/api/test", async(req, res) => {
+  const user = new User({email: "test@hotmail.com", username: "Osama"})
+  const newUser = await User.register(user, 'monkey')
+  res.send(newUser)
 });
 
 app.use((err, req, res, next) => {
