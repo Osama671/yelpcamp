@@ -1,5 +1,21 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 export default function Navbar() {
+  const [getUser, setGetUser] = useState(undefined);
+
+  const handleLogout = async () => {
+    const response = await axios.get("/api/logout");
+  };
+
+  useEffect(() => {
+    async function fetchUser() {
+      const response = await axios.get("/api/auth/getuser");
+      setGetUser(response.data.username);
+    }
+    fetchUser();
+  }, []);
+
   return (
     <>
       <nav
@@ -29,12 +45,41 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to='/campgrounds'>Campgrounds</Link>
+                <Link
+                  className="nav-link active"
+                  aria-current="page"
+                  to="/campgrounds"
+                >
+                  Campgrounds
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/newcampground">New Campgrounds</Link>
+                <Link
+                  className="nav-link active"
+                  aria-current="page"
+                  to="/newcampground"
+                >
+                  New Campgrounds
+                </Link>
               </li>
             </ul>
+          </div>
+          <div className="navbar-nav ml-auto ">
+            {getUser || (
+              <>
+                <li className="nav-link">
+                  <Link to="/login">Login</Link>
+                </li>
+                <li className="nav-link">
+                  <Link to="register">Register</Link>
+                </li>
+              </>
+            )}
+            {getUser && (
+              <li className="nav-link" onClick={handleLogout}>
+                <Link to="/login">Logout</Link>
+              </li>
+            )}
           </div>
         </div>
       </nav>

@@ -50,4 +50,7 @@ router.get("/auth/check", (req, res) => {
   }
 });
 
+router.get("/auth/getuser", (req,res) => {
+    res.json(req.user)
+})
 export default router;
