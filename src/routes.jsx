@@ -5,10 +5,16 @@ import FourOhFour from "./components/FourOhFour.tsx";
 import NewCampground from "./components/NewCampground.tsx";
 import CampgroundEdit from "./components/CampgroundEdit.tsx";
 import Profile from "./components/Profile.tsx";
+import Register from "./components/Register.tsx";
+import Login from "./components/Login.tsx";
+import AuthRoute from "./components/auth/AuthRoute.tsx";
+import isLoggedIn from "./util/isLoggedIn.js";
 
 const routes = [
   { path: "/", element: <App /> },
-  { path: "/newcampground", element: <NewCampground /> },
+  { path: "register", element: <Register /> },
+  { path: "login", element: <Login /> },
+  { path: "/newcampground", element: <AuthRoute Component={NewCampground} /> },
   {
     path: "profile",
     element: <Profile />,
