@@ -22,8 +22,8 @@ const validate = (values) => {
     errors.price = "Must be greater than 0";
   }
 
-  if (!values.imageurl) {
-    errors.imageurl = "Required";
+  if (!values.image) {
+    errors.image = "Required";
   }
 
   if (!values.description) {
@@ -42,15 +42,28 @@ export default function NewCampground() {
       title: "",
       location: "",
       price: "",
-      imageurl: "",
+      image: null,
       description: "",
     },
     validate,
     onSubmit: async (values) => {
-      const response = await axios.post("/api/campgrounds", values);
-      if(response) navigate("/campgrounds")
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("location", values.location);
+      formData.append("price", values.price);
+      formData.append("image", values.image);
+      formData.append("description", values.description);
+      console.log("AAAAAAA");
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+      const response = await axios.post("/api/campgrounds", formData);
+      console.log("BBBBB");
+      console.log(response);
+      if (response) navigate("/campgrounds");
     },
   });
+
   return (
     <>
       <h1 className="text-center">New Campground:</h1>
@@ -58,7 +71,7 @@ export default function NewCampground() {
         <Link to="/">Home Page</Link>
       </p>
       <div className="col-6 offset-3">
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
           <div className="mb-3">
             <label className="form-label" htmlFor="title">
               Title
@@ -93,7 +106,7 @@ export default function NewCampground() {
               <div style={{ color: "red" }}>{formik.errors.location}</div>
             ) : null}
           </div>
-          <div className="input-group ">
+          <div className="input-group">
             <span className="input-group-text">$</span>
             <input
               placeholder="0.00"
@@ -113,20 +126,20 @@ export default function NewCampground() {
             </div>
           ) : null}
           <div className="mb-3 mt-3">
-            <label className="form-label" htmlFor="imageurl">
-              Image Url
+            <label className="form-label" htmlFor="image">
+              Upload Image
             </label>
             <input
+              id="image"
+              name="image"
+              type="file"
               className="form-control"
-              id="imageurl"
-              type="text"
-              name="imageurl"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.imageurl}
+              onChange={(event) => {
+                formik.setFieldValue("image", event.target.files[0]);
+              }}
             />
-            {formik.touched.price && formik.errors.price ? (
-              <div style={{ color: "red" }}>{formik.errors.price}</div>
+            {formik.touched.image && formik.errors.image ? (
+              <div style={{ color: "red" }}>{formik.errors.image}</div>
             ) : null}
           </div>
           <div className="mb-3">

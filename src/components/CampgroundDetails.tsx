@@ -116,68 +116,69 @@ export default function CampgroundDetails() {
               {!currentUser || (
                 <form onSubmit={formik.handleSubmit} className="mb-3">
                   <h2>Leave a review</h2>
-                  <fieldset className="starability-basic">
-                    <legend>Rating:</legend>
-                    <input
-                      type="radio"
-                      id="second-rate1"
-                      name="rating"
-                      value="1"
-                      checked={formik.values.rating === 1}
-                      onChange={formik.handleChange}
-                    />
-                    <label htmlFor="second-rate1" title="Terrible">
-                      1 star
-                    </label>
+                  <div className="mb-3">
+                    <fieldset className="starability-basic">
+                      <input
+                        type="radio"
+                        id="second-rate1"
+                        name="rating"
+                        value="1"
+                        checked={formik.values.rating === 1}
+                        onChange={formik.handleChange}
+                      />
+                      <label htmlFor="second-rate1" title="Terrible">
+                        1 star
+                      </label>
 
-                    <input
-                      type="radio"
-                      id="second-rate2"
-                      name="rating"
-                      value="2"
-                      checked={formik.values.rating === 2}
-                      onChange={formik.handleChange}
-                    />
-                    <label htmlFor="second-rate2" title="Not good">
-                      2 stars
-                    </label>
+                      <input
+                        type="radio"
+                        id="second-rate2"
+                        name="rating"
+                        value="2"
+                        checked={formik.values.rating === 2}
+                        onChange={formik.handleChange}
+                      />
+                      <label htmlFor="second-rate2" title="Not good">
+                        2 stars
+                      </label>
 
-                    <input
-                      type="radio"
-                      id="second-rate3"
-                      name="rating"
-                      value="3"
-                      checked={formik.values.rating === 3}
-                      onChange={formik.handleChange}
-                    />
-                    <label htmlFor="second-rate3" title="Average">
-                      3 stars
-                    </label>
+                      <input
+                        type="radio"
+                        id="second-rate3"
+                        name="rating"
+                        value="3"
+                        checked={formik.values.rating === 3}
+                        onChange={formik.handleChange}
+                      />
+                      <label htmlFor="second-rate3" title="Average">
+                        3 stars
+                      </label>
 
-                    <input
-                      type="radio"
-                      id="second-rate4"
-                      name="rating"
-                      value="4"
-                      checked={formik.values.rating === 4}
-                      onChange={formik.handleChange}
-                    />
-                    <label htmlFor="second-rate4" title="Very good">
-                      4 stars
-                    </label>
+                      <input
+                        type="radio"
+                        id="second-rate4"
+                        name="rating"
+                        value="4"
+                        checked={formik.values.rating === 4}
+                        onChange={formik.handleChange}
+                      />
+                      <label htmlFor="second-rate4" title="Very good">
+                        4 stars
+                      </label>
 
-                    <input
-                      type="radio"
-                      id="second-rate5"
-                      name="rating"
-                      value="5"
-                      checked={formik.values.rating === 5}
-                      onChange={formik.handleChange}
-                    />
-                    <label htmlFor="second-rate5" title="Amazing">
-                      5 stars
-                    </label>
-                  </fieldset>
+                      <input
+                        type="radio"
+                        id="second-rate5"
+                        name="rating"
+                        value="5"
+                        checked={formik.values.rating === 5}
+                        onChange={formik.handleChange}
+                      />
+                      <label htmlFor="second-rate5" title="Amazing">
+                        5 stars
+                      </label>
+                    </fieldset>
+                  </div>
 
                   <div className="mb-3">
                     <label className="form-label" htmlFor="review">

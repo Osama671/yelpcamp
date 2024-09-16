@@ -8,8 +8,10 @@ import {
 } from "../controllers/campgrounds.js";
 import express from "express";
 import catchAsync from "../../util/catchAsync.js";
-import ExpressError from "../../util/ExpressError.js";
 import { validateCampground } from "../repositories/schemas/schema.js";
+import multer from "multer";
+import cloudinary from "../../cloudinary/index.js";
+const upload = multer({ storage: cloudinary.storage });
 
 const router = express.Router();
 
@@ -27,7 +29,19 @@ const router = express.Router();
 
 router.get("/", catchAsync(showAllCampgrounds));
 
-router.post("/", validateCampground, catchAsync(createCampground));
+router.post("/", upload.single("image"), (req, res) => {
+  // req.body should contain other form data like title, location, price, description
+  // req.file should contain the uploaded image file
+
+  console.log("Body:", req.body);
+  console.log("File:", req.file);
+
+  if (!req.file) {
+    return res.status(400).send("Image upload failed");
+  }
+
+  res.status(200).send("Files uploaded successfully");
+});
 
 router.get("/:id", catchAsync(showCampgroundDetails));
 
@@ -37,4 +51,10 @@ router.get("/:id/edit", catchAsync(showCampgroundEdit));
 
 router.post("/:id/edit", validateCampground, catchAsync(editCampground));
 
+router.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).send({ error: err.message });
+  }
+  next(err);
+});
 export default router;
