@@ -8,7 +8,6 @@ import Profile from "./components/Profile.tsx";
 import Register from "./components/Register.tsx";
 import Login from "./components/Login.tsx";
 import AuthRoute from "./components/auth/AuthRoute.tsx";
-import isLoggedIn from "./util/isLoggedIn.js";
 
 const routes = [
   { path: "/", element: <App /> },

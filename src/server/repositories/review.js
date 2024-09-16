@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 
-const reviewSchema = mongoose.Schema({
+const Schema = mongoose.Schema
+const reviewSchema = Schema({
   review: String,
   rating: Number,
+  author:{
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  }
 });
 
 const Review = mongoose.model("Review", reviewSchema);

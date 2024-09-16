@@ -112,60 +112,66 @@ export default function CampgroundDetails() {
               </div>
             </div>
             <div className="col-6">
-              <form onSubmit={formik.handleSubmit} className="mb-3">
-                <h2>Leave a review</h2>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="rating">
-                    Rating
-                  </label>
-                  <input
-                    className="form-range"
-                    type="range"
-                    min={1}
-                    max={5}
-                    name="rating"
-                    id="rating"
-                    onChange={formik.handleChange}
-                    value={formik.values.rating}
-                  ></input>
-                </div>
+              {!currentUser || (
+                <form onSubmit={formik.handleSubmit} className="mb-3">
+                  <h2>Leave a review</h2>
+                  <div className="mb-3">
+                    <label className="form-label" htmlFor="rating">
+                      Rating
+                    </label>
+                    <input
+                      className="form-range"
+                      type="range"
+                      min={1}
+                      max={5}
+                      name="rating"
+                      id="rating"
+                      onChange={formik.handleChange}
+                      value={formik.values.rating}
+                    ></input>
+                  </div>
 
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="review">
-                    Review
-                  </label>
-                  <textarea
-                    className="form-control"
-                    rows={3}
-                    cols={30}
-                    name="review"
-                    id="review"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.review}
-                  />
-                  {formik.touched.review && formik.errors.review ? (
-                    <div style={{ color: "red" }}>{formik.errors.review}</div>
-                  ) : null}
-                  <button type="submit" className="btn btn-success">
-                    Submit Review
-                  </button>
-                </div>
-              </form>
+                  <div className="mb-3">
+                    <label className="form-label" htmlFor="review">
+                      Review
+                    </label>
+                    <textarea
+                      className="form-control"
+                      rows={3}
+                      cols={30}
+                      name="review"
+                      id="review"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      value={formik.values.review}
+                    />
+                    {formik.touched.review && formik.errors.review ? (
+                      <div style={{ color: "red" }}>{formik.errors.review}</div>
+                    ) : null}
+                    <button type="submit" className="btn btn-success">
+                      Submit Review
+                    </button>
+                  </div>
+                </form>
+              )}
 
               {Object.keys(campground).length === 0 ||
                 campground.reviews.map((review) => (
                   <div className="mb-3 card" key={review._id}>
                     <div className="card-body">
                       <h5>rating: {review.rating}</h5>
+                      <h6 className="card-subtitle mb-2 text-muted">
+                        By: {review.author.username}{" "}
+                      </h6>
                       <p>Review: {review.review}</p>
-
-                      <button
-                        onClick={() => handleDeleteReview(review._id)}
-                        className="btn btn-sm btn-danger"
-                      >
-                        Delete
-                      </button>
+                      {currentUser !== review.author._id ? null : (
+                        <button
+                          onClick={() => handleDeleteReview(review._id)}
+                          className="btn btn-sm btn-danger"
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

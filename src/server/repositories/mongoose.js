@@ -22,7 +22,7 @@ const campgroundSchema = new Schema({
   location: String,
   author: {
     type: Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
   },
   reviews: [
     {
@@ -39,7 +39,6 @@ campgroundSchema.post("findOneAndDelete", async function (doc) {
 });
 
 const Campground = mongoose.model("campground", campgroundSchema);
-
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
@@ -61,15 +60,17 @@ async function seedCampgrounds() {
 }
 seedCampgrounds();
 
-export async function findAllCampgrounds() {
+async function findAllCampgrounds() {
   return await Campground.find({});
 }
 
-export async function findCampgroundById(id) {
-  return await Campground.findById(id).populate("reviews").populate("author");
+async function findCampgroundById(id) {
+  return await Campground.findById(id)
+    .populate({ path: "reviews", populate: "author" })
+    .populate("author");
 }
 
-export async function createCampground(
+async function createCampground(
   location,
   description,
   price,
@@ -88,7 +89,7 @@ export async function createCampground(
   await newCampground.save();
 }
 
-export async function editCampground(
+async function editCampground(
   id,
   location,
   description,
@@ -104,10 +105,10 @@ export async function editCampground(
     title: title,
     image: imageurl,
   };
-  const campground = await findCampgroundById(id)
-  if(!campground) throw new ExpressError("Campground not found", 500)
-  if(!campground.author.equals(userid)){
-    return new ExpressError("You are not the author of this campground", 403)
+  const campground = await findCampgroundById(id);
+  if (!campground) throw new ExpressError("Campground not found", 500);
+  if (!campground.author.equals(userid)) {
+    return new ExpressError("You are not the author of this campground", 403);
   }
   await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
 }
@@ -119,12 +120,22 @@ export async function deleteReviewInCampground(id, reviewid) {
   );
 }
 
-export async function deleteCampgroundById(id, userid) {
-  const campground = await findCampgroundById(id)
-  if(!campground) throw new ExpressError("Campground not found", 500)
-  if(!campground.author.equals(userid)){
-    return new ExpressError("You are not the author of this campground", 403)
+async function deleteCampgroundById(id, userid) {
+  const campground = await findCampgroundById(id);
+  if (!campground) throw new ExpressError("Campground not found", 500);
+  if (!campground.author.equals(userid)) {
+    return new ExpressError("You are not the author of this campground", 403);
   }
   await Campground.findByIdAndDelete({ _id: id });
 }
 
+const campgroundModel = {
+  findAllCampgrounds,
+  findCampgroundById,
+  createCampground,
+  editCampground,
+  deleteCampgroundById,
+  deleteReviewInCampground
+};
+
+export default campgroundModel
