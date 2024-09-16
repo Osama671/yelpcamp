@@ -1,3 +1,4 @@
+import "../css/stars.css";
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -115,21 +116,68 @@ export default function CampgroundDetails() {
               {!currentUser || (
                 <form onSubmit={formik.handleSubmit} className="mb-3">
                   <h2>Leave a review</h2>
-                  <div className="mb-3">
-                    <label className="form-label" htmlFor="rating">
-                      Rating
-                    </label>
+                  <fieldset className="starability-basic">
+                    <legend>Rating:</legend>
                     <input
-                      className="form-range"
-                      type="range"
-                      min={1}
-                      max={5}
+                      type="radio"
+                      id="second-rate1"
                       name="rating"
-                      id="rating"
+                      value="1"
+                      checked={formik.values.rating === 1}
                       onChange={formik.handleChange}
-                      value={formik.values.rating}
-                    ></input>
-                  </div>
+                    />
+                    <label htmlFor="second-rate1" title="Terrible">
+                      1 star
+                    </label>
+
+                    <input
+                      type="radio"
+                      id="second-rate2"
+                      name="rating"
+                      value="2"
+                      checked={formik.values.rating === 2}
+                      onChange={formik.handleChange}
+                    />
+                    <label htmlFor="second-rate2" title="Not good">
+                      2 stars
+                    </label>
+
+                    <input
+                      type="radio"
+                      id="second-rate3"
+                      name="rating"
+                      value="3"
+                      checked={formik.values.rating === 3}
+                      onChange={formik.handleChange}
+                    />
+                    <label htmlFor="second-rate3" title="Average">
+                      3 stars
+                    </label>
+
+                    <input
+                      type="radio"
+                      id="second-rate4"
+                      name="rating"
+                      value="4"
+                      checked={formik.values.rating === 4}
+                      onChange={formik.handleChange}
+                    />
+                    <label htmlFor="second-rate4" title="Very good">
+                      4 stars
+                    </label>
+
+                    <input
+                      type="radio"
+                      id="second-rate5"
+                      name="rating"
+                      value="5"
+                      checked={formik.values.rating === 5}
+                      onChange={formik.handleChange}
+                    />
+                    <label htmlFor="second-rate5" title="Amazing">
+                      5 stars
+                    </label>
+                  </fieldset>
 
                   <div className="mb-3">
                     <label className="form-label" htmlFor="review">
@@ -159,10 +207,16 @@ export default function CampgroundDetails() {
                 campground.reviews.map((review) => (
                   <div className="mb-3 card" key={review._id}>
                     <div className="card-body">
-                      <h5>rating: {review.rating}</h5>
+                      <h5>Rating: {review.rating}</h5>
                       <h6 className="card-subtitle mb-2 text-muted">
                         By: {review.author.username}{" "}
                       </h6>
+                      <p
+                        className="starability-result"
+                        data-rating={review.rating}
+                      >
+                        Rated: 3
+                      </p>
                       <p>Review: {review.review}</p>
                       {currentUser !== review.author._id ? null : (
                         <button
