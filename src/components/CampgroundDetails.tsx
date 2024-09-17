@@ -74,11 +74,14 @@ export default function CampgroundDetails() {
           <div className="row m-5">
             <div className="col-6">
               <div className="card">
-                <img
+                {campground.images.map((img) => (
+                  <img src={img.url} className="card-img-top" alt="..."></img>
+                ))}
+                {/* <img
                   src={campground.image}
                   className="card-img-top"
                   alt="..."
-                />
+                /> */}
                 <div className="card-body">
                   <h5 className="card-title">{campground.title}</h5>
                   <p className="card-text">{campground.description}</p>

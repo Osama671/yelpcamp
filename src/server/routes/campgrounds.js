@@ -28,19 +28,11 @@ const router = express.Router();
 // };
 
 router.get("/", catchAsync(showAllCampgrounds));
-
-router.post("/", upload.single("image"), (req, res) => {
-  // req.body should contain other form data like title, location, price, description
-  // req.file should contain the uploaded image file
-
-  console.log("Body:", req.body);
-  console.log("File:", req.file);
-
-  if (!req.file) {
-    return res.status(400).send("Image upload failed");
-  }
-
-  res.status(200).send("Files uploaded successfully");
+// catchAsync(createCampground)
+router.post("/", upload.array("images"), catchAsync(createCampground), (req, res) => {
+  console.log("Body: ", req.body)
+  console.log("File: ", req.files)
+  res.status(200).send("worked")
 });
 
 router.get("/:id", catchAsync(showCampgroundDetails));
@@ -51,10 +43,4 @@ router.get("/:id/edit", catchAsync(showCampgroundEdit));
 
 router.post("/:id/edit", validateCampground, catchAsync(editCampground));
 
-router.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    return res.status(400).send({ error: err.message });
-  }
-  next(err);
-});
 export default router;

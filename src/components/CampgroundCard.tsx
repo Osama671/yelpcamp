@@ -5,7 +5,7 @@ export default function CampgroundCard({ campground }) {
       <div className="card">
         <div className="row">
           <div className="col-md-4">
-            <img className="img-fluid" src={campground.image} alt="Campground image"></img>
+            <img className="img-fluid" src={campground.images[0].url} alt="Campground image"></img>
           </div>
           <div className="col-md-8">
             <div className="card-body">

@@ -16,7 +16,7 @@ const Schema = mongoose.Schema;
 
 const campgroundSchema = new Schema({
   title: String,
-  image: String,
+  images: [{ url: String, filename: String }],
   price: Number,
   description: String,
   location: String,
@@ -51,7 +51,10 @@ async function seedCampgrounds() {
         title: `Title${i}`,
         location: `${cities[random].city}, ${cities[random].state}`,
         description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
-        image: `https://picsum.photos/400?random=${Math.random()}`,
+        images: {
+          url: `https://picsum.photos/400?random=${Math.random()}`,
+          filename: "",
+        },
         price: randomPrice,
         author: "66e607e21575667c3d0a7dc6",
       });
@@ -75,7 +78,7 @@ async function createCampground(
   description,
   price,
   title,
-  imageurl,
+  images,
   id
 ) {
   const newCampground = new Campground({
@@ -83,7 +86,7 @@ async function createCampground(
     description: `${description}`,
     price: price,
     title: `${title}`,
-    image: `${imageurl}`,
+    images: images,
     author: id,
   });
   await newCampground.save();
@@ -135,7 +138,7 @@ const campgroundModel = {
   createCampground,
   editCampground,
   deleteCampgroundById,
-  deleteReviewInCampground
+  deleteReviewInCampground,
 };
 
-export default campgroundModel
+export default campgroundModel;

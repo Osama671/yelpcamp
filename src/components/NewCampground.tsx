@@ -22,8 +22,8 @@ const validate = (values) => {
     errors.price = "Must be greater than 0";
   }
 
-  if (!values.image) {
-    errors.image = "Required";
+  if (!values.images || values.images.length === 0) {
+    errors.images = "Required";
   }
 
   if (!values.description) {
@@ -42,7 +42,7 @@ export default function NewCampground() {
       title: "",
       location: "",
       price: "",
-      image: null,
+      images: [], // Use an array to hold multiple files
       description: "",
     },
     validate,
@@ -51,15 +51,12 @@ export default function NewCampground() {
       formData.append("title", values.title);
       formData.append("location", values.location);
       formData.append("price", values.price);
-      formData.append("image", values.image);
-      formData.append("description", values.description);
-      console.log("AAAAAAA");
-      for (let pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
+      for (let i = 0; i < values.images.length; i++) {
+        formData.append("images", values.images[i]);
       }
+      formData.append("description", values.description);
+      
       const response = await axios.post("/api/campgrounds", formData);
-      console.log("BBBBB");
-      console.log(response);
       if (response) navigate("/campgrounds");
     },
   });
@@ -126,20 +123,21 @@ export default function NewCampground() {
             </div>
           ) : null}
           <div className="mb-3 mt-3">
-            <label className="form-label" htmlFor="image">
-              Upload Image
+            <label className="form-label" htmlFor="images">
+              Upload Images
             </label>
             <input
-              id="image"
-              name="image"
+              id="images"
+              name="images"
               type="file"
               className="form-control"
+              multiple // Allow multiple files
               onChange={(event) => {
-                formik.setFieldValue("image", event.target.files[0]);
+                formik.setFieldValue("images", event.target.files);
               }}
             />
-            {formik.touched.image && formik.errors.image ? (
-              <div style={{ color: "red" }}>{formik.errors.image}</div>
+            {formik.touched.images && formik.errors.images ? (
+              <div style={{ color: "red" }}>{formik.errors.images}</div>
             ) : null}
           </div>
           <div className="mb-3">

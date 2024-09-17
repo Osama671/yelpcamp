@@ -34,13 +34,14 @@ export const showCampgroundDetails = async (req, res, next) => {
   }
 
 export const createCampground = async (req, res, next) => {
-    const { location, description, price, title, imageurl } = req.body;
+    const { location, description, price, title } = req.body;
+    const campgroundImages = req.files.map(f => ({url: f.path, filename: f.filename}))
     await model.createCampground(
       location,
       description,
       price,
       title,
-      imageurl,
+      campgroundImages,
       req.user._id
     );
     res.redirect("/campgrounds");
