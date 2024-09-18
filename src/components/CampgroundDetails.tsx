@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
+import Carousel from "./Carousel.tsx"
 import SuccessToast from "../components/toasts/SuccessToast.tsx";
 
 const validate = (values) => {
@@ -73,46 +74,85 @@ export default function CampgroundDetails() {
         <main>
           <div className="row m-5">
             <div className="col-6">
-              <div className="card">
-                {campground.images.map((img) => (
-                  <img src={img.url} className="card-img-top" alt="..."></img>
-                ))}
-                {/* <img
-                  src={campground.image}
-                  className="card-img-top"
-                  alt="..."
-                /> */}
-                <div className="card-body">
-                  <h5 className="card-title">{campground.title}</h5>
-                  <p className="card-text">{campground.description}</p>
-                </div>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item">{campground.location}</li>
-                  <li className="list-group-item">
-                    Submitted by: {campground.author.username}
-                  </li>
-                  <li className="list-group-item">${campground.price}/night</li>
-                  <li className="list-group-item">A third item</li>
-                </ul>
-                {campground.author._id == currentUser && (
-                  <div className="card-body">
-                    <Link
-                      to={`/campground/${id}/edit`}
-                      className="btn btn-info card-link"
-                    >
-                      Edit Campground
-                    </Link>
-                    <button
-                      onClick={deleteCampground}
-                      className="btn btn-danger card-link"
-                    >
-                      Delete Campground
-                    </button>
+              <Carousel images={campground.images} />
+              <div id="carouselExample" className="carousel slide">
+                <div className="carousel-inner">
+                  <div className="carousel-item active">
+                    <img
+                      src={campground.images[0].url}
+                      className="d-block w-100"
+                      alt="..."
+                    ></img>
                   </div>
-                )}
-                <div className="card-footer text-body-secondary">
-                  <Link to="/campgrounds">All Campgrounds </Link>
+                  {campground.images.slice(1).map((img) => (
+                    <div className="carousel-item">
+                      <img
+                        src={img.url}
+                        className="d-block w-100"
+                        alt="..."
+                      ></img>
+                    </div>
+                  ))}
                 </div>
+                <button
+                  className="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselExample"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    className="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button
+                  className="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselExample"
+                  data-bs-slide="next"
+                >
+                  <span
+                    className="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
+              {/* {campground.images.map((img) => (
+                <img src={img.url} className="card-img-top" alt="..."></img>
+              ))} */}
+
+              <div className="card-body">
+                <h5 className="card-title">{campground.title}</h5>
+                <p className="card-text">{campground.description}</p>
+              </div>
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">{campground.location}</li>
+                <li className="list-group-item">
+                  Submitted by: {campground.author.username}
+                </li>
+                <li className="list-group-item">${campground.price}/night</li>
+                <li className="list-group-item">A third item</li>
+              </ul>
+              {campground.author._id == currentUser && (
+                <div className="card-body">
+                  <Link
+                    to={`/campground/${id}/edit`}
+                    className="btn btn-info card-link"
+                  >
+                    Edit Campground
+                  </Link>
+                  <button
+                    onClick={deleteCampground}
+                    className="btn btn-danger card-link"
+                  >
+                    Delete Campground
+                  </button>
+                </div>
+              )}
+              <div className="card-footer text-body-secondary">
+                <Link to="/campgrounds">All Campgrounds </Link>
               </div>
             </div>
             <div className="col-6">

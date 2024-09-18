@@ -4,8 +4,7 @@ if (process.env.NODE_ENV !== "production") {
     const dotenv = await import("dotenv");
     dotenv.config();
   }
-
-console.log(process.env.CLOUDINARY_CLOUD_NAME)
+console.log("CLOUDINARY NAME:", process.env.CLOUDINARY_CLOUD_NAME)
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_KEY,
@@ -15,8 +14,8 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "yelpcamp", // The folder where images will be uploaded in Cloudinary
-    allowed_formats: ["jpeg", "png", "jpg"], // Allowed file formats
+    folder: "yelpcamp", 
+    allowed_formats: ["jpeg", "png", "jpg"], 
   },
 });
 

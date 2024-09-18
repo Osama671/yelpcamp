@@ -29,11 +29,16 @@ const router = express.Router();
 
 router.get("/", catchAsync(showAllCampgrounds));
 // catchAsync(createCampground)
-router.post("/", upload.array("images"), catchAsync(createCampground), (req, res) => {
-  console.log("Body: ", req.body)
-  console.log("File: ", req.files)
-  res.status(200).send("worked")
-});
+router.post(
+  "/",
+  upload.array("images"),
+  catchAsync(createCampground),
+  (req, res) => {
+    console.log(req.body, "-----", req.files);
+    res.status(200).send("Upload completed")
+  },
+  catchAsync(createCampground)
+);
 
 router.get("/:id", catchAsync(showCampgroundDetails));
 

@@ -42,7 +42,7 @@ export default function NewCampground() {
       title: "",
       location: "",
       price: "",
-      images: [], // Use an array to hold multiple files
+      images: [], 
       description: "",
     },
     validate,
@@ -55,7 +55,9 @@ export default function NewCampground() {
         formData.append("images", values.images[i]);
       }
       formData.append("description", values.description);
-      
+      // for (let [key, value] of formData){
+      //   console.log(key, value)
+      // }      
       const response = await axios.post("/api/campgrounds", formData);
       if (response) navigate("/campgrounds");
     },
