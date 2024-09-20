@@ -1,7 +1,10 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { Types } from "mongoose";
+// @ts-expect-error idklmfao
 import cities from "../../seeds/cities.js";
 import { faker } from "@faker-js/faker";
+// @ts-expect-error idklmfao
 import Review from "./review.js";
+// @ts-expect-error idklmfao
 import ExpressError from "../../util/ExpressError.js";
 
 const seedAmount = 2;
@@ -14,7 +17,25 @@ async function main() {
 
 const Schema = mongoose.Schema;
 
-const campgroundSchema = new Schema({
+interface ICampground {
+  title: string;
+  images: { url: string; filename: string }[];
+  price: number;
+  description: string;
+  location: string;
+  author: Types.ObjectId;
+  reviews: Types.ObjectId[];
+}
+
+interface IImages {
+  fieldname: string;
+  originalname: string;
+  path: string;
+  filename: string;
+  [key: string]: unknown;
+}
+
+const campgroundSchema = new Schema<ICampground>({
   title: String,
   images: [{ url: String, filename: String }],
   price: Number,
@@ -32,11 +53,14 @@ const campgroundSchema = new Schema({
   ],
 });
 
-campgroundSchema.post("findOneAndDelete", async function (doc) {
-  if (doc) {
-    await Review.deleteMany({ _id: { $in: doc.reviews } });
+campgroundSchema.post(
+  "findOneAndDelete",
+  async function (doc: ICampground | null) {
+    if (doc) {
+      await Review.deleteMany({ _id: { $in: doc.reviews } });
+    }
   }
-});
+);
 
 const Campground = mongoose.model("campground", campgroundSchema);
 
@@ -67,19 +91,19 @@ async function findAllCampgrounds() {
   return await Campground.find({});
 }
 
-async function findCampgroundById(id) {
+async function findCampgroundById(id: string) {
   return await Campground.findById(id)
     .populate({ path: "reviews", populate: "author" })
     .populate("author");
 }
 
 async function createCampground(
-  location,
-  description,
-  price,
-  title,
-  images,
-  id
+  location: string,
+  description: string,
+  price: string,
+  title: string,
+  images: IImages,
+  id: string
 ) {
   const newCampground = new Campground({
     location: `${location}`,
@@ -93,13 +117,13 @@ async function createCampground(
 }
 
 async function editCampground(
-  id,
-  location,
-  description,
-  price,
-  title,
-  imageurl,
-  userid
+  id: string,
+  location: string,
+  description: string,
+  price: string,
+  title: string,
+  imageurl: string,
+  userid: string
 ) {
   const update = {
     location: location,
@@ -116,14 +140,14 @@ async function editCampground(
   await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
 }
 
-export async function deleteReviewInCampground(id, reviewid) {
+export async function deleteReviewInCampground(id: string, reviewid: string) {
   await Campground.findOneAndUpdate(
     { _id: id },
     { $pull: { reviews: reviewid } }
   );
 }
 
-async function deleteCampgroundById(id, userid) {
+async function deleteCampgroundById(id: string, userid: string) {
   const campground = await findCampgroundById(id);
   if (!campground) throw new ExpressError("Campground not found", 500);
   if (!campground.author.equals(userid)) {

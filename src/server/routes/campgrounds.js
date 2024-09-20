@@ -5,7 +5,7 @@ import {
   showCampgroundDetails,
   createCampground,
   deleteCampground,
-} from "../controllers/campgrounds.js";
+} from "../controllers/campgrounds.ts";
 import express from "express";
 import catchAsync from "../../util/catchAsync.js";
 import { validateCampground } from "../repositories/schemas/schema.js";
