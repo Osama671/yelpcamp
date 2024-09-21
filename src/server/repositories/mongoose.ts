@@ -1,11 +1,8 @@
-import mongoose, { Types } from "mongoose";
-// @ts-expect-error idklmfao
-import cities from "../../seeds/cities.js";
+import mongoose, { Schema } from "mongoose";
+import cities from "../../seeds/cities.ts";
 import { faker } from "@faker-js/faker";
-// @ts-expect-error idklmfao
-import Review from "./review.js";
-// @ts-expect-error idklmfao
-import ExpressError from "../../util/ExpressError.js";
+import Review from "./review.ts";
+import ExpressError from "../../util/ExpressError.ts";
 
 const seedAmount = 2;
 
@@ -15,27 +12,13 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
 }
 
-const Schema = mongoose.Schema;
-
-interface ICampground {
-  title: string;
-  images: { url: string; filename: string }[];
-  price: number;
-  description: string;
-  location: string;
-  author: Types.ObjectId;
-  reviews: Types.ObjectId[];
-}
-
 interface IImages {
-  fieldname: string;
-  originalname: string;
-  path: string;
   filename: string;
-  [key: string]: unknown;
+  url: string;
 }
 
-const campgroundSchema = new Schema<ICampground>({
+
+const campgroundSchema = new Schema({
   title: String,
   images: [{ url: String, filename: String }],
   price: Number,
@@ -55,7 +38,7 @@ const campgroundSchema = new Schema<ICampground>({
 
 campgroundSchema.post(
   "findOneAndDelete",
-  async function (doc: ICampground | null) {
+  async function (doc) {
     if (doc) {
       await Review.deleteMany({ _id: { $in: doc.reviews } });
     }
@@ -102,7 +85,7 @@ async function createCampground(
   description: string,
   price: string,
   title: string,
-  images: IImages,
+  images: IImages[],
   id: string
 ) {
   const newCampground = new Campground({
