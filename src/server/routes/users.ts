@@ -1,7 +1,7 @@
 import express from "express";
-import catchAsync from "../../util/catchAsync.js";
+import catchAsync from "../../util/catchAsync.ts";
 import passport from "passport";
-import { registerUser, logout } from "../controllers/users.js";
+import { registerUser, logout } from "../controllers/users.ts";
 const router = express.Router();
 
 router.post("/register", catchAsync(registerUser));
@@ -12,7 +12,7 @@ router.post(
     failureFlash: true,
     failureRedirect: "/login",
   }),
-  (req, res) => {
+  (_, res) => {
     res.status(200).send("Sucessfully logged");
   }
 );

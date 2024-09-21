@@ -1,7 +1,7 @@
 import express from "express";
-import { createReview, deleteReview } from "../controllers/reviews.js";
-import catchAsync from "../../util/catchAsync.js";
-import { validateReview } from "../repositories/schemas/schema.js";
+import { createReview, deleteReview } from "../controllers/reviews.ts";
+import catchAsync from "../../util/catchAsync.ts";
+import { validateReview } from "../repositories/schemas/schema.ts";
 const router = express.Router({ mergeParams: true });
 
 router.post(

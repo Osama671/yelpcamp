@@ -7,10 +7,10 @@ import {
   deleteCampground,
 } from "../controllers/campgrounds.ts";
 import express from "express";
-import catchAsync from "../../util/catchAsync.js";
-import { validateCampground } from "../repositories/schemas/schema.js";
+import catchAsync from "../../util/catchAsync.ts";
+import { validateCampground } from "../repositories/schemas/schema.ts";
 import multer from "multer";
-import cloudinary from "../../cloudinary/index.js";
+import cloudinary from "../../cloudinary/cloudinary.ts";
 const upload = multer({ storage: cloudinary.storage });
 
 const router = express.Router();
@@ -37,7 +37,6 @@ router.post(
     console.log(req.body, "-----", req.files);
     res.status(200).send("Upload completed")
   },
-  catchAsync(createCampground)
 );
 
 router.get("/:id", catchAsync(showCampgroundDetails));

@@ -2,14 +2,12 @@ import model from "../repositories/mongoose.js";
 import { Request, Response } from "express";
 
 interface IImageIterable {
-  fieldname: string;
-  originalname: string;
-  path: string;
   filename: string;
-  [key: string]: unknown;
+  url: string;
+  path: string
 }
 
-export const showAllCampgrounds = async (_: unknown, res: Response) => {
+export const showAllCampgrounds = async (_: Request, res: Response) => {
   const campgrounds = await model.findAllCampgrounds();
   res.json(campgrounds);
 };
@@ -50,10 +48,14 @@ export const createCampground = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.json({ message: "User not found" });
   }
+
   const { location, description, price, title } = req.body;
   const userid = req.user._id;
 
-  const campgroundImages = req.files.map((f: IImageIterable) => ({
+  const files = req.files as Express.Multer.File[];
+  console.log("FILES: ", files)
+
+  const campgroundImages = files.map((f: IImageIterable) => ({
     url: f.path,
     filename: f.filename,
   }));
@@ -71,6 +73,9 @@ export const createCampground = async (req: Request, res: Response) => {
 export const deleteCampground = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.json({ message: "User not found" });
+  }
+  if(!req.user._id){
+    return res.json(({message: "No id"}))
   }
   const { id } = req.params;
   const userid = req.user._id;
