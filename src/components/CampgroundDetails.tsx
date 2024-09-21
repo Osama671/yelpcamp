@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
-import Carousel from "./Carousel.tsx"
+import Carousel from "./reactbootstrap/Carousel.tsx";
 import SuccessToast from "../components/toasts/SuccessToast.tsx";
 
 const validate = (values) => {
@@ -74,54 +74,10 @@ export default function CampgroundDetails() {
         <main>
           <div className="row m-5">
             <div className="col-6">
-              <Carousel images={campground.images} />
-              <div id="carouselExample" className="carousel slide">
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <img
-                      src={campground.images[0].url}
-                      className="d-block w-100"
-                      alt="..."
-                    ></img>
-                  </div>
-                  {campground.images.slice(1).map((img) => (
-                    <div className="carousel-item">
-                      <img
-                        src={img.url}
-                        className="d-block w-100"
-                        alt="..."
-                      ></img>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#carouselExample"
-                  data-bs-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#carouselExample"
-                  data-bs-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
-              </div>
-              {/* {campground.images.map((img) => (
-                <img src={img.url} className="card-img-top" alt="..."></img>
-              ))} */}
+              <Carousel
+                images={campground.images}
+                showArrows={campground.images.length === 1 ? false : true}
+              />
 
               <div className="card-body">
                 <h5 className="card-title">{campground.title}</h5>

@@ -23,17 +23,23 @@ export const editCampground = async (req: Request, res: Response) => {
     return res.json({ message: "User not found" });
   }
   const { id } = req.params;
-  const { location, description, price, title, imageurl } = req.body;
+  const { location, description, price, title, deleteImages } = req.body;
   const userid = req.user._id;
-  console.log("USER ID: ", userid);
+  const files = req.files as Express.Multer.File[];
+
+  const campgroundImages = files.map((f: IImageIterable) => ({
+    url: f.path,
+    filename: f.filename,
+  }));
   await model.editCampground(
     id,
     location,
     description,
     price,
     title,
-    imageurl,
-    userid
+    campgroundImages,
+    userid,
+    deleteImages
   );
   res.redirect(`/campground/${id}`);
 };
@@ -53,7 +59,6 @@ export const createCampground = async (req: Request, res: Response) => {
   const userid = req.user._id;
 
   const files = req.files as Express.Multer.File[];
-  console.log("FILES: ", files)
 
   const campgroundImages = files.map((f: IImageIterable) => ({
     url: f.path,
@@ -67,7 +72,7 @@ export const createCampground = async (req: Request, res: Response) => {
     campgroundImages,
     userid
   );
-  res.redirect("/campgrounds");
+  res.status(200).send("Edit Successful")
 };
 
 export const deleteCampground = async (req: Request, res: Response) => {

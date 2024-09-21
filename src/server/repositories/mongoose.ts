@@ -3,6 +3,7 @@ import cities from "../../seeds/cities.ts";
 import { faker } from "@faker-js/faker";
 import Review from "./review.ts";
 import ExpressError from "../../util/ExpressError.ts";
+import cloudinary from "../../cloudinary/cloudinary.ts";
 
 const seedAmount = 2;
 
@@ -36,14 +37,11 @@ const campgroundSchema = new Schema({
   ],
 });
 
-campgroundSchema.post(
-  "findOneAndDelete",
-  async function (doc) {
-    if (doc) {
-      await Review.deleteMany({ _id: { $in: doc.reviews } });
-    }
+campgroundSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Review.deleteMany({ _id: { $in: doc.reviews } });
   }
-);
+});
 
 const Campground = mongoose.model("campground", campgroundSchema);
 
@@ -58,10 +56,16 @@ async function seedCampgrounds() {
         title: `Title${i}`,
         location: `${cities[random].city}, ${cities[random].state}`,
         description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
-        images: {
-          url: `https://picsum.photos/400?random=${Math.random()}`,
-          filename: "",
-        },
+        images: [
+          {
+            url: `https://picsum.photos/400?random=${Math.random()}`,
+            filename: "",
+          },
+          {
+            url: `https://picsum.photos/400?random=${Math.random()}`,
+            filename: "",
+          },
+        ],
         price: randomPrice,
         author: "66e607e21575667c3d0a7dc6",
       });
@@ -100,27 +104,45 @@ async function createCampground(
 }
 
 async function editCampground(
-  id: string,
+  campgroundId: string,
   location: string,
   description: string,
   price: string,
   title: string,
-  imageurl: string,
-  userid: string
+  images: IImages[],
+  userid: string,
+  deleteImages: string[]
 ) {
+  const campground = await findCampgroundById(campgroundId);
+  if (!campground) throw new ExpressError("Campground not found", 500);
+  if (!campground.author.equals(userid)) {
+    return new ExpressError("You are not the author of this campground", 403);
+  }
+
   const update = {
     location: location,
     description: description,
     price: price,
     title: title,
-    image: imageurl,
   };
-  const campground = await findCampgroundById(id);
-  if (!campground) throw new ExpressError("Campground not found", 500);
-  if (!campground.author.equals(userid)) {
-    return new ExpressError("You are not the author of this campground", 403);
+
+  await Campground.findOneAndUpdate({ _id: campgroundId }, update, {
+    new: true,
+  });
+
+  campground.images = [...campground.images, ...images];
+  await campground.save();
+
+  if (deleteImages.length !== 0) {
+    deleteImages.map(async (filename) => {
+      await cloudinary.cloudinary.uploader.destroy(filename);
+    });
+    await Campground.updateOne(
+      { _id: campgroundId },
+      { $pull: { images: { filename: { $in: deleteImages } } } }
+    );
   }
-  await Campground.findOneAndUpdate({ _id: id }, update, { new: true });
+  return;
 }
 
 export async function deleteReviewInCampground(id: string, reviewid: string) {

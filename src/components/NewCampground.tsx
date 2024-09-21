@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
-import ayaya from "../ayaya.ts"
+import bsCustomFileInput from "bs-custom-file-input";
 
 const validate = (values) => {
   const errors = {};
@@ -43,7 +43,7 @@ export default function NewCampground() {
       title: "",
       location: "",
       price: "",
-      images: [], 
+      images: [],
       description: "",
     },
     validate,
@@ -56,13 +56,13 @@ export default function NewCampground() {
         formData.append("images", values.images[i]);
       }
       formData.append("description", values.description);
-      // for (let [key, value] of formData){
-      //   console.log(key, value)
-      // }      
+
       const response = await axios.post("/api/campgrounds", formData);
       if (response) navigate("/campgrounds");
     },
   });
+
+  bsCustomFileInput.init();
 
   return (
     <>
@@ -126,19 +126,22 @@ export default function NewCampground() {
             </div>
           ) : null}
           <div className="mb-3 mt-3">
-            <label className="form-label" htmlFor="images">
-              Upload Images
-            </label>
-            <input
-              id="images"
-              name="images"
-              type="file"
-              className="form-control"
-              multiple // Allow multiple files
-              onChange={(event) => {
-                formik.setFieldValue("images", event.target.files);
-              }}
-            />
+            {/*Start of bootstrap Form */}
+            <div className="mb-3 custom-file">
+              <label htmlFor="images" className="form-label custom-file-label">
+                {formik.values.images.length === 0 ? "Upload Images" : null}
+              </label>
+              <input
+                id="images"
+                name="images"
+                type="file"
+                className="form-control"
+                multiple
+                onChange={(event) => {
+                  formik.setFieldValue("images", event.target.files);
+                }}
+              ></input>
+            </div>
             {formik.touched.images && formik.errors.images ? (
               <div style={{ color: "red" }}>{formik.errors.images}</div>
             ) : null}

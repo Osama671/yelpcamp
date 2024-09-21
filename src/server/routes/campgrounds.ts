@@ -31,6 +31,7 @@ router.get("/", catchAsync(showAllCampgrounds));
 // catchAsync(createCampground)
 router.post(
   "/",
+
   upload.array("images"),
   catchAsync(createCampground),
   (req, res) => {
@@ -45,6 +46,6 @@ router.delete("/:id", catchAsync(deleteCampground));
 
 router.get("/:id/edit", catchAsync(showCampgroundEdit));
 
-router.post("/:id/edit", validateCampground, catchAsync(editCampground));
+router.post("/:id/edit", upload.array("images"), catchAsync(editCampground));
 
 export default router;

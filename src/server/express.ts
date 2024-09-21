@@ -66,6 +66,7 @@ app.get("/api/test", async (_: Request, res: Response) => {
   res.send(newUser);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   const { status = 500, message = "Internal Server Error" } = err as IExpressError;
   res.status(status).send(message);

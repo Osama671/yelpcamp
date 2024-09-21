@@ -9,7 +9,9 @@ const validateCampground = (req: Request, _: Response, next: NextFunction) => {
       price: Joi.number().required().min(10),
       title: Joi.string().required(),
       imageurl: Joi.string().required(),
-    }).required();
+      
+    }).required()
+    //Add later: deleteImages: Joi.array()
     const {error} = campgroundSchema.validate(req.body);
     if (error) {
       const errorMessage = error.details.map((detail) => detail.message).join(", ")

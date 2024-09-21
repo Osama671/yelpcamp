@@ -28,7 +28,6 @@ router.get("/auth/check", (req, res) => {
 });
 
 router.get("/auth/getuser", (req, res) => {
-  console.log("Express user:", req.user);
   res.json(req.user);
 });
 export default router;
