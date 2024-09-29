@@ -1,12 +1,16 @@
 import model from "../repositories/mongoose.js";
 import { Request, Response } from "express";
 
+import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding.js"; //.d.ts file module path edited with .js extension
+const mapBoxToken = process.env.MAPBOX_TOKEN || "oi";
+
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
+
 interface IImageIterable {
   filename: string;
   url: string;
-  path: string
+  path: string;
 }
-
 export const showAllCampgrounds = async (_: Request, res: Response) => {
   const campgrounds = await model.findAllCampgrounds();
   res.json(campgrounds);
@@ -51,6 +55,13 @@ export const showCampgroundDetails = async (req: Request, res: Response) => {
 };
 
 export const createCampground = async (req: Request, res: Response) => {
+  const geodata = await geocoder
+    .forwardGeocode({
+      query: req.body.location,
+      limit: 1,
+    })
+    .send();
+  const geometry = geodata.body.features[0].geometry
   if (!req.user) {
     return res.json({ message: "User not found" });
   }
@@ -65,6 +76,7 @@ export const createCampground = async (req: Request, res: Response) => {
     filename: f.filename,
   }));
   await model.createCampground(
+    geometry,
     location,
     description,
     price,
@@ -72,15 +84,15 @@ export const createCampground = async (req: Request, res: Response) => {
     campgroundImages,
     userid
   );
-  res.status(200).send("Edit Successful")
+  res.status(200).send("Campground created!");
 };
 
 export const deleteCampground = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.json({ message: "User not found" });
   }
-  if(!req.user._id){
-    return res.json(({message: "No id"}))
+  if (!req.user._id) {
+    return res.json({ message: "No id" });
   }
   const { id } = req.params;
   const userid = req.user._id;

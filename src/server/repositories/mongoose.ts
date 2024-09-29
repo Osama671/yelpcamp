@@ -18,10 +18,18 @@ interface IImages {
   url: string;
 }
 
-
 const campgroundSchema = new Schema({
   title: String,
   images: [{ url: String, filename: String }],
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+    },
+    coordinates: {
+      type: [Number],
+    },
+  },
   price: Number,
   description: String,
   location: String,
@@ -85,6 +93,7 @@ async function findCampgroundById(id: string) {
 }
 
 async function createCampground(
+  geometry: { type: string; coordinates: number[] },
   location: string,
   description: string,
   price: string,
@@ -93,6 +102,7 @@ async function createCampground(
   id: string
 ) {
   const newCampground = new Campground({
+    geometry: geometry,
     location: `${location}`,
     description: `${description}`,
     price: price,
