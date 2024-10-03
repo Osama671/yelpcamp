@@ -1,12 +1,15 @@
 import "../css/stars.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
 import Carousel from "./reactbootstrap/Carousel.tsx";
-import SuccessToast from "../components/toasts/SuccessToast.tsx";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const validate = (values) => {
   const errors = {};
@@ -22,6 +25,10 @@ const validate = (values) => {
 export default function CampgroundDetails() {
   const [campground, setCampground] = useState({});
   const [currentUser, setCurrentUser] = useState();
+
+  const mapRef = useRef();
+  const mapContainerRef = useRef();
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -32,7 +39,6 @@ export default function CampgroundDetails() {
 
   async function getCampground() {
     const response = await axios.get(`/api/campgrounds/${id}`);
-    console.log(response.data);
     setCampground(response.data);
   }
 
@@ -46,6 +52,23 @@ export default function CampgroundDetails() {
       `/api/campgrounds/${id}/review/${reviewid}`
     );
     getCampground();
+  };
+
+  const createMapBox = () => {
+    mapboxgl.accessToken = mapboxEnv;
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/light-v10',
+      center: campground.geometry.coordinates,
+      zoom: 9,
+    });
+    const marker = new mapboxgl.Marker()
+      .setLngLat(campground.geometry.coordinates)
+      .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<h5>${campground.title}</h5><p>${campground.location}</p>`))
+      .addTo(mapRef.current);
+    return () => {
+      mapRef.current.remove();
+    };
   };
 
   const formik = useFormik({
@@ -67,6 +90,13 @@ export default function CampgroundDetails() {
     getCampground();
     getCurrentUser();
   }, [id]);
+
+  useEffect(() => {
+    if (campground.geometry?.coordinates) {
+      createMapBox();
+    }
+  }, [campground]);
+
   return (
     <>
       <Navbar />
@@ -74,6 +104,12 @@ export default function CampgroundDetails() {
         <main>
           <div className="row m-5">
             <div className="col-6">
+              <div
+                id="map-container"
+                style={{ width: "300px", height: "300px" }}
+                ref={mapContainerRef}
+              />
+
               <Carousel
                 images={campground.images}
                 showArrows={campground.images.length === 1 ? false : true}

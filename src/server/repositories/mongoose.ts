@@ -5,7 +5,7 @@ import Review from "./review.ts";
 import ExpressError from "../../util/ExpressError.ts";
 import cloudinary from "../../cloudinary/cloudinary.ts";
 
-const seedAmount = 2;
+const seedAmount = 50;
 
 main().catch((err) => console.log(err));
 
@@ -18,31 +18,41 @@ interface IImages {
   url: string;
 }
 
-const campgroundSchema = new Schema({
-  title: String,
-  images: [{ url: String, filename: String }],
-  geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
+const opts = { toJSON: { virtuals: true } };
+
+const campgroundSchema = new Schema(
+  {
+    title: String,
+    images: [{ url: String, filename: String }],
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      coordinates: {
+        type: [Number],
+      },
     },
-    coordinates: {
-      type: [Number],
-    },
-  },
-  price: Number,
-  description: String,
-  location: String,
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  reviews: [
-    {
+    price: Number,
+    description: String,
+    location: String,
+    author: {
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "User",
     },
-  ],
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+  },
+  opts
+);
+
+//TODO: Better implementation without passing id as data-id, but passing it from MapBox directly
+campgroundSchema.virtual("properties.popUpMarkup").get(function () {
+  return `<strong><a href=# id="navigate-link" data-id=${this._id}>${this.title}</a></strong>`
 });
 
 campgroundSchema.post("findOneAndDelete", async function (doc) {
@@ -74,6 +84,10 @@ async function seedCampgrounds() {
             filename: "",
           },
         ],
+        geometry: {
+          type: "Point",
+          coordinates: [cities[random].longitude, cities[random].latitude],
+        },
         price: randomPrice,
         author: "66e607e21575667c3d0a7dc6",
       });

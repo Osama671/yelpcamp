@@ -2,7 +2,7 @@ import model from "../repositories/mongoose.js";
 import { Request, Response } from "express";
 
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding.js"; //.d.ts file module path edited with .js extension
-const mapBoxToken = process.env.MAPBOX_TOKEN || "oi";
+const mapBoxToken = process.env.MAPBOX_TOKEN || "";
 
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 

@@ -1,14 +1,8 @@
-import mongoose, {Types} from "mongoose";
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema
 
-interface IReviewSchema{
-  review: string,
-  rating: number,
-  author: Types.ObjectId
-}
-
-const reviewSchema = new Schema<IReviewSchema>({
+const reviewSchema = new Schema({
   review: String,
   rating: Number,
   author:{
