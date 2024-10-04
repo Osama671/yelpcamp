@@ -67,11 +67,18 @@ export default function Navbar() {
           <div className="navbar-nav ml-auto ">
             {getUser || (
               <>
-                <li className="nav-link">
-                  <Link to="/login">Login</Link>
+                <li className="nav-item">
+                  <Link
+                    to="/login"
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Login
+                  </Link>
                 </li>
-                <li className="nav-link">
-                  <Link to="/register">Register</Link>
+                <li className="nav-item">
+                  <Link to="/register" className="nav-link active"
+                  aria-current="page">Register</Link>
                 </li>
               </>
             )}

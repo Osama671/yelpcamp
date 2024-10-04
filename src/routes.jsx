@@ -1,4 +1,3 @@
-import App from "./App.tsx";
 import Campgrounds from "./components/Campgrounds.tsx";
 import CampgroundDetails from "./components/CampgroundDetails.tsx";
 import FourOhFour from "./components/FourOhFour.tsx";
@@ -8,9 +7,18 @@ import Profile from "./components/Profile.tsx";
 import Register from "./components/Register.tsx";
 import Login from "./components/Login.tsx";
 import AuthRoute from "./components/auth/AuthRoute.tsx";
+import HomePage from "./components/HomePage.tsx"
+import { HelmetProvider } from "react-helmet-async";
 
 const routes = [
-  { path: "/", element: <App /> },
+  {
+    path: "/",
+    element: (
+      <HelmetProvider>
+        <HomePage />
+      </HelmetProvider>
+    ),
+  },
   { path: "register", element: <Register /> },
   { path: "login", element: <Login /> },
   { path: "/newcampground", element: <AuthRoute Component={NewCampground} /> },

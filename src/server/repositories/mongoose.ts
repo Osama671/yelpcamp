@@ -50,7 +50,7 @@ const campgroundSchema = new Schema(
   opts
 );
 
-//TODO: Better implementation without passing id as data-id, but passing it from MapBox directly
+//TODO: Better implementation without passing id as data-id, but passing it from MapBox directly in Clustermap.tsx
 campgroundSchema.virtual("properties.popUpMarkup").get(function () {
   return `<strong><a href=# id="navigate-link" data-id=${this._id}>${this.title}</a></strong>`
 });
