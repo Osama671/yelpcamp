@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-export default function Navbar() {
+
+export default function Navbar({ styles }) {
   const [getUser, setGetUser] = useState(undefined);
 
   const handleLogout = async () => {
@@ -19,10 +20,10 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="navbar sticky-top navbar-expand-lg bg-body-tertiary"
+        className={`${styles.navbar} sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
         data-bs-theme="dark"
       >
-        <div className="container-fluid">
+        <div className="container-fluid d-flex gap-3 ">
           <Link className="navbar-brand" to="/">
             Yelpcamp
           </Link>
@@ -40,13 +41,17 @@ export default function Navbar() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/">
+                <Link
+                  className={`${styles.navLink} active`}
+                  aria-current="page"
+                  to="/"
+                >
                   Home
                 </Link>
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link active"
+                  className={`${styles.navLink} active`}
                   aria-current="page"
                   to="/campgrounds"
                 >
@@ -55,7 +60,7 @@ export default function Navbar() {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link active"
+                  className={`${styles.navLink} active`}
                   aria-current="page"
                   to="/newcampground"
                 >
@@ -64,26 +69,33 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-          <div className="navbar-nav ml-auto ">
+          <div className="collapse navbar-collapse ml-auto justify-content-end" id="navbarNav">
             {getUser || (
               <>
-                <li className="nav-item">
-                  <Link
-                    to="/login"
-                    className="nav-link active"
-                    aria-current="page"
-                  >
-                    Login
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/register" className="nav-link active"
-                  aria-current="page">Register</Link>
-                </li>
+                <ul className="navbar-nav ">
+                  <li className="nav-item">
+                    <Link
+                      to="/login"
+                      className={`${styles.navLink} active`}
+                      aria-current="page"
+                    >
+                      Login
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/register"
+                      className={`${styles.navLink} active`}
+                      aria-current="page"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                </ul>
               </>
             )}
             {getUser && (
-              <li className="nav-link" onClick={handleLogout}>
+              <li className={`${styles.navLink} active`} onClick={handleLogout}>
                 <Link to="/login">Logout</Link>
               </li>
             )}

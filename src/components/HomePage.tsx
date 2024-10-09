@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import "../styles/homepage.css";
+import styles from "../styles/homepage.module.css";
 
 export default function HomePage() {
   return (
@@ -16,10 +16,13 @@ export default function HomePage() {
         <meta name="description" content="Beautiful YelpCamp 10/10" />
         <title>Yelpcamp</title>
       </Helmet>
-      <div className="homepage-wrapper d-flex text-center bg-dark justify-content-center">
-      <Navbar />
-
-        <div className="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column text-white">
+      <div
+        className={`${styles.homepageWrapper} d-flex text-center bg-dark justify-content-center`}
+      >
+        <Navbar styles={styles}/>
+        <div
+          className={`${styles.coverContainer} d-flex w-100 h-100 p-3 mx-auto flex-column text-white`}
+        >
           <header className="mb-auto"></header>
           <main className="px-3">
             <h1>YelpCamp</h1>
@@ -30,13 +33,12 @@ export default function HomePage() {
             </p>
             <Link
               to="/campgrounds"
-              className="btn btn-lg btn-secondary font-weight-bold border-white bg-white"
+              className={`${styles.btnSecondaryBS} btn btn-lg btn-secondary font-weight-bold border-white bg-white`}
             >
-              View Campgrounds
+              <strong>View Campgrounds</strong>
             </Link>
           </main>
-
-          <Footer />
+          <Footer styles={styles}/>
         </div>
       </div>
     </>

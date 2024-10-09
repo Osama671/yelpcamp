@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import "../styles/maps.css"
 
 const ClusterMap = ({ campgrounds }) => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const ClusterMap = ({ campgrounds }) => {
       center: [-103.5917, 40.6699],
       zoom: 3,
     });
+    mapRef.current.addControl(new mapboxgl.NavigationControl());
 
     mapRef.current.on("load", () => {
       console.log(campgrounds);
@@ -126,9 +128,8 @@ const ClusterMap = ({ campgrounds }) => {
 
   return (
     <div
-      id="map"
+      id="cluster-map"
       ref={mapContainerRef}
-      style={{ width: "100%", height: "500px" }}
     ></div>
   );
 };

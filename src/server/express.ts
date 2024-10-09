@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== "production") {
   const dotenv = await import("dotenv");
   dotenv.config();
 }
-import {Request, Response, NextFunction} from "express"
+import { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import express from "express";
@@ -12,22 +12,24 @@ import campgroundRouter from "./routes/campgrounds.js";
 import reviewRouter from "./routes/reviews.js";
 import userRouter from "./routes/users.ts";
 import passport from "passport";
-import  {Strategy} from "passport-local";
+import { Strategy } from "passport-local";
+import helmet from "helmet";
 import User from "./repositories/users.ts";
+import mongoSanitize from "express-mongo-sanitize"
 
-interface IExpressError extends Error{
-  status: number
+interface IExpressError extends Error {
+  status: number;
 }
 
 interface ISessionConfig {
-  secret: string,
-  resave: boolean,
-  saveUninitialized: boolean,
+  secret: string;
+  resave: boolean;
+  saveUninitialized: boolean;
   cookie: {
-    httpOnly: boolean,
-    expires: Date,
-    maxAge: number
-  }
+    httpOnly: boolean;
+    expires: Date;
+    maxAge: number;
+  };
 }
 
 const app = express();
@@ -56,6 +58,9 @@ passport.use(new Strategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(mongoSanitize());
+
 app.use("/api/", userRouter);
 app.use("/api/campgrounds", campgroundRouter);
 app.use("/api/campgrounds/:id/review", reviewRouter);
@@ -68,7 +73,8 @@ app.get("/api/test", async (_: Request, res: Response) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  const { status = 500, message = "Internal Server Error" } = err as IExpressError;
+  const { status = 500, message = "Internal Server Error" } =
+    err as IExpressError;
   res.status(status).send(message);
 });
 

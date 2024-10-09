@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 export default function CampgroundCard({ campground }) {
   return (
     <>
-      <div className="card">
+      <div className="card mb-3">
         <div className="row">
           <div className="col-md-4">
             <img className="img-fluid" src={campground.images[0].url} alt="Campground image"></img>
@@ -16,7 +16,6 @@ export default function CampgroundCard({ campground }) {
             </div>
           </div>
         </div>
-        ;
       </div>
     </>
   );

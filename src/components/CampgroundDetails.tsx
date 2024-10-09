@@ -8,6 +8,7 @@ import Footer from "./Footer.tsx";
 import Carousel from "./reactbootstrap/Carousel.tsx";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import styles from "../styles/navbar.module.css";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -58,13 +59,19 @@ export default function CampgroundDetails() {
     mapboxgl.accessToken = mapboxEnv;
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/light-v10',
+      style: "mapbox://styles/mapbox/light-v10",
       center: campground.geometry.coordinates,
       zoom: 9,
     });
+    mapRef.current.addControl(new mapboxgl.NavigationControl());
+
     const marker = new mapboxgl.Marker()
       .setLngLat(campground.geometry.coordinates)
-      .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<h5>${campground.title}</h5><p>${campground.location}</p>`))
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }).setHTML(
+          `<h5>${campground.title}</h5><p>${campground.location}</p>`
+        )
+      )
       .addTo(mapRef.current);
     return () => {
       mapRef.current.remove();
@@ -99,16 +106,12 @@ export default function CampgroundDetails() {
 
   return (
     <>
-      <Navbar />
+      <Navbar styles={styles} />
       {Object.keys(campground).length === 0 || (
         <main>
           <div className="row m-5">
             <div className="col-6">
-              <div
-                id="map-container"
-                style={{ width: "300px", height: "300px" }}
-                ref={mapContainerRef}
-              />
+            
 
               <Carousel
                 images={campground.images}
@@ -148,6 +151,7 @@ export default function CampgroundDetails() {
               </div>
             </div>
             <div className="col-6">
+            <div id="map-container" ref={mapContainerRef} />
               {!currentUser || (
                 <form onSubmit={formik.handleSubmit} className="mb-3">
                   <h2>Leave a review</h2>
@@ -269,7 +273,7 @@ export default function CampgroundDetails() {
           </div>
         </main>
       )}
-      <Footer />
+      <Footer styles={styles} />
     </>
   );
 }

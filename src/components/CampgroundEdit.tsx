@@ -104,7 +104,7 @@ export default function CampgroundEdit() {
             <>
               <h1 className="text-center">Edit Campground:</h1>
               <p className="text-center"></p>
-              <div className="col-6 offset-3">
+              <div className="col-md-6 offset-md-3">
                 <form
                   onSubmit={formik.handleSubmit}
                   encType="multipart/form-data"

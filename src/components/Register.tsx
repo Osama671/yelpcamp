@@ -26,7 +26,7 @@ const validate = (values) => {
 };
 
 export default function Register() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -37,70 +37,82 @@ export default function Register() {
     validate,
     onSubmit: async (values) => {
       const response = await axios.post("/api/register", values);
-      navigate("/campgrounds")
+      navigate("/campgrounds");
     },
   });
 
   return (
     <>
-      <div className="col-6 offset-3 mt-3">
-        <h1>Register</h1>
-        <form onSubmit={formik.handleSubmit}>
-          <div className="my-3">
-            <label className="form-label" htmlFor="username">
-              Username
-            </label>
-            <input
-              className="form-control"
-              id="username"
-              type="text"
-              name="username"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.username}
-            />
-            {formik.touched.username && formik.errors.username ? (
-              <div style={{ color: "red" }}>{formik.errors.username}</div>
-            ) : null}
+      <div className="container d-flex justify-content-center align-items-center mt-5">
+        <div className="col-8 col-lg-5 mt-3">
+          <div className="card shadow">
+            <img
+              className="card-img-top"
+              style={{ width: "auto", height: "300px" }}
+              src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            ></img>
+            <div className="card-body">
+              <h5 className="card-title">Register</h5>
+              <form onSubmit={formik.handleSubmit}>
+                <div className="my-3">
+                  <label className="form-label" htmlFor="username">
+                    Username
+                  </label>
+                  <input
+                    className="form-control"
+                    id="username"
+                    type="text"
+                    name="username"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.username}
+                  />
+                  {formik.touched.username && formik.errors.username ? (
+                    <div style={{ color: "red" }}>{formik.errors.username}</div>
+                  ) : null}
+                </div>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    className="form-control"
+                    id="password"
+                    type="password"
+                    name="password"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                  />
+                  {formik.touched.password && formik.errors.password ? (
+                    <div style={{ color: "red" }}>{formik.errors.password}</div>
+                  ) : null}
+                </div>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="email">
+                    Email
+                  </label>
+                  <input
+                    className="form-control"
+                    id="email"
+                    type="email"
+                    name="email"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div style={{ color: "red" }}>{formik.errors.email}</div>
+                  ) : null}
+                </div>
+                <div className="d-grid">
+                <button type="submit" className="btn btn-success">
+                  Register
+                </button></div>
+              </form>
+            </div>
           </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="form-control"
-              id="password"
-              type="password"
-              name="password"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.password}
-            />
-            {formik.touched.password && formik.errors.password ? (
-              <div style={{ color: "red" }}>{formik.errors.password}</div>
-            ) : null}
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="form-control"
-              id="email"
-              type="email"
-              name="email"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.email}
-            />
-            {formik.touched.email && formik.errors.email ? (
-              <div style={{ color: "red" }}>{formik.errors.email}</div>
-            ) : null}
-          </div>
-          <button type="submit" className="btn btn-success">
-            Submit
-          </button>
-        </form>
+        </div>
       </div>
     </>
   );
