@@ -130,6 +130,7 @@ const ClusterMap = ({ campgrounds }) => {
     <div
       id="cluster-map"
       ref={mapContainerRef}
+      className="rounded"
     ></div>
   );
 };

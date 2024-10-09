@@ -110,26 +110,25 @@ export default function CampgroundDetails() {
       {Object.keys(campground).length === 0 || (
         <main>
           <div className="row m-5">
-            <div className="col-6">
-            
-
+            <div className=" col-md-6">
               <Carousel
                 images={campground.images}
                 showArrows={campground.images.length === 1 ? false : true}
               />
-
-              <div className="card-body">
-                <h5 className="card-title">{campground.title}</h5>
-                <p className="card-text">{campground.description}</p>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">{campground.title}</h5>
+                  <p className="card-text">{campground.description}</p>
+                </div>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">{campground.location}</li>
+                  <li className="list-group-item">
+                    Submitted by: {campground.author.username}
+                  </li>
+                  <li className="list-group-item">${campground.price}/night</li>
+                  <li className="list-group-item">A third item</li>
+                </ul>
               </div>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">{campground.location}</li>
-                <li className="list-group-item">
-                  Submitted by: {campground.author.username}
-                </li>
-                <li className="list-group-item">${campground.price}/night</li>
-                <li className="list-group-item">A third item</li>
-              </ul>
               {campground.author._id == currentUser && (
                 <div className="card-body">
                   <Link
@@ -146,12 +145,9 @@ export default function CampgroundDetails() {
                   </button>
                 </div>
               )}
-              <div className="card-footer text-body-secondary">
-                <Link to="/campgrounds">All Campgrounds </Link>
-              </div>
             </div>
-            <div className="col-6">
-            <div id="map-container" ref={mapContainerRef} />
+            <div className=" col-md-6">
+              <div id="map-container" ref={mapContainerRef} className="mb-3"/>
               {!currentUser || (
                 <form onSubmit={formik.handleSubmit} className="mb-3">
                   <h2>Leave a review</h2>
@@ -220,7 +216,7 @@ export default function CampgroundDetails() {
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label" htmlFor="review">
+                    <label className="form-label fs-4" htmlFor="review">
                       Review
                     </label>
                     <textarea
@@ -236,7 +232,7 @@ export default function CampgroundDetails() {
                     {formik.touched.review && formik.errors.review ? (
                       <div style={{ color: "red" }}>{formik.errors.review}</div>
                     ) : null}
-                    <button type="submit" className="btn btn-success">
+                    <button type="submit" className="btn btn-success mt-3">
                       Submit Review
                     </button>
                   </div>

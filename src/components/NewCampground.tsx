@@ -66,6 +66,7 @@ export default function NewCampground() {
 
   return (
     <>
+    
       <h1 className="text-center">New Campground:</h1>
       <p className="text-center">
         <Link to="/">Home Page</Link>

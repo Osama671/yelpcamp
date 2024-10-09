@@ -25,11 +25,18 @@
 
 .navbar {
   width: 100vw;
-  position: relative;
+  position: absolute;
   color: white;
-  height: 8vh;
   align-content: center;
   padding-right: 1rem;
 }
 
+@media (max-width: 992px) {
+    .navItem {
+        margin-top: 16px;
+    }
+    .navbarNav {
+        align-items: center;
+    }
+}
 

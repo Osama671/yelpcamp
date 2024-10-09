@@ -20,9 +20,10 @@ export default function Navbar({ styles }) {
   return (
     <>
       <nav
-        className={`${styles.navbar} sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
+        className={`${styles.navbar}  navbar sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
         data-bs-theme="dark"
       >
+        
         <div className="container-fluid d-flex gap-3 ">
           <Link className="navbar-brand" to="/">
             Yelpcamp
@@ -39,29 +40,26 @@ export default function Navbar({ styles }) {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
+            <ul className={`navbar-nav ${styles.navbarNav}`}>
+              <li className={`nav-item ${styles.navItem}`}>
                 <Link
                   className={`${styles.navLink} active`}
-                  aria-current="page"
                   to="/"
                 >
                   Home
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className={`nav-item ${styles.navItem}`}>
                 <Link
                   className={`${styles.navLink} active`}
-                  aria-current="page"
                   to="/campgrounds"
                 >
                   Campgrounds
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className={`nav-item ${styles.navItem}`}>
                 <Link
                   className={`${styles.navLink} active`}
-                  aria-current="page"
                   to="/newcampground"
                 >
                   New Campgrounds
@@ -69,11 +67,14 @@ export default function Navbar({ styles }) {
               </li>
             </ul>
           </div>
-          <div className="collapse navbar-collapse ml-auto justify-content-end" id="navbarNav">
-            {getUser || (
+          <div
+            className="collapse navbar-collapse ml-auto justify-content-end"
+            id="navbarNav"
+          >
+            {getUser === undefined ? (
               <>
-                <ul className="navbar-nav ">
-                  <li className="nav-item">
+                <ul className={`navbar-nav ${styles.navbarNav}`}>
+                  <li className={`nav-item ${styles.navItem}`}>
                     <Link
                       to="/login"
                       className={`${styles.navLink} active`}
@@ -82,7 +83,7 @@ export default function Navbar({ styles }) {
                       Login
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className={`nav-item ${styles.navItem}`}>
                     <Link
                       to="/register"
                       className={`${styles.navLink} active`}
@@ -93,11 +94,18 @@ export default function Navbar({ styles }) {
                   </li>
                 </ul>
               </>
-            )}
-            {getUser && (
-              <li className={`${styles.navLink} active`} onClick={handleLogout}>
-                <Link to="/login">Logout</Link>
-              </li>
+            ) : (
+              <ul className={`navbar-nav ${styles.navbarNav}`}>
+                <li className={`nav-item ${styles.navItem}`}>
+                  <Link
+                    to="/login"
+                    onClick={handleLogout}
+                    className={`${styles.navLink} active`}
+                  >
+                    Logout
+                  </Link>
+                </li>
+              </ul>
             )}
           </div>
         </div>

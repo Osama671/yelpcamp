@@ -24,7 +24,7 @@ export default function Campgrounds() {
     <>
       <div className="vh-100">
         <Navbar styles={styles} />
-        <div className="d-flex flex-column col-md-8 offset-md-2">
+        <div className="d-flex flex-column col-10 offset-1 col-md-8 offset-md-2">
           <main className="mt-3 ">
             {dataRetrieved ? (
               <>

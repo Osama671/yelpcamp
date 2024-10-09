@@ -20,6 +20,7 @@ export default function HomePage() {
         className={`${styles.homepageWrapper} d-flex text-center bg-dark justify-content-center`}
       >
         <Navbar styles={styles}/>
+        
         <div
           className={`${styles.coverContainer} d-flex w-100 h-100 p-3 mx-auto flex-column text-white`}
         >
