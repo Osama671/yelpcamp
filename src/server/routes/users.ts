@@ -1,10 +1,9 @@
 import express from "express";
-import catchAsync from "../../util/catchAsync.ts";
 import passport from "passport";
 import { registerUser, logout } from "../controllers/users.ts";
 const router = express.Router();
 
-router.post("/register", catchAsync(registerUser));
+router.post("/register", registerUser);
 
 router.post(
   "/login",

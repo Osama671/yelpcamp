@@ -7,10 +7,11 @@ import {
   deleteCampground,
 } from "../controllers/campgrounds.ts";
 import express from "express";
-import catchAsync from "../../util/catchAsync.ts";
-import { validateCampground } from "../repositories/schemas/schema.ts";
+// import catchAsync from "../../util/catchAsync.ts";
+// import { validateCampground } from "../repositories/schemas/schema.ts";
 import multer from "multer";
 import cloudinary from "../../cloudinary/cloudinary.ts";
+
 const upload = multer({ storage: cloudinary.storage });
 
 const router = express.Router();
@@ -27,25 +28,25 @@ const router = express.Router();
 //   }
 // };
 
-router.get("/", catchAsync(showAllCampgrounds));
+router.get("/", showAllCampgrounds);
 // catchAsync(createCampground)
 router.post(
   "/",
 
   upload.array("images"),
-  catchAsync(createCampground),
+  createCampground,
   (req, res) => {
     console.log(req.body, "-----", req.files);
     res.status(200).send("Upload completed")
   },
 );
 
-router.get("/:id", catchAsync(showCampgroundDetails));
+router.get("/:id", showCampgroundDetails);
 
-router.delete("/:id", catchAsync(deleteCampground));
+router.delete("/:id", deleteCampground);
 
-router.get("/:id/edit", catchAsync(showCampgroundEdit));
+router.get("/:id/edit", showCampgroundEdit);
 
-router.post("/:id/edit", upload.array("images"), catchAsync(editCampground));
+router.post("/:id/edit", upload.array("images"), editCampground);
 
 export default router;

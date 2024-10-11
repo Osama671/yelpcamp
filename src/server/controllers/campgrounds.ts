@@ -1,7 +1,8 @@
 import model from "../repositories/mongoose.js";
 import { Request, Response } from "express";
-
 import mbxGeocoding from "@mapbox/mapbox-sdk/services/geocoding.js"; //.d.ts file module path edited with .js extension
+import ExpressErrorGeneric from "../../util/ExpressErrorGeneric.js";
+import ExpressError from "../../util/ExpressError.ts";
 const mapBoxToken = process.env.MAPBOX_TOKEN || "";
 
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
@@ -12,90 +13,122 @@ interface IImageIterable {
   path: string;
 }
 export const showAllCampgrounds = async (_: Request, res: Response) => {
-  const campgrounds = await model.findAllCampgrounds();
-  res.json(campgrounds);
+  try {
+    const campgrounds = await model.findAllCampgrounds();
+    if (!campgrounds)
+      return res.status(404).json({ message: "Campgrounds not found" });
+    return res.json(campgrounds);
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
 };
 
 export const showCampgroundEdit = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const campground = await model.findCampgroundById(id);
-  res.json(campground);
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User is not logged in." });
+    }
+    const { id } = req.params;
+    const userid = req.user._id;
+    const campground = await model.findCampgroundById(id);
+    if (!campground.author.equals(userid)) {
+      throw new ExpressError("You are not the author of this campground", 403);
+    }
+    return res.status(200).json(campground);
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
 };
 
 export const editCampground = async (req: Request, res: Response) => {
   if (!req.user) {
-    return res.json({ message: "User not found" });
+    return res.status(401).json({ message: "User is not logged in." });
   }
-  const { id } = req.params;
-  const { location, description, price, title, deleteImages } = req.body;
-  const userid = req.user._id;
-  const files = req.files as Express.Multer.File[];
+  try {
+    const { id } = req.params;
+    const { location, description, price, title, deleteImages } = req.body;
+    const userid = req.user._id;
+    const files = req.files as Express.Multer.File[];
 
-  const campgroundImages = files.map((f: IImageIterable) => ({
-    url: f.path,
-    filename: f.filename,
-  }));
-  await model.editCampground(
-    id,
-    location,
-    description,
-    price,
-    title,
-    campgroundImages,
-    userid,
-    deleteImages
-  );
-  res.redirect(`/campground/${id}`);
+    const campgroundImages = files.map((f: IImageIterable) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
+    await model.editCampground(
+      id,
+      location,
+      description,
+      price,
+      title,
+      campgroundImages,
+      userid,
+      deleteImages
+    );
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
 };
 
 export const showCampgroundDetails = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const campground = await model.findCampgroundById(id);
-  res.json(campground);
+  try {
+    const { id } = req.params;
+    const campground = await model.findCampgroundById(id);
+    if (!campground) {
+      return res.status(404).json({ message: "Campground not found" });
+    }
+    res.json(campground);
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
 };
 
 export const createCampground = async (req: Request, res: Response) => {
-  const geodata = await geocoder
-    .forwardGeocode({
-      query: req.body.location,
-      limit: 1,
-    })
-    .send();
-  const geometry = geodata.body.features[0].geometry
-  if (!req.user) {
-    return res.json({ message: "User not found" });
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    const geodata = await geocoder
+      .forwardGeocode({
+        query: req.body.location,
+        limit: 1,
+      })
+      .send();
+    const geometry = geodata.body.features[0].geometry;
+
+    const { location, description, price, title } = req.body;
+    const userid = req.user._id;
+
+    const files = req.files as Express.Multer.File[];
+
+    const campgroundImages = files.map((f: IImageIterable) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
+    await model.createCampground(
+      geometry,
+      location,
+      description,
+      price,
+      title,
+      campgroundImages,
+      userid
+    );
+    return res.status(200).send("Campground created!");
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
   }
-
-  const { location, description, price, title } = req.body;
-  const userid = req.user._id;
-
-  const files = req.files as Express.Multer.File[];
-
-  const campgroundImages = files.map((f: IImageIterable) => ({
-    url: f.path,
-    filename: f.filename,
-  }));
-  await model.createCampground(
-    geometry,
-    location,
-    description,
-    price,
-    title,
-    campgroundImages,
-    userid
-  );
-  res.status(200).send("Campground created!");
 };
 
 export const deleteCampground = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return res.json({ message: "User not found" });
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    const { id } = req.params;
+    const userid = req.user._id;
+    await model.deleteCampgroundById(id, userid);
+    return res.status(200).json({ message: `Campground ID ${id} Deleted.` });
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
   }
-  if (!req.user._id) {
-    return res.json({ message: "No id" });
-  }
-  const { id } = req.params;
-  const userid = req.user._id;
-  await model.deleteCampgroundById(id, userid);
-  res.status(200).json({ message: `Campground ID ${id} Deleted.` });
 };

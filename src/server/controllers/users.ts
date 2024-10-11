@@ -1,5 +1,5 @@
 import User from "../repositories/users.ts";
-import {Request, Response, NextFunction} from "express"
+import { Request, Response, NextFunction } from "express";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { username, password, email } = req.body;
@@ -14,7 +14,6 @@ export const registerUser = async (req: Request, res: Response) => {
       resolve();
     });
   });
-
   res.status(200).send("User Registered");
 };
 

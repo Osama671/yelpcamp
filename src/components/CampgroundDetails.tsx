@@ -254,14 +254,12 @@ export default function CampgroundDetails() {
                         Rated: 3
                       </p>
                       <p>Review: {review.review}</p>
-                      {currentUser !== review.author._id ? null : (
                         <button
                           onClick={() => handleDeleteReview(review._id)}
                           className="btn btn-sm btn-danger"
                         >
                           Delete
                         </button>
-                      )}
                     </div>
                   </div>
                 ))}
