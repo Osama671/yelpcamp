@@ -73,6 +73,7 @@ export const showCampgroundDetails = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const campground = await model.findCampgroundById(id);
+
     if (!campground) {
       return res.status(404).json({ message: "Campground not found" });
     }

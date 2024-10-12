@@ -34,25 +34,44 @@ export default function CampgroundDetails() {
   const navigate = useNavigate();
 
   async function getCurrentUser() {
-    const response = await axios.get("/api/auth/getuser");
-    setCurrentUser(response.data._id);
+    try {
+      const response = await axios.get("/api/auth/getuser");
+      setCurrentUser(response.data._id);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async function getCampground() {
-    const response = await axios.get(`/api/campgrounds/${id}`);
-    setCampground(response.data);
+    try {
+      const response = await axios.get(`/api/campgrounds/${id}`);
+      if (response.status !== 200) navigate("/campgrounds");
+      setCampground(response.data);
+    } catch (e) {
+      console.error(e);
+      navigate("/campgrounds");
+    }
   }
 
   const deleteCampground = async () => {
-    const response = await axios.delete(`/api/campgrounds/${id}`);
-    if (response.status === 200) navigate("/campgrounds");
+    try {
+      const response = await axios.delete(`/api/campgrounds/${id}`);
+      if (response.status === 200) navigate("/campgrounds");
+    } catch (e) {
+      console.error(e);
+      navigate("/campgrounds");
+    }
   };
 
   const handleDeleteReview = async (reviewid: string) => {
-    const response = await axios.delete(
-      `/api/campgrounds/${id}/review/${reviewid}`
-    );
-    getCampground();
+    try {
+      const response = await axios.delete(
+        `/api/campgrounds/${id}/review/${reviewid}`
+      );
+      getCampground();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const createMapBox = () => {
@@ -110,7 +129,7 @@ export default function CampgroundDetails() {
       {Object.keys(campground).length === 0 || (
         <main>
           <div className="row m-5">
-            <div className=" col-md-6">
+            <div className=" col-md-6 mt-5">
               <Carousel
                 images={campground.images}
                 showArrows={campground.images.length === 1 ? false : true}
@@ -146,13 +165,14 @@ export default function CampgroundDetails() {
                 </div>
               )}
             </div>
-            <div className=" col-md-6">
-              <div id="map-container" ref={mapContainerRef} className="mb-3"/>
+            <div className=" col-md-6 mt-5">
+              <div id="map-container" ref={mapContainerRef} className="mb-3" />
+              <h2>Reviews:</h2>
+
               {!currentUser || (
                 <form onSubmit={formik.handleSubmit} className="mb-3">
-                  <h2>Leave a review</h2>
                   <div className="mb-3">
-                    <fieldset className="starability-basic">
+                    <fieldset className="starability-basic ">
                       <input
                         type="radio"
                         id="second-rate1"
@@ -238,6 +258,12 @@ export default function CampgroundDetails() {
                   </div>
                 </form>
               )}
+              {campground.reviews.length === 0 && (
+                <>
+                  <h3 style={{ textAlign: "center" }}>No reviews</h3>{" "}
+                  <h5 style={{ textAlign: "center" }}>Be the first to review!</h5>
+                </>
+              )}
 
               {Object.keys(campground).length === 0 ||
                 campground.reviews.map((review) => (
@@ -254,12 +280,14 @@ export default function CampgroundDetails() {
                         Rated: 3
                       </p>
                       <p>Review: {review.review}</p>
+                      {currentUser !== review.author._id ? null : (
                         <button
                           onClick={() => handleDeleteReview(review._id)}
                           className="btn btn-sm btn-danger"
                         >
                           Delete
                         </button>
+                      )}
                     </div>
                   </div>
                 ))}

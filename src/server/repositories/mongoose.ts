@@ -76,11 +76,19 @@ async function seedCampgrounds() {
         description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
         images: [
           {
-            url: `https://picsum.photos/400?random=${Math.random()}`,
+            url: `https://picsum.photos/900?random=${Math.random()}`,
             filename: "",
           },
           {
-            url: `https://picsum.photos/400?random=${Math.random()}`,
+            url: `https://picsum.photos/900/1200?random=${Math.random()}`,
+            filename: "",
+          },
+          {
+            url: `https://picsum.photos/300/1500?random=${Math.random()}`,
+            filename: "",
+          },
+          {
+            url: `https://picsum.photos/1900/300?random=${Math.random()}`,
             filename: "",
           },
         ],
@@ -101,10 +109,14 @@ async function findAllCampgrounds() {
 }
 
 async function findCampgroundById(id: string) {
-  const campground = await Campground.findById(id)
-    .populate({ path: "reviews", populate: "author" })
-    .populate("author");
-  return campground;
+  try {
+    const campground = await Campground.findById(id)
+      .populate({ path: "reviews", populate: "author" })
+      .populate("author");
+    return campground;
+  } catch (e) {
+    throw new ExpressError(`Database Error: ${e}`, 404);
+  }
 }
 
 async function createCampground(
@@ -183,7 +195,7 @@ export async function deleteReviewInCampground(
   userid: string
 ) {
   const review = await findReviewById(reviewid, userid);
-  
+
   if (!review.author.equals(userid)) {
     throw new ExpressError("You are not the author of this review", 403);
   }
