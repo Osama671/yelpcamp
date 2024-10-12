@@ -12,9 +12,11 @@ interface IImageIterable {
   url: string;
   path: string;
 }
-export const showAllCampgrounds = async (_: Request, res: Response) => {
+export const showAllCampgrounds = async (req: Request, res: Response) => {
   try {
-    const campgrounds = await model.findAllCampgrounds();
+    const page = req.query.page ? Number(req.query.page) : 1
+    
+    const campgrounds = await model.findAllCampgrounds(page);
     if (!campgrounds)
       return res.status(404).json({ message: "Campgrounds not found" });
     return res.json(campgrounds);

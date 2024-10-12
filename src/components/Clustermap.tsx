@@ -124,13 +124,13 @@ const ClusterMap = ({ campgrounds }) => {
     });
 
     return () => mapRef.current.remove();
-  }, []);
+  }, [campgrounds, navigate]);
 
   return (
     <div
       id="cluster-map"
       ref={mapContainerRef}
-      className="rounded"
+      className="rounded mt-4"  
     ></div>
   );
 };

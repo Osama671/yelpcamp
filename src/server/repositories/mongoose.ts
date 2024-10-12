@@ -104,8 +104,14 @@ async function seedCampgrounds() {
 }
 seedCampgrounds();
 
-async function findAllCampgrounds() {
-  return await Campground.find({});
+async function findAllCampgrounds(page: number = 1) {
+  const campgrounds = await Campground.find({})
+    .populate("author")
+    .skip(((page - 1) * 20))
+    .limit(20);
+  const campgroundsCount = await Campground.find({}).countDocuments();
+  const queryData = { campgrounds: campgrounds, count: campgroundsCount };
+  return queryData;
 }
 
 async function findCampgroundById(id: string) {

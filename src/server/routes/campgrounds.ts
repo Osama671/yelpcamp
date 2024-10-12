@@ -29,7 +29,6 @@ const router = express.Router();
 // };
 
 router.get("/", showAllCampgrounds);
-// catchAsync(createCampground)
 router.post(
   "/",
 
@@ -37,8 +36,8 @@ router.post(
   createCampground,
   (req, res) => {
     console.log(req.body, "-----", req.files);
-    res.status(200).send("Upload completed")
-  },
+    res.status(200).send("Upload completed");
+  }
 );
 
 router.get("/:id", showCampgroundDetails);

@@ -128,8 +128,8 @@ export default function CampgroundDetails() {
       <Navbar styles={styles} />
       {Object.keys(campground).length === 0 || (
         <main>
-          <div className="row m-5">
-            <div className=" col-md-6 mt-5">
+          <div className="row mx-5 mt-3 mb-3">
+            <div className=" col-lg-6 mt-3">
               <Carousel
                 images={campground.images}
                 showArrows={campground.images.length === 1 ? false : true}
@@ -165,7 +165,7 @@ export default function CampgroundDetails() {
                 </div>
               )}
             </div>
-            <div className=" col-md-6 mt-5">
+            <div className=" col-lg-6 mt-3">
               <div id="map-container" ref={mapContainerRef} className="mb-3" />
               <h2>Reviews:</h2>
 

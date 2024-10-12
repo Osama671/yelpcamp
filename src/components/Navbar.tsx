@@ -41,14 +41,7 @@ export default function Navbar({ styles }) {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className={`navbar-nav ${styles.navbarNav}`}>
-              <li className={`nav-item ${styles.navItem}`}>
-                <Link
-                  className={`${styles.navLink} active`}
-                  to="/"
-                >
-                  Home
-                </Link>
-              </li>
+              
               <li className={`nav-item ${styles.navItem}`}>
                 <Link
                   className={`${styles.navLink} active`}
