@@ -104,11 +104,14 @@ async function seedCampgrounds() {
 }
 seedCampgrounds();
 
-async function findAllCampgrounds(page: number = 1) {
+async function findAllCampgrounds(
+  page: number = 1,
+  productsPerPage: number = 0
+) {
   const campgrounds = await Campground.find({})
     .populate("author")
-    .skip(((page - 1) * 20))
-    .limit(20);
+    .skip((page - 1) * productsPerPage)
+    .limit(productsPerPage);
   const campgroundsCount = await Campground.find({}).countDocuments();
   const queryData = { campgrounds: campgrounds, count: campgroundsCount };
   return queryData;

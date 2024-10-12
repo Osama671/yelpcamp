@@ -15,8 +15,9 @@ interface IImageIterable {
 export const showAllCampgrounds = async (req: Request, res: Response) => {
   try {
     const page = req.query.page ? Number(req.query.page) : 1
+    const productsPerPage = req.query.productsPerPage ? Number(req.query.productsPerPage) : 0
     
-    const campgrounds = await model.findAllCampgrounds(page);
+    const campgrounds = await model.findAllCampgrounds(page, productsPerPage);
     if (!campgrounds)
       return res.status(404).json({ message: "Campgrounds not found" });
     return res.json(campgrounds);

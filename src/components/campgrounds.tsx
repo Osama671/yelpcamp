@@ -12,23 +12,40 @@ import styles from "../styles/navbar.module.css";
 export default function Campgrounds() {
   const [campgrounds, setCampgrounds] = useState([]);
   const [dataRetrieved, setDataRetrieved] = useState(false);
+  const [allCampgrounds, setAllCampgrounds] = useState([]);
   const [pageCount, setPageCount] = useState(1);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-const fetchCampgrounds = async () => {
-  const info = await axios.get(`/api/campgrounds?page=${pageCount}`);
+  const productsPerPage = 2;
+
+  const fetchCampgrounds = async () => {
+    try {
+      const info = await axios.get(
+        `/api/campgrounds?page=${pageCount}&productsPerPage=${productsPerPage}`
+      );
       setCampgrounds(info.data);
       setDataRetrieved(true);
-}
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchAllCampgrounds = async () => {
+    try {
+      const info = await axios.get(`/api/campgrounds`);
+      setAllCampgrounds(info.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const setPageNumInURL = () => {
     setSearchParams({ page: `${pageCount}` });
   };
 
-
   const onPageChange = (num) => {
-    setPageCount(num)
+    setPageCount(num);
   };
 
   useEffect(() => {
@@ -36,24 +53,28 @@ const fetchCampgrounds = async () => {
       const info = await axios.get(`/api/campgrounds?page=${pageCount}`);
       setCampgrounds(info.data);
       setDataRetrieved(true);
+      fetchAllCampgrounds();
     }
     getAPI();
   }, []);
 
   useEffect(() => {
     setPageNumInURL();
-    fetchCampgrounds()
+    fetchCampgrounds();
   }, [pageCount]);
 
   return (
     <>
+      {console.log(allCampgrounds)}
       <div className="vh-min-100">
         <Navbar styles={styles} />
         <main className="mt-3 ">
           {dataRetrieved ? (
             <>
               <div className="d-flex flex-column col-10 offset-1 col-md-8 offset-md-2">
-                <ClusterMap campgrounds={campgrounds}></ClusterMap>
+                <ClusterMap
+                  campgrounds={allCampgrounds.campgrounds}
+                ></ClusterMap>
               </div>
               <div className="container w-50 mt-5 ">
                 <form className="d-flex shadow-sm" role="search">
@@ -88,9 +109,10 @@ const fetchCampgrounds = async () => {
           )}
           {campgrounds.length === 0 || (
             <Pagination
-            onPageChange={onPageChange}
+              onPageChange={onPageChange}
               currentPageCount={pageCount}
               campgroundsCount={campgrounds.count}
+              productsPerPage={productsPerPage}
             />
           )}
         </main>
