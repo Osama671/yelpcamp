@@ -1,27 +1,34 @@
+interface paginatedProducts {
+  onPageChange: (page: number) => void;
+  currentPageCount: number;
+  campgroundsCount: number;
+  productsPerPage: number;
+}
+
 export default function Pagination({
   onPageChange,
   currentPageCount,
   campgroundsCount,
   productsPerPage,
-}) {
+}: paginatedProducts) {
   const totalPages = Math.ceil(campgroundsCount / productsPerPage);
+  //Second argument is maximum amount of pagination boxes appearing
   const maxPageNumber = Math.min(totalPages, 10);
   let startPage =
     currentPageCount < maxPageNumber / 2
       ? 1
-      : Math.floor(currentPageCount - maxPageNumber / 2);
-  if (totalPages - startPage < maxPageNumber) {
+      : Math.max(Math.floor(currentPageCount - maxPageNumber / 2), 1); //Math.max to ensure value is never 0
+
+  if (totalPages - startPage < maxPageNumber)
     startPage = totalPages + 1 - maxPageNumber;
-  }
+
   return (
     <>
       <ul className="pagination justify-content-center mt-3">
         <li
           className={`page-item ${currentPageCount <= 1 ? "disabled" : ""}`}
           onClick={() =>
-            currentPageCount - 1 <= 0
-              ? null
-              : onPageChange(currentPageCount - 1)
+            currentPageCount - 1 <= 0 || onPageChange(currentPageCount - 1)
           }
         >
           <a className="page-link" href="#" aria-label="Previous">
@@ -53,9 +60,8 @@ export default function Pagination({
             currentPageCount >= totalPages ? "disabled" : ""
           }`}
           onClick={() =>
-            currentPageCount + 1 > totalPages
-              ? null
-              : onPageChange(currentPageCount + 1)
+            currentPageCount + 1 > totalPages ||
+            onPageChange(currentPageCount + 1)
           }
         >
           <a className="page-link" href="#" aria-label="Next">

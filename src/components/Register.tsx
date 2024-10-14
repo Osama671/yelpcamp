@@ -2,8 +2,15 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
-const validate = (values) => {
-  const errors = {};
+interface IFormikValues {
+  username: string;
+  password: string;
+  email: string;
+}
+
+
+const validate = (values: IFormikValues) => {
+  const errors = {} as Partial<IFormikValues>;
   if (!values.username) {
     errors.username = "Required";
   } else if (values.username.length >= 10) {
@@ -37,7 +44,9 @@ export default function Register() {
     validate,
     onSubmit: async (values) => {
       const response = await axios.post("/api/register", values);
-      navigate("/campgrounds");
+      if (response.status === 200) {
+        navigate("/campgrounds");
+      }
     },
   });
 
@@ -106,9 +115,10 @@ export default function Register() {
                   ) : null}
                 </div>
                 <div className="d-grid">
-                <button type="submit" className="btn btn-success">
-                  Register
-                </button></div>
+                  <button type="submit" className="btn btn-success">
+                    Register
+                  </button>
+                </div>
               </form>
             </div>
           </div>

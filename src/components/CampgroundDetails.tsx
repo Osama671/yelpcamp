@@ -9,15 +9,24 @@ import Carousel from "./reactbootstrap/Carousel.tsx";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import styles from "../styles/navbar.module.css";
+import ConfirmationModal from "./reactbootstrap/ConfirmationModal.tsx";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const validate = (values) => {
-  const errors = {};
+interface IformikValues {
+  review: string
+}
+
+interface IErrorValues {
+  review?: string
+}
+
+const validate = (values: IformikValues) => {
+  const errors = {} as IErrorValues;
   if (!values.review) {
     errors.review = "Required";
-  } else if (values.review.length >= 10) {
-    errors.review = "Must be less than 10 characters";
+  } else if (values.review.length <= 10) {
+    errors.review = "Must be greater than 10 characters";
   }
 
   return errors;
@@ -145,23 +154,26 @@ export default function CampgroundDetails() {
                     Submitted by: {campground.author.username}
                   </li>
                   <li className="list-group-item">${campground.price}/night</li>
-                  <li className="list-group-item">A third item</li>
                 </ul>
               </div>
               {campground.author._id == currentUser && (
-                <div className="card-body">
+                <div className="card-body mt-3 d-flex gap-3 justify-content-between">
                   <Link
                     to={`/campground/${id}/edit`}
                     className="btn btn-info card-link"
                   >
                     Edit Campground
                   </Link>
-                  <button
-                    onClick={deleteCampground}
-                    className="btn btn-danger card-link"
-                  >
-                    Delete Campground
-                  </button>
+                  <ConfirmationModal
+                    func={deleteCampground}
+                    modalItems={{
+                      buttonText: "Delete Campground",
+                      title: "Delete campground",
+                      body: "Are you sure you want to delete your campground?",
+                      closeButton: "Close",
+                      submitButton: "Delete"
+                    }}
+                  />
                 </div>
               )}
             </div>
@@ -261,7 +273,9 @@ export default function CampgroundDetails() {
               {campground.reviews.length === 0 && (
                 <>
                   <h3 style={{ textAlign: "center" }}>No reviews</h3>{" "}
-                  <h5 style={{ textAlign: "center" }}>Be the first to review!</h5>
+                  <h5 style={{ textAlign: "center" }}>
+                    Be the first to review!
+                  </h5>
                 </>
               )}
 

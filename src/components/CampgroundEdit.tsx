@@ -14,8 +14,8 @@ const validate = (values) => {
 
   if (!values.location) {
     errors.location = "Required";
-  } else if (values.location.length >= 10) {
-    errors.location = "Must be less than 10 characters";
+  } else if (values.location.length >= 50) {
+    errors.location = "Must be less than 50 characters";
   }
 
   if (!values.price) {

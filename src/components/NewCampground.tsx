@@ -1,10 +1,28 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
+import LocationPicker from "./LocationPicker";
 
-const validate = (values) => {
-  const errors = {};
+interface IFormikValues {
+  title: string,
+  location: string,
+  price: number | string,
+  description: string
+  images: Express.Multer.File[]
+}
+
+interface IErrorValues {
+  title?: string,
+  location?: string,
+  price?: string | number,
+  description?: string
+  images?: string
+}
+
+const validate = (values: IFormikValues) => {
+  const errors = {} as IErrorValues;
   if (!values.title) {
     errors.title = "Required";
   } else if (values.title.length >= 10) {
@@ -19,7 +37,7 @@ const validate = (values) => {
 
   if (!values.price) {
     errors.price = "Required";
-  } else if (values.price <= 0) {
+  } else if (+values.price <= 0) {
     errors.price = "Must be greater than 0";
   }
 
@@ -29,7 +47,7 @@ const validate = (values) => {
 
   if (!values.description) {
     errors.description = "Required";
-  } else if (values.description <= 5) {
+  } else if (values.description.length <= 5) {
     errors.description = "Be a bit more descriptive!";
   }
   return errors;
@@ -37,6 +55,11 @@ const validate = (values) => {
 
 export default function NewCampground() {
   const navigate = useNavigate();
+
+  const [marker, setMarker] = useState({
+    latitude: 37.7749,
+    longitude: -122.4194,
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -56,6 +79,11 @@ export default function NewCampground() {
         formData.append("images", values.images[i]);
       }
       formData.append("description", values.description);
+      formData.append("longitude", String(marker.longitude));
+      formData.append("latitude", String(marker.latitude));
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
       const response = await axios.post("/api/campgrounds", formData);
       if (response) navigate("/campgrounds");
@@ -66,12 +94,12 @@ export default function NewCampground() {
 
   return (
     <>
-    
-      <h1 className="text-center">New Campground:</h1>
-      <p className="text-center">
-        <Link to="/">Home Page</Link>
-      </p>
-      <div className="col-md-6 offset-md-3">
+      <div className="mx-3">
+        <h1 className="text-center">New Campground:</h1>
+        <p className="text-center">
+          <Link to="/">Home Page</Link>
+        </p>
+        <div className="col-md-6 offset-md-3">
           <div className="card-body">
             <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
               <div className="mb-3">
@@ -108,6 +136,10 @@ export default function NewCampground() {
                   <div style={{ color: "red" }}>{formik.errors.location}</div>
                 ) : null}
               </div>
+              <LocationPicker marker={marker} setMarker={setMarker} />
+              <label className="form-label mt-3" htmlFor="price">
+                Price
+              </label>
               <div className="input-group">
                 <span className="input-group-text">$</span>
                 <input
@@ -169,13 +201,14 @@ export default function NewCampground() {
                   </div>
                 ) : null}
               </div>
-              <button type="submit">Add Campground</button>
+              <button className="btn btn-success" type="submit">Add Campground</button>
             </form>
           </div>
 
           <div className="col-6 offset-3">
             <br />
           </div>
+        </div>
       </div>
     </>
   );

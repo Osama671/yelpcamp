@@ -2,8 +2,13 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
-const validate = (values) => {
-  const errors = {};
+interface IFormikValues {
+  username: string,
+  password: string,
+}
+
+const validate = (values: IFormikValues) => {
+  const errors = {} as Partial<IFormikValues>;
   if (!values.username) {
     errors.username = "Required";
   } else if (values.username.length >= 10) {

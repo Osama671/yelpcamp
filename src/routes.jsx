@@ -3,11 +3,10 @@ import CampgroundDetails from "./components/CampgroundDetails.tsx";
 import FourOhFour from "./components/FourOhFour.tsx";
 import NewCampground from "./components/NewCampground.tsx";
 import CampgroundEdit from "./components/CampgroundEdit.tsx";
-import Profile from "./components/Profile.tsx";
 import Register from "./components/Register.tsx";
 import Login from "./components/Login.tsx";
 import AuthRoute from "./components/auth/AuthRoute.tsx";
-import HomePage from "./components/HomePage.tsx"
+import HomePage from "./components/HomePage.tsx";
 import { HelmetProvider } from "react-helmet-async";
 
 const routes = [
@@ -22,11 +21,7 @@ const routes = [
   { path: "register", element: <Register /> },
   { path: "login", element: <Login /> },
   { path: "/newcampground", element: <AuthRoute Component={NewCampground} /> },
-  {
-    path: "profile",
-    element: <Profile />,
-    // errorElement: <FourOhFour />,
-  },
+
   {
     path: "campgrounds",
     element: <Campgrounds />,

@@ -30,7 +30,7 @@ const campgroundSchema = new Schema(
         enum: ["Point"],
       },
       coordinates: {
-        type: [Number],
+        type: [Number, Number],
       },
     },
     price: Number,
@@ -127,9 +127,9 @@ async function findCampgroundById(id: string) {
     throw new ExpressError(`Database Error: ${e}`, 404);
   }
 }
-
+ 
 async function createCampground(
-  geometry: { type: string; coordinates: number[] },
+  geometry: { coordinates: number[] },
   location: string,
   description: string,
   price: string,
@@ -139,7 +139,7 @@ async function createCampground(
 ) {
   try {
     const newCampground = new Campground({
-      geometry: geometry,
+      geometry: { type: "Point", ...geometry },
       location: `${location}`,
       description: `${description}`,
       price: price,
@@ -147,6 +147,7 @@ async function createCampground(
       images: images,
       author: id,
     });
+
     await newCampground.save();
   } catch (e) {
     throw new ExpressError(
@@ -166,36 +167,42 @@ async function editCampground(
   userid: string,
   deleteImages: string[]
 ) {
-  const campground = await findCampgroundById(campgroundId);
-  if (!campground) throw new ExpressError("Campground not found", 500);
-  if (!campground.author.equals(userid)) {
-    throw new ExpressError("You are not the author of this campground", 403);
-  }
+  try {
+    const campground = await findCampgroundById(campgroundId);
+    if (!campground) throw new ExpressError("Campground not found", 500);
+    if (!campground.author.equals(userid)) {
+      throw new ExpressError("You are not the author of this campground", 403);
+    }
 
-  const update = {
-    location: location,
-    description: description,
-    price: price,
-    title: title,
-  };
+    const update = {
+      location: location,
+      description: description,
+      price: price,
+      title: title,
+    };
 
-  await Campground.findOneAndUpdate({ _id: campgroundId }, update, {
-    new: true,
-  });
-
-  campground.images = [...campground.images, ...images];
-  await campground.save();
-
-  if (deleteImages.length !== 0) {
-    deleteImages.map(async (filename) => {
-      await cloudinary.cloudinary.uploader.destroy(filename);
+    await Campground.findOneAndUpdate({ _id: campgroundId }, update, {
+      new: true,
     });
-    await Campground.updateOne(
-      { _id: campgroundId },
-      { $pull: { images: { filename: { $in: deleteImages } } } }
-    );
+
+    campground.images = [...campground.images, ...images];
+    await campground.save();
+
+    if (deleteImages) {
+      if (deleteImages.length !== 0) {
+        deleteImages.map(async (filename) => {
+          await cloudinary.cloudinary.uploader.destroy(filename);
+        });
+        await Campground.updateOne(
+          { _id: campgroundId },
+          { $pull: { images: { filename: { $in: deleteImages } } } }
+        );
+      }
+    }
+    return;
+  } catch (e) {
+    throw new ExpressError(`Problem occured in DB : ${e}`, 500);
   }
-  return;
 }
 
 export async function deleteReviewInCampground(

@@ -2,11 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar({ styles }) {
+// Why is the Navbar fetching the user :thinking:
+export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
   const [getUser, setGetUser] = useState(undefined);
 
   const handleLogout = async () => {
-    const response = await axios.get("/api/logout");
+    await axios.get("/api/logout");
   };
 
   useEffect(() => {
@@ -23,7 +24,6 @@ export default function Navbar({ styles }) {
         className={`${styles.navbar}  navbar sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
         data-bs-theme="dark"
       >
-        
         <div className="container-fluid d-flex gap-3 ">
           <Link className="navbar-brand" to="/">
             Yelpcamp
@@ -41,12 +41,8 @@ export default function Navbar({ styles }) {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className={`navbar-nav ${styles.navbarNav}`}>
-              
               <li className={`nav-item ${styles.navItem}`}>
-                <Link
-                  className={`${styles.navLink} active`}
-                  to="/campgrounds"
-                >
+                <Link className={`${styles.navLink} active`} to="/campgrounds">
                   Campgrounds
                 </Link>
               </li>

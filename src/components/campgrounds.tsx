@@ -17,7 +17,7 @@ export default function Campgrounds() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const productsPerPage = 2;
+  const productsPerPage = 16;
 
   const fetchCampgrounds = async () => {
     try {
