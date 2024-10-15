@@ -2,7 +2,15 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmationModal({func, modalItems}) {
+interface IModalItems {
+  buttonText: string,
+  title: string,
+  body: string,
+  closeButton: string,
+  submitButton: string,
+}
+
+function ConfirmationModal({func, modalItems}: {func: () => void, modalItems: IModalItems}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);

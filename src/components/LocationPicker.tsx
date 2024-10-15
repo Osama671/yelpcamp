@@ -4,7 +4,18 @@ import Map, { Marker } from "react-map-gl";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const LocationPicker = ({ marker, onMapClick }) => {
+interface IMarker {
+  longitude: number;
+  latitude: number;
+}
+
+const LocationPicker = ({
+  marker,
+  onMapClick,
+}: {
+  marker: IMarker;
+  onMapClick(geometry: IMarker): void;
+}) => {
   const [viewState, setViewState] = useState({
     latitude: 37.7749,
     longitude: -122.4194,

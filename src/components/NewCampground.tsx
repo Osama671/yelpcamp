@@ -6,19 +6,15 @@ import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
 
 interface IFormikValues {
-  title: string,
-  location: string,
-  price: number | string,
-  description: string
-  images: Express.Multer.File[]
+  title: string;
+  location: string;
+  price: number | string;
+  description: string;
+  images: Express.Multer.File[];
 }
 
-interface IErrorValues {
-  title?: string,
-  location?: string,
-  price?: string | number,
-  description?: string
-  images?: string
+interface IErrorValues extends Omit<IFormikValues, "images"> {
+  images: string;
 }
 
 const validate = (values: IFormikValues) => {
@@ -136,7 +132,7 @@ export default function NewCampground() {
                   <div style={{ color: "red" }}>{formik.errors.location}</div>
                 ) : null}
               </div>
-              <LocationPicker marker={marker} setMarker={setMarker} />
+              <LocationPicker marker={marker} onMapClick={setMarker} />
               <label className="form-label mt-3" htmlFor="price">
                 Price
               </label>
@@ -201,7 +197,9 @@ export default function NewCampground() {
                   </div>
                 ) : null}
               </div>
-              <button className="btn btn-success" type="submit">Add Campground</button>
+              <button className="btn btn-success" type="submit">
+                Add Campground
+              </button>
             </form>
           </div>
 

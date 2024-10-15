@@ -1,6 +1,6 @@
 import "normalize.css";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
@@ -8,14 +8,22 @@ import CampgroundCard from "./CampgroundCard.tsx";
 import ClusterMap from "./Clustermap.tsx";
 import Pagination from "./Pagination.tsx";
 import styles from "../styles/navbar.module.css";
+import { Campground } from "../../types.ts";
+
+interface IAllCampgrounds {
+  count: number;
+  campgrounds: Campground[];
+}
 
 export default function Campgrounds() {
-  const [campgrounds, setCampgrounds] = useState([]);
-  const [dataRetrieved, setDataRetrieved] = useState(false);
-  const [allCampgrounds, setAllCampgrounds] = useState([]);
+  const [paginatedCampgrounds, setpaginatedCampgrounds] =
+    useState<IAllCampgrounds | null>(null);
+  const [allCampgrounds, setAllCampgrounds] = useState<IAllCampgrounds | null>(
+    null
+  );
   const [pageCount, setPageCount] = useState(1);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const productsPerPage = 16;
 
@@ -24,8 +32,7 @@ export default function Campgrounds() {
       const info = await axios.get(
         `/api/campgrounds?page=${pageCount}&productsPerPage=${productsPerPage}`
       );
-      setCampgrounds(info.data);
-      setDataRetrieved(true);
+      setpaginatedCampgrounds(info.data);
     } catch (e) {
       console.error(e);
     }
@@ -44,15 +51,14 @@ export default function Campgrounds() {
     setSearchParams({ page: `${pageCount}` });
   };
 
-  const onPageChange = (num) => {
+  const onPageChange = (num: number) => {
     setPageCount(num);
   };
 
   useEffect(() => {
     async function getAPI() {
       const info = await axios.get(`/api/campgrounds?page=${pageCount}`);
-      setCampgrounds(info.data);
-      setDataRetrieved(true);
+      setpaginatedCampgrounds(info.data);
       fetchAllCampgrounds();
     }
     getAPI();
@@ -65,11 +71,10 @@ export default function Campgrounds() {
 
   return (
     <>
-      {console.log(allCampgrounds)}
       <div className="vh-min-100">
         <Navbar styles={styles} />
         <main className="mt-3 ">
-          {dataRetrieved ? (
+          {paginatedCampgrounds && allCampgrounds ? (
             <>
               <div className="d-flex flex-column col-10 offset-1 col-md-8 offset-md-2">
                 <ClusterMap
@@ -90,8 +95,8 @@ export default function Campgrounds() {
                 <h1 className="text-center mt-4">All Campgrounds:</h1>
                 <div className="d-flex container mb-3 flex-row">
                   <div className="row align-items-start gap-4">
-                    {campgrounds.campgrounds.length > 0 ? (
-                      campgrounds.campgrounds.map((campground) => (
+                    {paginatedCampgrounds.campgrounds.length > 0 ? (
+                      paginatedCampgrounds.campgrounds.map((campground) => (
                         <CampgroundCard
                           key={campground._id}
                           campground={campground}
@@ -103,17 +108,18 @@ export default function Campgrounds() {
                   </div>
                 </div>
               </div>
+
+              {Object.keys(paginatedCampgrounds).length === 0 || (
+                <Pagination
+                  onPageChange={onPageChange}
+                  currentPageCount={pageCount}
+                  campgroundsCount={paginatedCampgrounds.count}
+                  productsPerPage={productsPerPage}
+                />
+              )}
             </>
           ) : (
             <p>Loading Campgrounds...</p>
-          )}
-          {campgrounds.length === 0 || (
-            <Pagination
-              onPageChange={onPageChange}
-              currentPageCount={pageCount}
-              campgroundsCount={campgrounds.count}
-              productsPerPage={productsPerPage}
-            />
           )}
         </main>
         <Footer styles={styles} />

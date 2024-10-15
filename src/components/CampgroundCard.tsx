@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
-export default function CampgroundCard({ campground }) {
+import { Campground } from "../../types";
+export default function CampgroundCard({
+  campground,
+}: {
+  campground: Campground;
+}) {
   return (
     <>
       <div className="row d-flex flex-column col-12 col-sm-6 col-md-4 col-lg-3 ">

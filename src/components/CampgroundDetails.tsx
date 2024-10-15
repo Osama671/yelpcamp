@@ -1,5 +1,5 @@
 import "../css/stars.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
@@ -10,34 +10,30 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import styles from "../styles/navbar.module.css";
 import ConfirmationModal from "./reactbootstrap/ConfirmationModal.tsx";
+import { Campground } from "../../types.ts";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
-interface IformikValues {
-  review: string
+interface IFormikValues {
+  review: string;
 }
 
-interface IErrorValues {
-  review?: string
-}
-
-const validate = (values: IformikValues) => {
-  const errors = {} as IErrorValues;
+const validate = (values: IFormikValues) => {
+  const errors = {} as Partial<IFormikValues>;
   if (!values.review) {
     errors.review = "Required";
   } else if (values.review.length <= 10) {
     errors.review = "Must be greater than 10 characters";
   }
-
   return errors;
 };
 
 export default function CampgroundDetails() {
-  const [campground, setCampground] = useState({});
+  const [campground, setCampground] = useState<Campground | null>(null);
   const [currentUser, setCurrentUser] = useState();
 
-  const mapRef = useRef();
-  const mapContainerRef = useRef();
+  const mapRef = useRef<mapboxgl.Map>();
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -77,34 +73,42 @@ export default function CampgroundDetails() {
       const response = await axios.delete(
         `/api/campgrounds/${id}/review/${reviewid}`
       );
-      getCampground();
+      if (response.status === 200) {
+        //Show Review Deleted Sucessfully Toast
+        getCampground();
+      }
     } catch (e) {
       console.error(e);
     }
   };
 
-  const createMapBox = () => {
-    mapboxgl.accessToken = mapboxEnv;
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/light-v10",
-      center: campground.geometry.coordinates,
-      zoom: 9,
-    });
-    mapRef.current.addControl(new mapboxgl.NavigationControl());
+  const createMapBox = useCallback(() => {
+    if (campground && mapContainerRef.current) {
+      const [lng, lat] = campground.geometry.coordinates;
+      const newCoord = { lng, lat };
 
-    const marker = new mapboxgl.Marker()
-      .setLngLat(campground.geometry.coordinates)
-      .setPopup(
-        new mapboxgl.Popup({ offset: 25 }).setHTML(
-          `<h5>${campground.title}</h5><p>${campground.location}</p>`
+      mapboxgl.accessToken = mapboxEnv;
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: "mapbox://styles/mapbox/light-v10",
+        center: newCoord,
+        zoom: 9,
+      });
+      mapRef.current.addControl(new mapboxgl.NavigationControl());
+
+      new mapboxgl.Marker()
+        .setLngLat(newCoord)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<h5>${campground.title}</h5><p>${campground.location}</p>`
+          )
         )
-      )
-      .addTo(mapRef.current);
+        .addTo(mapRef.current);
+    }
     return () => {
-      mapRef.current.remove();
+      if (mapRef.current) mapRef.current.remove();
     };
-  };
+  }, [campground]);
 
   const formik = useFormik({
     initialValues: {
@@ -113,10 +117,7 @@ export default function CampgroundDetails() {
     },
     validate,
     onSubmit: async (values) => {
-      const response = await axios.post(
-        `/api/campgrounds/${id}/review`,
-        values
-      );
+      await axios.post(`/api/campgrounds/${id}/review`, values);
       getCampground();
     },
   });
@@ -127,15 +128,15 @@ export default function CampgroundDetails() {
   }, [id]);
 
   useEffect(() => {
-    if (campground.geometry?.coordinates) {
+    if (campground) {
       createMapBox();
     }
-  }, [campground]);
+  }, [campground, createMapBox]);
 
   return (
     <>
       <Navbar styles={styles} />
-      {Object.keys(campground).length === 0 || (
+      {campground && (
         <main>
           <div className="row mx-5 mt-3 mb-3">
             <div className=" col-lg-6 mt-3">
@@ -171,7 +172,7 @@ export default function CampgroundDetails() {
                       title: "Delete campground",
                       body: "Are you sure you want to delete your campground?",
                       closeButton: "Close",
-                      submitButton: "Delete"
+                      submitButton: "Delete",
                     }}
                   />
                 </div>

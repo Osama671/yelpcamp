@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
+import { Campground } from "../../types";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
 
-const validate = (values) => {
-  const errors = {};
+interface IFormikValues {
+  title: string;
+  location: string;
+  price: string | number;
+  description: string;
+}
+
+const validate = (values: IFormikValues) => {
+  const errors = {} as Partial<IFormikValues>;
   if (!values.title) {
     errors.title = "Required";
   } else if (values.title.length >= 10) {
@@ -20,22 +28,21 @@ const validate = (values) => {
 
   if (!values.price) {
     errors.price = "Required";
-  } else if (values.price <= 0) {
+  } else if (+values.price <= 0) {
     errors.price = "Must be greater than 0";
   }
 
   if (!values.description) {
     errors.description = "Required";
-  } else if (values.description <= 5) {
+  } else if (values.description.length <= 5) {
     errors.description = "Be a bit more descriptive!";
   }
   return errors;
 };
 
 export default function CampgroundEdit() {
-  const [campground, setCampground] = useState([]);
+  const [campground, setCampground] = useState<Campground | null>(null);
   const [currentUser, setCurrentUser] = useState();
-  const [isLoading, setIsLoading] = useState(true);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -48,7 +55,6 @@ export default function CampgroundEdit() {
   async function getCampgroundInfo() {
     const info = await axios.get(`/api/campgrounds/${id}/edit`);
     setCampground(info.data);
-    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -96,7 +102,9 @@ export default function CampgroundEdit() {
 
   return (
     <>
-      {isLoading ? null : (
+      {!campground ? (
+        <h1>...Loading...Or Is it?...idk</h1>
+      ) : (
         <>
           {campground.author._id !== currentUser ? (
             <Navigate to="/campgrounds" />
@@ -157,7 +165,7 @@ export default function CampgroundEdit() {
                       aria-label="Amount (to the nearest dollar)"
                       id="price"
                       name="price"
-                      placeholder={campground.price}
+                      placeholder={String(campground.price)}
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       value={formik.values.price}
