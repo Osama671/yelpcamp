@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "./contexts/ToastProvider";
 
 interface IFormikValues {
   username: string;
   password: string;
   email: string;
 }
-
 
 const validate = (values: IFormikValues) => {
   const errors = {} as Partial<IFormikValues>;
@@ -33,6 +33,7 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function Register() {
+  const showToast = useToast();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -45,6 +46,7 @@ export default function Register() {
     onSubmit: async (values) => {
       const response = await axios.post("/api/register", values);
       if (response.status === 200) {
+        if (showToast) showToast("Registration sucessful", "green");
         navigate("/campgrounds");
       }
     },

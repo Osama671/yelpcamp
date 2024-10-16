@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Campground } from "../../types";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
+import Navbar from "./Navbar";
+import styles from "../styles/navbar.module.css";
+import { useToast } from "./contexts/ToastProvider";
 
 interface IFormikValues {
   title: string;
@@ -42,6 +45,7 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function CampgroundEdit() {
+  const showToast = useToast();
   const [campground, setCampground] = useState<Campground | null>(null);
   const [currentUser, setCurrentUser] = useState();
 
@@ -101,6 +105,7 @@ export default function CampgroundEdit() {
       );
 
       if (response.status === 200) {
+        if (showToast) showToast("Campground edited sucessfully", "green");
         navigate(`/campground/${id}`);
       }
     },
@@ -118,144 +123,157 @@ export default function CampgroundEdit() {
             <Navigate to="/campgrounds" />
           ) : (
             <>
-              <h1 className="text-center">Edit Campground:</h1>
-              <p className="text-center"></p>
-              <div className="col-md-6 offset-md-3">
-                <form
-                  onSubmit={formik.handleSubmit}
-                  encType="multipart/form-data"
-                >
-                  <div className="mb-3">
-                    <label className="form-label" htmlFor="title">
-                      Title
-                    </label>
-                    <input
-                      className="form-control"
-                      id="title"
-                      type="text"
-                      name="title"
-                      placeholder={campground.title}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.title}
-                    />
-                    {formik.touched.title && formik.errors.title ? (
-                      <div style={{ color: "red" }}>{formik.errors.title}</div>
-                    ) : null}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label" htmlFor="location">
-                      Location
-                    </label>
-                    <input
-                      className="form-control"
-                      id="location"
-                      type="text"
-                      name="location"
-                      placeholder={campground.location}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.location}
-                    />
-                    {formik.touched.location && formik.errors.location ? (
-                      <div style={{ color: "red" }}>
-                        {formik.errors.location}
-                      </div>
-                    ) : null}
-                  </div>
-                  <LocationPicker marker={marker} onMapClick={setMarker} />
-                  <label htmlFor="price">Price</label>
-
-                  <div className="input-group">
-                    <span className="input-group-text">$</span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      aria-label="Amount (to the nearest dollar)"
-                      id="price"
-                      name="price"
-                      placeholder={String(campground.price)}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.price}
-                    />
-                  </div>
-                  {formik.touched.price && formik.errors.price ? (
-                    <div style={{ color: "red", marginBottom: "1em" }}>
-                      {formik.errors.price}
-                    </div>
-                  ) : null}
-
-                  <div className="mb-3 mt-3">
-                    <label className="form-label" htmlFor="description">
-                      Description
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="description"
-                      name="description"
-                      placeholder={campground.description}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.description}
-                    ></textarea>
-                    {formik.touched.description && formik.errors.description ? (
-                      <div style={{ color: "red" }}>
-                        {formik.errors.description}
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className="mb-3 ">
-                    <div className="mb-3 custom-file">
-                      <label
-                        htmlFor="images"
-                        className="form-label custom-file-label"
-                      >
-                        {formik.values.images.length === 0
-                          ? "Upload Images"
-                          : null}
+              <Navbar styles={styles} />
+              <div className="m-3">
+                <h1 className="text-center">Edit Campground:</h1>
+                <p className="text-center"></p>
+                <div className="col-md-6 offset-md-3">
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    encType="multipart/form-data"
+                  >
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="title">
+                        Title
                       </label>
                       <input
-                        id="images"
-                        name="images"
-                        type="file"
                         className="form-control"
-                        multiple
-                        onChange={(event) => {
-                          formik.setFieldValue("images", event.target.files);
-                        }}
-                      ></input>
-                    </div>
-                    {formik.touched.images && formik.errors.images ? (
-                      <div style={{ color: "red" }}>{formik.errors.images}</div>
-                    ) : null}
-                  </div>
-                  <div className="d-flex flex-column">
-                    {campground.images.map((image) => (
-                      <>
-                        <img
-                          src={image.url}
-                          key={image._id}
-                          className="img-thumbnail w-50 h-auto"
-                        ></img>
-                        <div className="d-flex form-check-inline gap-3 mb-3">
-                          <input
-                            name="deleteImages"
-                            type="checkbox"
-                            onChange={formik.handleChange}
-                            value={image.filename}
-                          />
-                          <label htmlFor="">Delete?</label>
+                        id="title"
+                        type="text"
+                        name="title"
+                        placeholder={campground.title}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.title}
+                      />
+                      {formik.touched.title && formik.errors.title ? (
+                        <div style={{ color: "red" }}>
+                          {formik.errors.title}
                         </div>
-                      </>
-                    ))}
-                  </div>
-                  <button className="btn btn-info mt-3" type="submit">
-                    Update Campground
-                  </button>
-                </form>
-                <div className="mt-3 mb-3">
-                  <Link to="/campgrounds">Back to Campgrounds</Link>
+                      ) : null}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="location">
+                        Location
+                      </label>
+                      <input
+                        className="form-control"
+                        id="location"
+                        type="text"
+                        name="location"
+                        placeholder={campground.location}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.location}
+                      />
+                      {formik.touched.location && formik.errors.location ? (
+                        <div style={{ color: "red" }}>
+                          {formik.errors.location}
+                        </div>
+                      ) : null}
+                    </div>
+                    <LocationPicker marker={marker} onMapClick={setMarker} />
+                    <label htmlFor="price">Price</label>
+
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
+                      <input
+                        type="text"
+                        className="form-control"
+                        aria-label="Amount (to the nearest dollar)"
+                        id="price"
+                        name="price"
+                        placeholder={String(campground.price)}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.price}
+                      />
+                    </div>
+                    {formik.touched.price && formik.errors.price ? (
+                      <div style={{ color: "red", marginBottom: "1em" }}>
+                        {formik.errors.price}
+                      </div>
+                    ) : null}
+
+                    <div className="mb-3 mt-3">
+                      <label className="form-label" htmlFor="description">
+                        Description
+                      </label>
+                      <textarea
+                        className="form-control"
+                        id="description"
+                        name="description"
+                        placeholder={campground.description}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.description}
+                      ></textarea>
+                      {formik.touched.description &&
+                      formik.errors.description ? (
+                        <div style={{ color: "red" }}>
+                          {formik.errors.description}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="mb-3 ">
+                      <div className="mb-3 custom-file">
+                        <label
+                          htmlFor="images"
+                          className="form-label custom-file-label"
+                        >
+                          {formik.values.images.length === 0
+                            ? "Upload Images"
+                            : null}
+                        </label>
+                        <input
+                          id="images"
+                          name="images"
+                          type="file"
+                          className="form-control"
+                          multiple
+                          onChange={(event) => {
+                            formik.setFieldValue("images", event.target.files);
+                          }}
+                        ></input>
+                      </div>
+                      {formik.touched.images && formik.errors.images ? (
+                        <div style={{ color: "red" }}>
+                          {formik.errors.images}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div
+                      className="d-flex flex-column w-100"
+                      style={{ height: "300px" }}
+                    >
+                      {campground.images.map((image) => (
+                        <>
+                          <img
+                            src={image.url}
+                            key={image._id}
+                            className="w-100 h-100 object-fit-fill"
+                          ></img>
+                          <div className="d-flex form-check-inline gap-3 mb-3 mt-2">
+                            <input
+                              name="deleteImages"
+                              type="checkbox"
+                              onChange={formik.handleChange}
+                              value={image.filename}
+                            />
+                            <label htmlFor="">Delete?</label>
+                          </div>
+                        </>
+                      ))}
+                      <div className="">
+                        <button
+                          className="btn btn-info mb-3 w-100"
+                          type="submit"
+                        >
+                          Update Campground
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </>

@@ -1,13 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useToast } from "./contexts/ToastProvider";
+import { useUser } from "./contexts/UserProvider";
 
 // Why is the Navbar fetching the user :thinking:
 export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
+  const showToast = useToast();
+  const { removeUser } = useUser();
   const [getUser, setGetUser] = useState(undefined);
 
   const handleLogout = async () => {
-    await axios.get("/api/logout");
+    const response = await axios.get("/api/logout");
+    if (response.status === 200 && showToast) {
+      removeUser()
+      showToast("Logout sucessful!", "green");
+    }
   };
 
   useEffect(() => {

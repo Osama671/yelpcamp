@@ -11,6 +11,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import styles from "../styles/navbar.module.css";
 import ConfirmationModal from "./reactbootstrap/ConfirmationModal.tsx";
 import { Campground } from "../../types.ts";
+import { useToast } from "./contexts/ToastProvider.tsx";
+import ExpressError from "../util/ExpressError.ts";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -29,6 +31,7 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function CampgroundDetails() {
+  const showToast = useToast();
   const [campground, setCampground] = useState<Campground | null>(null);
   const [currentUser, setCurrentUser] = useState();
 
@@ -47,24 +50,37 @@ export default function CampgroundDetails() {
     }
   }
 
-  const getCampground = useCallback(async() => {
+  const getCampground = useCallback(async () => {
     try {
       const response = await axios.get(`/api/campgrounds/${id}`);
-      if (response.status !== 200) navigate("/campgrounds");
+      if (response.status !== 200) {
+        if (showToast) showToast("Campground does not exist", "red");
+        navigate("/campgrounds");
+      }
       setCampground(response.data);
     } catch (e) {
-      console.error(e);
-      navigate("/campgrounds");
+      if (e instanceof ExpressError)
+        if (e.status) {
+          console.error(e);
+          if (showToast) showToast("Campground does not exist", "red");
+          navigate("/campgrounds");
+        }
     }
-  }, [id, navigate])
+  }, [id, navigate, showToast]);
 
   const deleteCampground = async () => {
     try {
       const response = await axios.delete(`/api/campgrounds/${id}`);
-      if (response.status === 200) navigate("/campgrounds");
+      if (response.status === 200) {
+        if (showToast) showToast("Campground deleted sucessfully", "green");
+        navigate("/campgrounds");
+      }
     } catch (e) {
-      console.error(e);
-      navigate("/campgrounds");
+      if (e instanceof ExpressError) {
+        console.error(e);
+        if (showToast) showToast("Error deleting campground", "red");
+        navigate("/campgrounds");
+      }
     }
   };
 
@@ -74,11 +90,14 @@ export default function CampgroundDetails() {
         `/api/campgrounds/${id}/review/${reviewid}`
       );
       if (response.status === 200) {
-        //Show Review Deleted Sucessfully Toast
+        if (showToast) showToast("Review deleted sucessfully", "green");
         getCampground();
       }
     } catch (e) {
-      console.error(e);
+      if (e instanceof ExpressError) {
+        if (showToast) showToast("Error deleting reviewing", "red");
+        console.error(e);
+      }
     }
   };
 

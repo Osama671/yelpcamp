@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "./contexts/ToastProvider";
+import { useUser } from "./contexts/UserProvider";
 
 interface IFormikValues {
-  username: string,
-  password: string,
+  username: string;
+  password: string;
 }
 
 const validate = (values: IFormikValues) => {
@@ -25,6 +27,8 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function Register() {
+  const showToast = useToast();
+  const {SetUser} = useUser()
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -35,9 +39,13 @@ export default function Register() {
     validate,
     onSubmit: async (values) => {
       const response = await axios.post("/api/login", values);
+      console.log("Response", response);
       console.log(response.status);
-      //TODO: Show username or password is incorrect when information does not match.
-      if (response.status === 200) navigate("/campgrounds");
+      if (response.status === 200) {
+        if (showToast) showToast("Login sucessful", "green");
+        SetUser()
+        navigate("/campgrounds");
+      }
     },
   });
 
@@ -46,7 +54,11 @@ export default function Register() {
       <div className="container d-flex justify-content-center align-items-center mt-5">
         <div className="col-8 col-lg-5 mt-3">
           <div className="card shadow">
-            <img className="card-img-top" style={{width: "auto", height: "300px"}} src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"></img>
+            <img
+              className="card-img-top"
+              style={{ width: "auto", height: "300px" }}
+              src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            ></img>
             <div className="card-body">
               <h5 className="card-title">Login</h5>
               <form onSubmit={formik.handleSubmit}>
@@ -86,9 +98,9 @@ export default function Register() {
                   ) : null}
                 </div>
                 <div className="d-grid">
-                <button type="submit" className="btn btn-success">
-                  Login
-                </button>
+                  <button type="submit" className="btn btn-success">
+                    Login
+                  </button>
                 </div>
               </form>
             </div>

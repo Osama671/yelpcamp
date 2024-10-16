@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
+import { useToast } from "./contexts/ToastProvider";
 
 interface IFormikValues {
   title: string;
@@ -50,6 +51,8 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function NewCampground() {
+  const showToast = useToast();
+
   const navigate = useNavigate();
 
   const [marker, setMarker] = useState({
@@ -82,7 +85,10 @@ export default function NewCampground() {
       }
 
       const response = await axios.post("/api/campgrounds", formData);
-      if (response) navigate("/campgrounds");
+      if (response.status === 200) {
+        if (showToast) showToast("Campground Created", "green");
+        navigate("/campgrounds");
+      }
     },
   });
 
