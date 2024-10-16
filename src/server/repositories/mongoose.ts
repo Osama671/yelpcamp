@@ -127,7 +127,7 @@ async function findCampgroundById(id: string) {
     throw new ExpressError(`Database Error: ${e}`, 404);
   }
 }
- 
+
 async function createCampground(
   geometry: { coordinates: number[] },
   location: string,
@@ -158,6 +158,7 @@ async function createCampground(
 }
 
 async function editCampground(
+  geometry: { coordinates: number[] },
   campgroundId: string,
   location: string,
   description: string,
@@ -175,6 +176,7 @@ async function editCampground(
     }
 
     const update = {
+      geometry: { type: "Point", ...geometry },
       location: location,
       description: description,
       price: price,

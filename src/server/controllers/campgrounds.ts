@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import ExpressErrorGeneric from "../../util/ExpressErrorGeneric.js";
 import ExpressError from "../../util/ExpressError.ts";
 
-
 interface IImageIterable {
   filename: string;
   url: string;
@@ -49,6 +48,10 @@ export const editCampground = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { location, description, price, title, deleteImages } = req.body;
+
+    const { longitude, latitude } = req.body;
+    const geometry = { coordinates: [+longitude, +latitude] };
+
     const userid = req.user._id;
     const files = req.files as Express.Multer.File[];
 
@@ -57,6 +60,7 @@ export const editCampground = async (req: Request, res: Response) => {
       filename: f.filename,
     }));
     await model.editCampground(
+      geometry,
       id,
       location,
       description,

@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { Campground } from "../../types";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
+import LocationPicker from "./LocationPicker";
 
 interface IFormikValues {
   title: string;
@@ -44,6 +45,11 @@ export default function CampgroundEdit() {
   const [campground, setCampground] = useState<Campground | null>(null);
   const [currentUser, setCurrentUser] = useState();
 
+  const [marker, setMarker] = useState({
+    latitude: 37.7749,
+    longitude: -122.4194,
+  });
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -52,10 +58,10 @@ export default function CampgroundEdit() {
     setCurrentUser(response.data._id);
   }
 
-  const getCampgroundInfo = useCallback(async() => {
+  const getCampgroundInfo = useCallback(async () => {
     const info = await axios.get(`/api/campgrounds/${id}/edit`);
     setCampground(info.data);
-  }, [id])
+  }, [id]);
 
   useEffect(() => {
     getCurrentUser();
@@ -84,6 +90,8 @@ export default function CampgroundEdit() {
       for (let i = 0; i < values.deleteImages.length; i++) {
         formData.append("deleteImages", values.deleteImages[i]);
       }
+      formData.append("longitude", String(marker.longitude));
+      formData.append("latitude", String(marker.latitude));
       for (const pair of formData.entries()) {
         console.log(pair[0], pair[1]);
       }
@@ -155,6 +163,7 @@ export default function CampgroundEdit() {
                       </div>
                     ) : null}
                   </div>
+                  <LocationPicker marker={marker} onMapClick={setMarker} />
                   <label htmlFor="price">Price</label>
 
                   <div className="input-group">
