@@ -32,4 +32,5 @@ export type Campground = {
   author: Author;
   geometry: Geometry;
   reviews: Review[]
+  properties?: { popUpMarkup: string };
 };

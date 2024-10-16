@@ -1,5 +1,5 @@
 import "normalize.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar.tsx";
@@ -27,7 +27,7 @@ export default function Campgrounds() {
 
   const productsPerPage = 16;
 
-  const fetchCampgrounds = async () => {
+  const fetchCampgrounds = useCallback(async () => {
     try {
       const info = await axios.get(
         `/api/campgrounds?page=${pageCount}&productsPerPage=${productsPerPage}`
@@ -36,7 +36,7 @@ export default function Campgrounds() {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [pageCount]);
 
   const fetchAllCampgrounds = async () => {
     try {
@@ -47,9 +47,9 @@ export default function Campgrounds() {
     }
   };
 
-  const setPageNumInURL = () => {
+  const setPageNumInURL = useCallback(() => {
     setSearchParams({ page: `${pageCount}` });
-  };
+  }, [pageCount, setSearchParams]);
 
   const onPageChange = (num: number) => {
     setPageCount(num);
@@ -62,12 +62,12 @@ export default function Campgrounds() {
       fetchAllCampgrounds();
     }
     getAPI();
-  }, []);
+  }, [pageCount]);
 
   useEffect(() => {
     setPageNumInURL();
     fetchCampgrounds();
-  }, [pageCount]);
+  }, [pageCount, setPageNumInURL, fetchCampgrounds]);
 
   return (
     <>

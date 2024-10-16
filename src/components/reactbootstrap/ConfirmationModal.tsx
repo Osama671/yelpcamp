@@ -31,7 +31,7 @@ function ConfirmationModal({func, modalItems}: {func: () => void, modalItems: IM
           <Button variant="secondary" onClick={handleClose}>
             {modalItems.closeButton}
           </Button>
-          <Button variant="primary" onClick={() => {func()}}>
+          <Button variant="danger" onClick={() => {func()}}>
             {modalItems.submitButton}
           </Button>
         </Modal.Footer>

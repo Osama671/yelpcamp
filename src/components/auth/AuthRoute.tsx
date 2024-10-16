@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
-export default function AuthRoute({ Component }) {
+export default function AuthRoute({ Component }: {Component: React.ComponentType}) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 

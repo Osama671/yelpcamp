@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Campground } from "../../types";
@@ -52,15 +52,15 @@ export default function CampgroundEdit() {
     setCurrentUser(response.data._id);
   }
 
-  async function getCampgroundInfo() {
+  const getCampgroundInfo = useCallback(async() => {
     const info = await axios.get(`/api/campgrounds/${id}/edit`);
     setCampground(info.data);
-  }
+  }, [id])
 
   useEffect(() => {
     getCurrentUser();
     getCampgroundInfo();
-  }, [id]);
+  }, [id, getCampgroundInfo]);
 
   const formik = useFormik({
     initialValues: {

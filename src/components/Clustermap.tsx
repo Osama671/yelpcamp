@@ -11,7 +11,7 @@ type IPointEnum = "Point";
 
 const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
   const navigate = useNavigate();
-  const mapContainerRef = useRef();
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map>();
 
   useEffect(() => {
@@ -22,9 +22,8 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
           type: campground.geometry.type as IPointEnum,
         },
         type: "Feature" as IFeatureEnum,
-        properties: { hey: "Hello" },
+        properties: campground.properties ?? {},
       }));
-      console.log(campgroundGeometry);
       mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
       mapRef.current = new mapboxgl.Map({
@@ -106,42 +105,42 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
               const features = mapRef.current.queryRenderedFeatures(e.point, {
                 layers: ["clusters"],
               });
-              const clusterId = features[0].properties.cluster_id;
-              mapRef.current
-                .getSource("campgrounds")
-                .getClusterExpansionZoom(clusterId, (err, zoom) => {
-                  if (err) return;
+              const clusterId = features?.[0].properties?.cluster_id;
+              const source = mapRef.current?.getSource(
+                "campgrounds"
+              ) as mapboxgl.GeoJSONSource;
+              source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+                if (err) return;
 
-                  mapRef.current.easeTo({
-                    center: features[0].geometry.coordinates,
-                    zoom: zoom,
-                  });
+                mapRef.current?.easeTo({
+                  center: features[0].geometry.coordinates,
+                  zoom: zoom ?? undefined,
                 });
+              });
             }
           });
         }
         if (mapRef.current) {
           mapRef.current.on("click", "unclustered-point", (e) => {
-            const text = e.features[0].properties.popUpMarkup;
+            const text = e.features?.[0].properties?.popUpMarkup;
 
-            const coordinates = e.features[0].geometry.coordinates.slice();
-            const mag = e.features[0].properties.mag;
-            const tsunami =
-              e.features[0].properties.tsunami === 1 ? "yes" : "no";
+            const coordinates = e.features?.[0]?.geometry.coordinates.slice();
 
             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
               coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
             }
 
-            const popup = new mapboxgl.Popup()
-              .setLngLat(coordinates)
-              .setHTML(text)
-              .addTo(mapRef.current);
+            if (mapRef.current) {
+              new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(text)
+                .addTo(mapRef.current);
+            }
 
             // TODO: Find a better implementation with virtual function in mongoose
-            const popupArticle = document.querySelector("#navigate-link");
-            const id = popupArticle.dataset.id;
-            popupArticle.addEventListener("click", () => {
+            const popupArticle = document.querySelector("#navigate-link") as HTMLElement | undefined
+            const id = popupArticle?.dataset.id
+            popupArticle?.addEventListener("click", () => {
               navigate(`/campground/${id}`);
             });
           });
@@ -156,7 +155,7 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
         });
       });
 
-      return () => mapRef.current.remove();
+      return () => mapRef.current?.remove();
     }
   }, [campgrounds, navigate]);
 

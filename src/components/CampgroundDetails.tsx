@@ -47,7 +47,7 @@ export default function CampgroundDetails() {
     }
   }
 
-  async function getCampground() {
+  const getCampground = useCallback(async() => {
     try {
       const response = await axios.get(`/api/campgrounds/${id}`);
       if (response.status !== 200) navigate("/campgrounds");
@@ -56,7 +56,7 @@ export default function CampgroundDetails() {
       console.error(e);
       navigate("/campgrounds");
     }
-  }
+  }, [id, navigate])
 
   const deleteCampground = async () => {
     try {
@@ -125,7 +125,7 @@ export default function CampgroundDetails() {
   useEffect(() => {
     getCampground();
     getCurrentUser();
-  }, [id]);
+  }, [id, getCampground]);
 
   useEffect(() => {
     if (campground) {
