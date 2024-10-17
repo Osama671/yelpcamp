@@ -13,6 +13,7 @@ import ConfirmationModal from "./reactbootstrap/ConfirmationModal.tsx";
 import { Campground } from "../../types.ts";
 import { useToast } from "./contexts/ToastProvider.tsx";
 import ExpressError from "../util/ExpressError.ts";
+import { useUser } from "./contexts/UserProvider.tsx";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -33,22 +34,14 @@ const validate = (values: IFormikValues) => {
 export default function CampgroundDetails() {
   const showToast = useToast();
   const [campground, setCampground] = useState<Campground | null>(null);
-  const [currentUser, setCurrentUser] = useState();
 
   const mapRef = useRef<mapboxgl.Map>();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const { user } = useUser()
+
   const { id } = useParams();
   const navigate = useNavigate();
-
-  async function getCurrentUser() {
-    try {
-      const response = await axios.get("/api/auth/getuser");
-      setCurrentUser(response.data._id);
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   const getCampground = useCallback(async () => {
     try {
@@ -143,7 +136,6 @@ export default function CampgroundDetails() {
 
   useEffect(() => {
     getCampground();
-    getCurrentUser();
   }, [id, getCampground]);
 
   useEffect(() => {
@@ -176,7 +168,7 @@ export default function CampgroundDetails() {
                   <li className="list-group-item">${campground.price}/night</li>
                 </ul>
               </div>
-              {campground.author._id == currentUser && (
+              {campground.author._id == user && (
                 <div className="card-body mt-3 d-flex gap-3 justify-content-between">
                   <Link
                     to={`/campground/${id}/edit`}
@@ -201,7 +193,7 @@ export default function CampgroundDetails() {
               <div id="map-container" ref={mapContainerRef} className="mb-3" />
               <h2>Reviews:</h2>
 
-              {!currentUser || (
+              {!user || (
                 <form onSubmit={formik.handleSubmit} className="mb-3">
                   <div className="mb-3">
                     <fieldset className="starability-basic ">
@@ -314,7 +306,7 @@ export default function CampgroundDetails() {
                         Rated: 3
                       </p>
                       <p>Review: {review.review}</p>
-                      {currentUser !== review.author._id ? null : (
+                      {user !== review.author._id ? null : (
                         <button
                           onClick={() => handleDeleteReview(review._id)}
                           className="btn btn-sm btn-danger"

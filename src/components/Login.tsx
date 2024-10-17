@@ -28,7 +28,7 @@ const validate = (values: IFormikValues) => {
 
 export default function Register() {
   const showToast = useToast();
-  const {SetUser} = useUser()
+  const {getUser} = useUser()
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -43,7 +43,7 @@ export default function Register() {
       console.log(response.status);
       if (response.status === 200) {
         if (showToast) showToast("Login sucessful", "green");
-        SetUser()
+        getUser()
         navigate("/campgrounds");
       }
     },

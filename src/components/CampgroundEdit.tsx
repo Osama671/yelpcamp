@@ -8,6 +8,7 @@ import LocationPicker from "./LocationPicker";
 import Navbar from "./Navbar";
 import styles from "../styles/navbar.module.css";
 import { useToast } from "./contexts/ToastProvider";
+import { useUser } from "./contexts/UserProvider";
 
 interface IFormikValues {
   title: string;
@@ -46,8 +47,8 @@ const validate = (values: IFormikValues) => {
 
 export default function CampgroundEdit() {
   const showToast = useToast();
+  const { user } = useUser();
   const [campground, setCampground] = useState<Campground | null>(null);
-  const [currentUser, setCurrentUser] = useState();
 
   const [marker, setMarker] = useState({
     latitude: 37.7749,
@@ -57,18 +58,12 @@ export default function CampgroundEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  async function getCurrentUser() {
-    const response = await axios.get("/api/auth/getuser");
-    setCurrentUser(response.data._id);
-  }
-
   const getCampgroundInfo = useCallback(async () => {
     const info = await axios.get(`/api/campgrounds/${id}/edit`);
     setCampground(info.data);
   }, [id]);
 
   useEffect(() => {
-    getCurrentUser();
     getCampgroundInfo();
   }, [id, getCampgroundInfo]);
 
@@ -119,7 +114,7 @@ export default function CampgroundEdit() {
         <h1>...Loading...Or Is it?...idk</h1>
       ) : (
         <>
-          {campground.author._id !== currentUser ? (
+          {campground.author._id !== user ? (
             <Navigate to="/campgrounds" />
           ) : (
             <>
