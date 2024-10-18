@@ -12,10 +12,15 @@ export default function CampgroundCard({
           to={`/campground/${campground._id}`}
           style={{ textDecoration: "none", color: "black" }}
         >
-          <div className="col-md-12">
+          <div className="col-12 ">
             <img
-              className="img-fluid mx-auto d-block w-100 rounded"
-              src={campground.images[0].url}
+              className=" w-100 h-auto rounded"
+              style={{
+                objectFit: "fill",
+                maxHeight: "30vh",
+                minHeight: "30vh",
+              }}
+              src={campground.images[0]?.url}
               alt="Campground image"
             ></img>
           </div>

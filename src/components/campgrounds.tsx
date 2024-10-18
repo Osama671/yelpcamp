@@ -82,36 +82,35 @@ export default function Campgrounds() {
                     campgrounds={allCampgrounds.campgrounds}
                   ></ClusterMap>
                 </div>
-                <div
-                  className={`container col-12 col-md-6 mt-5 ${styles.searchWrapper}`}
-                >
-                  <h1>Search:</h1>
-                  <form className="d-flex shadow-sm" role="search">
-                    <input
-                      className="form-control"
-                      type="search"
-                      placeholder="CURRENTLY NOT IMPLEMENTED"
-                      aria-label="Search"
-                    />
+                <div className={`container col-12 col-md-6 mt-5 text-center `}>
+                  <form className="shadow-sm" role="search">
+                    <div className="d-flex">
+                      <input
+                        className={`${styles.searchBar} form-control rounded`}
+                        type="search"
+                        placeholder="Search..."
+                        aria-label="Search"
+                      />
+                    </div>
                   </form>
                 </div>
                 <div
                   className={`container d-flex flex-column mt-5 ${styles.main}`}
                 >
-                  <h1 className="text-center mt-4">All Campgrounds:</h1>
-                  <div className="d-flex container mb-3 ">
-                    <div className="row align-items-start justify-content-center gap-4">
-                      {paginatedCampgrounds.campgrounds.length > 0 ? (
-                        paginatedCampgrounds.campgrounds.map((campground) => (
-                          <CampgroundCard
-                            key={campground._id}
-                            campground={campground}
-                          />
-                        ))
-                      ) : (
-                        <p>No campgrounds available :(</p>
-                      )}
-                    </div>
+                  <h1 className={`text-center mt-4 ${styles.campgroundsTitle}`}>
+                    All Campgrounds:
+                  </h1>
+                  <div className="container d-flex mb-3 flex-wrap align-items-start justify-content-center gap-4">
+                    {paginatedCampgrounds.campgrounds.length > 0 ? (
+                      paginatedCampgrounds.campgrounds.map((campground) => (
+                        <CampgroundCard
+                          key={campground._id}
+                          campground={campground}
+                        />
+                      ))
+                    ) : (
+                      <p>No campgrounds available :(</p>
+                    )}
                   </div>
                 </div>
 

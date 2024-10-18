@@ -189,10 +189,18 @@ async function editCampground(
 
     campground.images = [...campground.images, ...images];
     await campground.save();
-
     if (deleteImages) {
       if (deleteImages.length !== 0) {
         deleteImages.map(async (filename) => {
+          //If placeholdeer image (no filename in cloud), pull img from db based on url
+          //filename being passed will either be url (if placeholder) or cloud filename (if uploaded by user)
+          if (filename.startsWith("http")) {
+            await Campground.updateOne(
+              { _id: campgroundId },
+              { $pull: { images: { url: { $in: filename } } } }
+            );
+            return;
+          }
           await cloudinary.cloudinary.uploader.destroy(filename);
         });
         await Campground.updateOne(

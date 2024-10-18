@@ -47,7 +47,9 @@ export const editCampground = async (req: Request, res: Response) => {
   }
   try {
     const { id } = req.params;
-    const { location, description, price, title, deleteImages } = req.body;
+    const { location, description, price, title } = req.body;
+    let {deleteImages} = req.body
+    if(!Array.isArray(deleteImages) && deleteImages !== undefined) deleteImages = [deleteImages]
 
     const { longitude, latitude } = req.body;
     const geometry = { coordinates: [+longitude, +latitude] };

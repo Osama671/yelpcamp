@@ -80,6 +80,7 @@ export default function CampgroundEdit() {
     validate,
     onSubmit: async (values) => {
       const formData = new FormData();
+      console.log(values);
       formData.append("title", values.title);
       formData.append("location", values.location);
       formData.append("price", values.price);
@@ -248,7 +249,7 @@ export default function CampgroundEdit() {
                             </div>
                           ) : null}
                         </div>
-                        <div className="container justify-content-center d-flex flex-wrap p-0">
+                        <div className="container justify-content-center p-0">
                           <div className="row ">
                             {campground.images.map((image) => (
                               <>
@@ -261,6 +262,7 @@ export default function CampgroundEdit() {
                                     <img
                                       src={image.url}
                                       className="w-100 h-100 object-fit-fill"
+                                      key={image._id}
                                     ></img>
                                   </div>
                                   <div className="d-flex form-check-inline gap-3 ">
@@ -268,21 +270,23 @@ export default function CampgroundEdit() {
                                       name="deleteImages"
                                       type="checkbox"
                                       onChange={formik.handleChange}
-                                      value={image.filename}
+                                      value={image.filename || image.url}
                                     />
-                                    <label htmlFor="">Delete?</label>
+                                    <label htmlFor="deleteImages">
+                                      Delete?
+                                    </label>
                                   </div>
                                 </div>
                               </>
                             ))}
                           </div>
                         </div>
-                        <div className="mt-5">
+                        <div className="d-flex justify-content-center mt-4">
                           <button
-                            className="btn btn-info mb-3 w-100"
+                            className={`btn btn-success  p-3 fs-5 fw-medium ${styles.submitButton}`}
                             type="submit"
                           >
-                            Update Campground
+                            Edit Campground
                           </button>
                         </div>
                       </form>
