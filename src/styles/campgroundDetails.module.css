@@ -1,0 +1,27 @@
+.campgroundsWrapper {
+  position: relative;
+}
+
+.campgroundsWrapper::before {
+  background-size: cover;
+  background-position: center;
+  z-index: -9999;
+  filter: blur(2px);
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  /* background-color: rgba(237, 239, 243, 0.4);*/
+  background-image: url("https://media.istockphoto.com/id/1377841262/photo/the-beautiful-scenery-of-a-tent-in-a-pine-tree-forest-at-pang-oung-mae-hong-son-province.jpg?s=1024x1024&w=is&k=20&c=m1ki99jwqSpWKG0_mqqY5aALuXWQIco28cGBFIU0Gbg=");
+
+}
+
+.reviewWrapper {
+  background-color: rgba(255, 255, 255, 1);
+  padding: 16px
+}
+
+.cardWrapper {
+  background-color: rgba(255, 255, 255, 1);
+}

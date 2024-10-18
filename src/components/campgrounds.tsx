@@ -9,7 +9,7 @@ import ClusterMap from "./Clustermap.tsx";
 import Pagination from "./Pagination.tsx";
 import navbarStyles from "../styles/navbar.module.css";
 import { Campground } from "../../types.ts";
-import styles from "../styles/campgrounds.module.css";
+import { useTheme } from "./contexts/ThemeProvider.tsx";
 
 interface IAllCampgrounds {
   count: number;
@@ -17,6 +17,7 @@ interface IAllCampgrounds {
 }
 
 export default function Campgrounds() {
+  const {styles} = useTheme()
   const [paginatedCampgrounds, setpaginatedCampgrounds] =
     useState<IAllCampgrounds | null>(null);
   const [allCampgrounds, setAllCampgrounds] = useState<IAllCampgrounds | null>(

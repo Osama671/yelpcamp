@@ -2,8 +2,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
+import { useTheme } from "./contexts/ThemeProvider";
 
 export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
+  const {changeTheme} = useTheme()
   const showToast = useToast();
   const { removeUser, user } = useUser();
 
@@ -60,6 +62,15 @@ export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
             {!user ? (
               <>
                 <ul className={`navbar-nav ${styles.navbarNav}`}>
+                  <li className={`nav-item ${styles.navItem}`}>
+                    <p
+                      className={`${styles.navLink} active`}
+                      aria-current="page"
+                      onClick={() => changeTheme()}
+                    >
+                      Switch Theme
+                    </p>
+                  </li>
                   <li className={`nav-item ${styles.navItem}`}>
                     <Link
                       to="/login"

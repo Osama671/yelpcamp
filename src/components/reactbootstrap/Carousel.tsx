@@ -8,18 +8,23 @@ function ReactCarousel({
   images: Image[];
   showArrows: boolean;
 }) {
-  if (images.length === 0) images = [{ url: "https://placehold.co/600x400/EEE/31343C", filename: "", _id: "1" }];
+  if (images.length === 0)
+    images = [
+      {
+        url: "https://placehold.co/600x400/EEE/31343C",
+        filename: "",
+        _id: "1",
+      },
+    ];
   return (
     <>
-      {console.log(images)}
-
       <Carousel controls={showArrows} data-bs-theme="dark">
         <Carousel.Item
           key={images[0]._id}
           style={{ height: "500px", width: "100%" }}
         >
           <img
-            className="img-fluid"
+            className="img-fluid "
             style={{ width: "100%", height: "100%", objectFit: "fill" }}
             src={images[0].url}
             alt="First slide"
