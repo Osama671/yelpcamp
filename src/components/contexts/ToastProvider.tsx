@@ -11,19 +11,24 @@ const ToastContext = createContext<ToastFunction | null>(null);
 let toastTimeoutId: ReturnType<typeof setTimeout>;
 
 export const ToastProvider = ({ children }: ToastContextProviderProps) => {
-  const [showA, setShowA] = useState(false);
-  const [message, setMessage] = useState("test");
-  const [color, setColor] = useState("green");
+  const [toastData, setToastData] = useState({
+    showToast: false,
+    message: "",
+    color: "green",
+  });
 
-  const toggleShowA = () => setShowA((prev) => !prev);
+  const toggleToast = () =>
+    setToastData((oldData) => ({ ...oldData, showToast: !showToast }));
 
   const showToast = (toastMessage: string, toastColor: string) => {
-    setColor(toastColor);
-    setMessage(toastMessage);
-    setShowA(true);
+    setToastData(() => ({
+      showToast: true,
+      message: toastMessage,
+      color: toastColor,
+    }));
     if (toastTimeoutId) clearTimeout(toastTimeoutId);
     toastTimeoutId = setTimeout(() => {
-      setShowA(false);
+      setToastData((oldData) => ({ ...oldData, showToast: false }));
     }, 3000);
   };
 
@@ -32,11 +37,11 @@ export const ToastProvider = ({ children }: ToastContextProviderProps) => {
       {children}
       <div className="position-fixed bottom-0 end-0">
         <Toast
-          show={showA}
-          onClose={toggleShowA}
-          style={{ backgroundColor: color }}
+          show={toastData.showToast}
+          onClose={toggleToast}
+          style={{ backgroundColor: toastData.color }}
         >
-          <Toast.Body className="text-white">{message}</Toast.Body>
+          <Toast.Body className="text-white">{toastData.message}</Toast.Body>
         </Toast>
       </div>
     </ToastContext.Provider>

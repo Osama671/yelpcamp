@@ -1,10 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
 import { useToast } from "./contexts/ToastProvider";
+import styles from "../styles/newCampground.module.css";
 
 interface IFormikValues {
   title: string;
@@ -96,121 +97,149 @@ export default function NewCampground() {
 
   return (
     <>
-      <div className="mx-3">
-        <h1 className="text-center">New Campground:</h1>
-        <p className="text-center">
-          <Link to="/">Home Page</Link>
-        </p>
-        <div className="col-md-6 offset-md-3">
-          <div className="card-body">
-            <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-              <div className="mb-3">
-                <label className="form-label" htmlFor="title">
-                  Title
-                </label>
-                <input
-                  className="form-control"
-                  id="title"
-                  type="text"
-                  name="title"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.title}
-                />
-                {formik.touched.title && formik.errors.title ? (
-                  <div style={{ color: "red" }}>{formik.errors.title}</div>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="location">
-                  Location
-                </label>
-                <input
-                  className="form-control"
-                  id="location"
-                  type="text"
-                  name="location"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.location}
-                />
-                {formik.touched.location && formik.errors.location ? (
-                  <div style={{ color: "red" }}>{formik.errors.location}</div>
-                ) : null}
-              </div>
-              <LocationPicker marker={marker} onMapClick={setMarker} />
-              <label className="form-label mt-3" htmlFor="price">
-                Price
-              </label>
-              <div className="input-group">
-                <span className="input-group-text">$</span>
-                <input
-                  placeholder="0.00"
-                  type="text"
-                  className="form-control"
-                  aria-label="Amount (to the nearest dollar)"
-                  id="price"
-                  name="price"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.price}
-                />
-              </div>
-              {formik.touched.price && formik.errors.price ? (
-                <div style={{ color: "red", marginBottom: "1em" }}>
-                  {formik.errors.price}
-                </div>
-              ) : null}
-              <div className="mb-3 mt-3">
-                {/*Start of bootstrap Form */}
-                <div className="mb-3 custom-file">
-                  <label
-                    htmlFor="images"
-                    className="form-label custom-file-label"
-                  >
-                    {formik.values.images.length === 0 ? "Upload Images" : null}
+      <div className={`${styles.newCampgroundWrapper}`}>
+        <div
+          className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
+        >
+          <div className={`${styles.formWrapper}`}>
+            <h1 className="text-center">Create a new Campground</h1>
+            <hr />
+            <div className="card-body">
+              <form
+                onSubmit={formik.handleSubmit}
+                encType="multipart/form-data"
+              >
+                <div className="mb-3">
+                  <label className="form-label fw-medium fs-3" htmlFor="title">
+                    Title
                   </label>
                   <input
-                    id="images"
-                    name="images"
-                    type="file"
                     className="form-control"
-                    multiple
-                    onChange={(event) => {
-                      formik.setFieldValue("images", event.target.files);
-                    }}
-                  ></input>
+                    id="title"
+                    type="text"
+                    name="title"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.title}
+                  />
+                  {formik.touched.title && formik.errors.title ? (
+                    <div style={{ color: "red" }} className="fw-medium">
+                      {formik.errors.title}
+                    </div>
+                  ) : null}
                 </div>
-                {formik.touched.images && formik.errors.images ? (
-                  <div style={{ color: "red" }}>{formik.errors.images}</div>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="description">
-                  Description
+                <div className="mb-3">
+                  <label
+                    className="form-label fw-medium fs-3"
+                    htmlFor="location"
+                  >
+                    Location
+                  </label>
+                  <input
+                    className="form-control"
+                    id="location"
+                    type="text"
+                    name="location"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.location}
+                  />
+                  {formik.touched.location && formik.errors.location ? (
+                    <div style={{ color: "red" }} className="fw-medium">
+                      {formik.errors.location}
+                    </div>
+                  ) : null}
+                </div>
+                <LocationPicker marker={marker} onMapClick={setMarker} />
+                <label
+                  className="form-label mt-3 fw-medium fs-3"
+                  htmlFor="price"
+                >
+                  Price
                 </label>
-                <textarea
-                  className="form-control"
-                  id="description"
-                  name="description"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.description}
-                ></textarea>
-                {formik.touched.description && formik.errors.description ? (
-                  <div style={{ color: "red" }}>
-                    {formik.errors.description}
+                <div className="input-group">
+                  <span className="input-group-text">$</span>
+                  <input
+                    placeholder="0.00"
+                    type="text"
+                    className="form-control"
+                    aria-label="Amount (to the nearest dollar)"
+                    id="price"
+                    name="price"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.price}
+                  />
+                </div>
+                {formik.touched.price && formik.errors.price ? (
+                  <div style={{ color: "red" }} className="fw-medium">
+                    {formik.errors.price}
                   </div>
                 ) : null}
-              </div>
-              <button className="btn btn-success" type="submit">
-                Add Campground
-              </button>
-            </form>
-          </div>
+                <div className="mb-3 mt-3">
+                  <div className=" custom-file">
+                    <label
+                      htmlFor="images"
+                      className="form-label custom-file-label fw-medium fs-3"
+                    >
+                      {formik.values.images.length === 0
+                        ? "Upload Images"
+                        : null}
+                    </label>
+                    <input
+                      id="images"
+                      name="images"
+                      type="file"
+                      className="form-control"
+                      multiple
+                      onChange={(event) => {
+                        formik.setFieldValue("images", event.target.files);
+                      }}
+                    ></input>
+                  </div>
+                  {formik.touched.images && formik.errors.images ? (
+                    <div style={{ color: "red" }} className="fw-medium">
+                      {formik.errors.images}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-3">
+                  <label
+                    className="form-label fw-medium fs-3"
+                    htmlFor="description"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    style={{ resize: "none" }}
+                    className="form-control"
+                    rows={6}
+                    id="description"
+                    name="description"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.description}
+                  ></textarea>
+                  {formik.touched.description && formik.errors.description ? (
+                    <div style={{ color: "red" }} className="fw-medium">
+                      {formik.errors.description}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="d-flex justify-content-center">
+                  <button
+                    className={`btn btn-success mt-3 p-3 fs-5 fw-medium ${styles.submitButton}`}
+                    type="submit"
+                  >
+                    Create Campground
+                  </button>
+                </div>
+              </form>
+            </div>
 
-          <div className="col-6 offset-3">
-            <br />
+            <div className="col-6 offset-3">
+              <br />
+            </div>
           </div>
         </div>
       </div>

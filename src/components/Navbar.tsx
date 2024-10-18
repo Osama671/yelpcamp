@@ -1,33 +1,23 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
 
-// Why is the Navbar fetching the user :thinking:
 export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
   const showToast = useToast();
-  const { removeUser } = useUser();
-  const [getUser, setGetUser] = useState(undefined);
+  const { removeUser, user } = useUser();
 
   const handleLogout = async () => {
     const response = await axios.get("/api/logout");
-    if (response.status === 200 && showToast) {
-      removeUser()
-      showToast("Logout sucessful!", "green");
+    if (response.status === 200) {
+      if (showToast) showToast("Logout sucessful!", "green");
+      removeUser();
     }
   };
 
-  useEffect(() => {
-    async function fetchUser() {
-      const response = await axios.get("/api/auth/getuser");
-      setGetUser(response.data.username);
-    }
-    fetchUser();
-  }, []);
-
   return (
     <>
+    {console.log(user)}
       <nav
         className={`${styles.navbar}  navbar sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
         data-bs-theme="dark"
@@ -68,7 +58,7 @@ export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
             className="collapse navbar-collapse ml-auto justify-content-end"
             id="navbarNav"
           >
-            {getUser === undefined ? (
+            {!user ? (
               <>
                 <ul className={`navbar-nav ${styles.navbarNav}`}>
                   <li className={`nav-item ${styles.navItem}`}>

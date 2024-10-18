@@ -32,13 +32,13 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function CampgroundDetails() {
+  const { user } = useUser();
   const showToast = useToast();
+  
   const [campground, setCampground] = useState<Campground | null>(null);
 
   const mapRef = useRef<mapboxgl.Map>();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const { user } = useUser()
 
   const { id } = useParams();
   const navigate = useNavigate();

@@ -9,7 +9,6 @@ import ClusterMap from "./Clustermap.tsx";
 import Pagination from "./Pagination.tsx";
 import styles from "../styles/navbar.module.css";
 import { Campground } from "../../types.ts";
-import { useUser } from "./contexts/UserProvider.tsx";
 
 interface IAllCampgrounds {
   count: number;
@@ -17,8 +16,6 @@ interface IAllCampgrounds {
 }
 
 export default function Campgrounds() {
-  const { user } = useUser();
-
   const [paginatedCampgrounds, setpaginatedCampgrounds] =
     useState<IAllCampgrounds | null>(null);
   const [allCampgrounds, setAllCampgrounds] = useState<IAllCampgrounds | null>(
@@ -71,10 +68,8 @@ export default function Campgrounds() {
     setPageNumInURL();
     fetchCampgrounds();
   }, [pageCount, setPageNumInURL, fetchCampgrounds]);
-
   return (
     <>
-    {console.log("USER", user)}
       <div className="vh-min-100">
         <Navbar styles={styles} />
         <main className="mt-3 ">
