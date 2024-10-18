@@ -1,0 +1,24 @@
+.campgroundsWrapper{
+    position: relative
+}
+
+.campgroundsWrapper::before {
+  background-size: cover;
+  background-position: center;
+  z-index: -9999;
+  filter: blur(2px);
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("https://images.unsplash.com/photo-1512503097562-0d48af52b006?q=80&w=1966&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
+.main {
+    background-color: rgba(240, 240, 240, 0.6)
+}
+
+.searchWrapper {
+    background-color: rgba(240, 240, 240, 0.6)
+}

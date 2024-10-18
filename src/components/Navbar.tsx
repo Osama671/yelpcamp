@@ -17,7 +17,6 @@ export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
 
   return (
     <>
-    {console.log(user)}
       <nav
         className={`${styles.navbar}  navbar sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
         data-bs-theme="dark"

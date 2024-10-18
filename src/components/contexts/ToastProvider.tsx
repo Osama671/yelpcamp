@@ -35,7 +35,7 @@ export const ToastProvider = ({ children }: ToastContextProviderProps) => {
   return (
     <ToastContext.Provider value={showToast}>
       {children}
-      <div className="position-fixed bottom-0 end-0">
+      <div className="position-fixed bottom-0 end-0 z-3">
         <Toast
           show={toastData.showToast}
           onClose={toggleToast}

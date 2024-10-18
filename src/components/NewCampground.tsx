@@ -6,6 +6,8 @@ import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
 import { useToast } from "./contexts/ToastProvider";
 import styles from "../styles/newCampground.module.css";
+import navbarStyles from "../styles/navbar.module.css";
+import Navbar from "./Navbar";
 
 interface IFormikValues {
   title: string;
@@ -97,6 +99,7 @@ export default function NewCampground() {
 
   return (
     <>
+      <Navbar styles={navbarStyles} />
       <div className={`${styles.newCampgroundWrapper}`}>
         <div
           className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
@@ -235,10 +238,6 @@ export default function NewCampground() {
                   </button>
                 </div>
               </form>
-            </div>
-
-            <div className="col-6 offset-3">
-              <br />
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 .newCampgroundWrapper {
-  position: relative; 
+  position: relative;
 }
 
 .newCampgroundWrapper::before {
@@ -33,6 +33,6 @@
 }
 
 .submitButton:hover {
-  background-color: #218838; 
+  background-color: #218838;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }

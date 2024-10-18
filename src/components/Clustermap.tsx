@@ -8,7 +8,6 @@ import { Campground } from "../../types";
 type IFeatureEnum = "Feature";
 type IPointEnum = "Point";
 
-
 const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
   const navigate = useNavigate();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -28,7 +27,7 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
 
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: "mapbox://styles/mapbox/light-v11",
+        style: "mapbox://styles/mapbox/streets-v12",
         center: [-103.5917, 40.6699],
         zoom: 3,
       });
@@ -36,8 +35,6 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
 
       mapRef.current.on("load", () => {
         if (mapRef.current) {
-          console.log(campgrounds);
-
           mapRef.current.addSource("campgrounds", {
             type: "geojson",
             data: {
@@ -138,8 +135,10 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
             }
 
             // TODO: Find a better implementation with virtual function in mongoose
-            const popupArticle = document.querySelector("#navigate-link") as HTMLElement | undefined
-            const id = popupArticle?.dataset.id
+            const popupArticle = document.querySelector("#navigate-link") as
+              | HTMLElement
+              | undefined;
+            const id = popupArticle?.dataset.id;
             popupArticle?.addEventListener("click", () => {
               navigate(`/campground/${id}`);
             });

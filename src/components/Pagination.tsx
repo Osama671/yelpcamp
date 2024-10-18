@@ -43,9 +43,9 @@ export default function Pagination({
             }
 
             return (
-              <li key={i + startPage} className="page-item">
+              <li key={i + startPage} className="page-item "  >
                 <a
-                  className="page-link"
+                  className="page-link text-dark"
                   href="#"
                   onClick={() => onPageChange(i + startPage)}
                 >

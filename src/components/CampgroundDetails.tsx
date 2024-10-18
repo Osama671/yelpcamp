@@ -34,7 +34,7 @@ const validate = (values: IFormikValues) => {
 export default function CampgroundDetails() {
   const { user } = useUser();
   const showToast = useToast();
-  
+
   const [campground, setCampground] = useState<Campground | null>(null);
 
   const mapRef = useRef<mapboxgl.Map>();
@@ -129,8 +129,16 @@ export default function CampgroundDetails() {
     },
     validate,
     onSubmit: async (values) => {
-      await axios.post(`/api/campgrounds/${id}/review`, values);
-      getCampground();
+      try {
+        await axios.post(`/api/campgrounds/${id}/review`, values);
+        if (showToast) showToast("Review Submitted!", "green");
+        getCampground();
+      } catch (e) {
+        if (e instanceof ExpressError) {
+          if (showToast) showToast("Error submitting review", "red");
+          console.error(e);
+        }
+      }
     },
   });
 
