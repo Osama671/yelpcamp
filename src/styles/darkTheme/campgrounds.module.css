@@ -1,44 +1,81 @@
+/*DARK MODE*/
+
 .campgroundsWrapper {
-    position: relative;
-  }
-  
-  .campgroundsWrapper::before {
-    background-size: cover;
-    background-position: center;
-    z-index: -9999;
-    filter: blur(2px);
-    content: "";
-    position: absolute;
-    background-attachment: fixed;
-    width: 100%;
-    min-height: 100%;
-    background-image: url("https://images.unsplash.com/photo-1515444744559-7be63e1600de?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-  }
-  
-  .main {
-    background-color: rgba(240, 240, 240, 0.6);
-  }
-  
-  .searchBar {
-    border: none;
-    background-color: rgba(240, 240, 240, 0.6);
-    padding: 10px 20px;
-    border-radius: 25px;
-    background: linear-gradient(45deg, #69b4e3, #90ed90);
-  }
-  
-  .searchBar:focus {
-    box-shadow: none;
-  }
-  
-  .searchBar:hover {
-    box-shadow: 0 0 8px rgba(220, 224, 229, 0.6);
-  }
-  
-  .campgroundsTitle {
-    font-family: "Roboto Slab", serif;
-    font-size: 36px; 
-    font-weight: bold;
-    color: #333; 
-  }
-  
+  position: relative;
+}
+
+.campgroundsWrapper::before {
+  background-size: cover;
+  background-position: center;
+  z-index: -9999;
+  filter: blur(3px);
+  filter: brightness(85%);
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("https://images.unsplash.com/photo-1515444744559-7be63e1600de?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
+.main {
+  background-color: #a8998188;
+}
+
+.searchBar {
+  border: none;
+  background-color: rgba(240, 240, 240, 0.6);
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #2631b2, #010901);
+}
+
+.searchBar::placeholder {
+  color: rgba(255, 255, 255, 0.801);
+  font-size: 18px;
+}
+
+.searchBar:focus {
+  box-shadow: none;
+}
+
+.searchBar:hover {
+  box-shadow: 0 0 8px rgba(250, 250, 250, 0.6);
+}
+
+.campgroundsTitle {
+  font-family: "Roboto Slab", serif;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffffc5;
+}
+
+.cardTitle {
+  color: #ffffffc6;
+  font-weight: 500;
+}
+
+.cardAuthor {
+  color: rgba(217, 210, 244, 0.806);
+  font-weight: 500;
+}
+
+.cardLocation {
+  color: #ffffffc6;
+  font-weight: 500;
+}
+
+.cardPrice {
+  color: #ffffffc6;
+  font-weight: 500;
+}
+
+.cardThumbnail {
+  filter: brightness(85%)
+}
+
+.paginationButtons {
+  color: rgba(255, 255, 255, 0.751) !important;
+  border: 0px;
+  background-color: #2d3269b3 !important;
+}

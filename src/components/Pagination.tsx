@@ -3,6 +3,7 @@ interface paginatedProducts {
   currentPageCount: number;
   campgroundsCount: number;
   productsPerPage: number;
+  styles: CSSModuleClasses;
 }
 
 export default function Pagination({
@@ -10,6 +11,7 @@ export default function Pagination({
   currentPageCount,
   campgroundsCount,
   productsPerPage,
+  styles,
 }: paginatedProducts) {
   const totalPages = Math.ceil(campgroundsCount / productsPerPage);
   //Second argument is maximum amount of pagination boxes appearing
@@ -31,7 +33,11 @@ export default function Pagination({
             currentPageCount - 1 <= 0 || onPageChange(currentPageCount - 1)
           }
         >
-          <a className="page-link" href="#" aria-label="Previous">
+          <a
+            className={`page-link ${styles?.paginationButtons}`}
+            href="#"
+            aria-label="Previous"
+          >
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
@@ -43,9 +49,9 @@ export default function Pagination({
             }
 
             return (
-              <li key={i + startPage} className="page-item "  >
+              <li key={i + startPage} className="page-item ">
                 <a
-                  className="page-link text-dark"
+                  className={`page-link ${styles?.paginationButtons}`}
                   href="#"
                   onClick={() => onPageChange(i + startPage)}
                 >
@@ -64,7 +70,7 @@ export default function Pagination({
             onPageChange(currentPageCount + 1)
           }
         >
-          <a className="page-link" href="#" aria-label="Next">
+          <a className={`page-link ${styles.paginationButtons}`} href="#" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

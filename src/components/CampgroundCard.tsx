@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { Campground } from "../../types";
 export default function CampgroundCard({
   campground,
+  styles,
 }: {
   campground: Campground;
+  styles?: CSSModuleClasses;
 }) {
   return (
     <>
@@ -14,7 +16,7 @@ export default function CampgroundCard({
         >
           <div className="col-12 ">
             <img
-              className=" w-100 h-auto rounded"
+              className={`w-100 h-auto rounded ${styles?.cardThumbnail}`}
               style={{
                 objectFit: "fill",
                 maxHeight: "30vh",
@@ -26,13 +28,17 @@ export default function CampgroundCard({
           </div>
           <div className="col-md-12">
             <div className="card-body">
-              <h5 className="card-title mt-2">{campground.title}</h5>
-              <p className="card-text my-0 text-secondary">
+              <h5 className={`card-title mt-2 ${styles?.cardTitle}`}>
+                {campground.title}
+              </h5>
+              <p className={`card-text my-0  ${styles?.cardAuthor}`}>
                 <em> By: {campground.author.username}</em>
               </p>
-              <p className="card-text my-0 ">Location: {campground.location}</p>
+              <p className={`card-text my-0 ${styles?.cardLocation}`}>
+                Location: {campground.location}
+              </p>
 
-              <p className="card-text my-0 ">
+              <p className={`card-text my-0 ${styles?.cardPrice}`}>
                 Price: ${campground.price}/night
               </p>
             </div>

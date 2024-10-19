@@ -1,22 +1,28 @@
 import { createContext, useContext, useState } from "react";
-import lightStyles from "../../styles/lightTheme/campgrounds.module.css";
-import darkStyles from "../../styles/darkTheme/campgrounds.module.css";
+import allThemes from "../../styles/themeStyles"; //All themes (css) are in this file
 
 const ThemeContext = createContext("");
-
-const themes = { light: lightStyles, dark: darkStyles };
+const themes = allThemes;
+const mapboxTheme = {
+  light: "mapbox://styles/mapbox/streets-v12",
+  dark: "mapbox://styles/mapbox/standard-satellite",
+};
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const [styles, setStyles] = useState(themes[theme]);
+  const [mapboxStyle, setMapboxStyle] = useState(mapboxTheme[theme]);
 
   const changeTheme = () => {
     const newtheme = theme === "light" ? "dark" : "light";
     setTheme(newtheme);
     setStyles(themes[theme]);
+    setMapboxStyle(mapboxTheme[theme]);
   };
   return (
-    <ThemeContext.Provider value={{styles, changeTheme}}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={{ styles, changeTheme, mapboxStyle }}>
+      {children}
+    </ThemeContext.Provider>
   );
 };
 

@@ -17,7 +17,8 @@ interface IAllCampgrounds {
 }
 
 export default function Campgrounds() {
-  const {styles} = useTheme()
+  const {styles: campgroundStyles, mapboxStyle} = useTheme()
+  const styles = campgroundStyles.campgrounds
   const [paginatedCampgrounds, setpaginatedCampgrounds] =
     useState<IAllCampgrounds | null>(null);
   const [allCampgrounds, setAllCampgrounds] = useState<IAllCampgrounds | null>(
@@ -72,7 +73,7 @@ export default function Campgrounds() {
   }, [pageCount, setPageNumInURL, fetchCampgrounds]);
   return (
     <>
-      <div className={`campgroundsWrapper ${styles.campgroundsWrapper}`}>
+      <div className={`campgroundsWrapper ${styles?.campgroundsWrapper}`}>
         <div className="vh-min-100">
           <Navbar styles={navbarStyles} />
           <main className={`mt-3`}>
@@ -81,15 +82,16 @@ export default function Campgrounds() {
                 <div className="d-flex flex-column col-10 offset-1 col-md-8 offset-md-2">
                   <ClusterMap
                     campgrounds={allCampgrounds.campgrounds}
+                    mapboxStyle={mapboxStyle}
                   ></ClusterMap>
                 </div>
                 <div className={`container col-12 col-md-6 mt-5 text-center `}>
                   <form className="shadow-sm" role="search">
                     <div className="d-flex">
                       <input
-                        className={`${styles.searchBar} form-control rounded`}
+                        className={`${styles.searchBar} form-control rounded text-white`}
                         type="search"
-                        placeholder="Search..."
+                        placeholder="Search...            (not implemented yet :'<)"
                         aria-label="Search"
                       />
                     </div>
@@ -107,6 +109,7 @@ export default function Campgrounds() {
                         <CampgroundCard
                           key={campground._id}
                           campground={campground}
+                          styles={styles}
                         />
                       ))
                     ) : (
@@ -121,6 +124,7 @@ export default function Campgrounds() {
                     currentPageCount={pageCount}
                     campgroundsCount={paginatedCampgrounds.count}
                     productsPerPage={productsPerPage}
+                    styles={styles}
                   />
                 )}
               </>

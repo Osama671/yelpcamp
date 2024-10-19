@@ -5,9 +5,10 @@ import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
 import { useToast } from "./contexts/ToastProvider";
-import styles from "../styles/newCampground.module.css";
+import styles from "../styles/lightTheme/newCampground.module.css";
 import navbarStyles from "../styles/navbar.module.css";
 import Navbar from "./Navbar";
+import { useTheme } from "./contexts/ThemeProvider";
 
 interface IFormikValues {
   title: string;
@@ -54,7 +55,10 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function NewCampground() {
+  const {styles: campgroundStyles} = useTheme()
+  const styles = campgroundStyles.newCampground
   const showToast = useToast();
+  
 
   const navigate = useNavigate();
 

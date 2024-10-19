@@ -8,7 +8,15 @@ import { Campground } from "../../types";
 type IFeatureEnum = "Feature";
 type IPointEnum = "Point";
 
-const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
+const defaultStyle = "mapbox://styles/mapbox/streets-v12";
+
+const ClusterMap = ({
+  campgrounds,
+  mapboxStyle = defaultStyle,
+}: {
+  campgrounds: Campground[];
+  mapboxStyle?: string;
+}) => {
   const navigate = useNavigate();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map>();
@@ -27,7 +35,7 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
 
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: "mapbox://styles/mapbox/streets-v12",
+        style: mapboxStyle,
         center: [-103.5917, 40.6699],
         zoom: 3,
       });
@@ -156,7 +164,7 @@ const ClusterMap = ({ campgrounds }: { campgrounds: Campground[] }) => {
 
       return () => mapRef.current?.remove();
     }
-  }, [campgrounds, navigate]);
+  }, [campgrounds, navigate, mapboxStyle]);
 
   return (
     <div id="cluster-map" ref={mapContainerRef} className="rounded mt-4"></div>
