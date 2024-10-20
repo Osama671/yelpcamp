@@ -1,6 +1,7 @@
 import { MapMouseEvent } from "mapbox-gl";
 import { useState } from "react";
 import Map, { Marker } from "react-map-gl";
+import { useTheme } from "./contexts/ThemeProvider";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -12,10 +13,12 @@ interface IMarker {
 const LocationPicker = ({
   marker,
   onMapClick,
+  styles
 }: {
   marker: IMarker;
-  onMapClick(geometry: IMarker): void;
+  onMapClick(geometry: IMarker): void; styles?: CSSModuleClasses
 }) => {
+  const {mapboxStyle} = useTheme()
   const [viewState, setViewState] = useState({
     latitude: 37.7749,
     longitude: -122.4194,
@@ -29,11 +32,11 @@ const LocationPicker = ({
 
   return (
     <div>
-      <h3>Select a Location</h3>
+      <h3 className={`${styles.formMapPicker}`}>Select a Location</h3>
       <Map
         {...viewState}
         style={{ width: "100%", height: "400px" }}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapStyle={mapboxStyle}
         onMove={(event) => setViewState(event.viewState)}
         onClick={handleMapClick}
         mapboxAccessToken={MAPBOX_TOKEN}

@@ -55,10 +55,9 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function NewCampground() {
-  const {styles: campgroundStyles} = useTheme()
-  const styles = campgroundStyles.newCampground
+  const { styles: campgroundStyles } = useTheme();
+  const styles = campgroundStyles.newCampground;
   const showToast = useToast();
-  
 
   const navigate = useNavigate();
 
@@ -109,7 +108,7 @@ export default function NewCampground() {
           className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
         >
           <div className={`${styles.formWrapper}`}>
-            <h1 className="text-center">Create a new Campground</h1>
+            <h1 className={`text-center ${styles.formHeader}`}>Create a new Campground</h1>
             <hr />
             <div className="card-body">
               <form
@@ -117,11 +116,11 @@ export default function NewCampground() {
                 encType="multipart/form-data"
               >
                 <div className="mb-3">
-                  <label className="form-label fw-medium fs-3" htmlFor="title">
+                  <label className={`form-label fw-medium fs-3 ${styles.formTitleHeader}`} htmlFor="title">
                     Title
                   </label>
                   <input
-                    className="form-control"
+                    className={`form-control ${styles.formTitleInput}`}
                     id="title"
                     type="text"
                     name="title"
@@ -137,13 +136,13 @@ export default function NewCampground() {
                 </div>
                 <div className="mb-3">
                   <label
-                    className="form-label fw-medium fs-3"
+                    className={`form-label fw-medium fs-3 ${styles.formLocationHeader}`}
                     htmlFor="location"
                   >
                     Location
                   </label>
                   <input
-                    className="form-control"
+                    className={`form-control ${styles.formLocationInput}`}
                     id="location"
                     type="text"
                     name="location"
@@ -157,19 +156,19 @@ export default function NewCampground() {
                     </div>
                   ) : null}
                 </div>
-                <LocationPicker marker={marker} onMapClick={setMarker} />
+                <LocationPicker marker={marker} onMapClick={setMarker} styles={styles} />
                 <label
-                  className="form-label mt-3 fw-medium fs-3"
+                  className={`form-label mt-3 fw-medium fs-3 ${styles.formPriceHeader}`}
                   htmlFor="price"
                 >
                   Price
                 </label>
                 <div className="input-group">
-                  <span className="input-group-text">$</span>
+                  <span className={`input-group-text ${styles.formPriceInput}`}>$</span>
                   <input
                     placeholder="0.00"
                     type="text"
-                    className="form-control"
+                    className={`form-control ${styles.formPriceInput}`}
                     aria-label="Amount (to the nearest dollar)"
                     id="price"
                     name="price"
@@ -187,17 +186,17 @@ export default function NewCampground() {
                   <div className=" custom-file">
                     <label
                       htmlFor="images"
-                      className="form-label custom-file-label fw-medium fs-3"
+                      className={`form-label custom-file-label fw-medium fs-3 ${styles.formImagesHeader}`}
                     >
                       {formik.values.images.length === 0
-                        ? "Upload Images"
+                        ? "Upload Images" 
                         : null}
                     </label>
                     <input
                       id="images"
                       name="images"
                       type="file"
-                      className="form-control"
+                      className={`form-control ${styles.formImageInput}`}
                       multiple
                       onChange={(event) => {
                         formik.setFieldValue("images", event.target.files);
@@ -212,14 +211,14 @@ export default function NewCampground() {
                 </div>
                 <div className="mb-3">
                   <label
-                    className="form-label fw-medium fs-3"
+                    className={`form-label fw-medium fs-3 ${styles.formDescriptionHeader}`}
                     htmlFor="description"
                   >
                     Description
                   </label>
                   <textarea
-                    style={{ resize: "none" }}
-                    className="form-control"
+                    
+                    className={`form-control ${styles.textarea}`}
                     rows={6}
                     id="description"
                     name="description"

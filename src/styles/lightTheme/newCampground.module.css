@@ -1,5 +1,5 @@
 .newCampgroundWrapper {
-  position: relative; 
+  position: relative;
 }
 
 .newCampgroundWrapper::before {
@@ -33,6 +33,27 @@
 }
 
 .submitButton:hover {
-  background-color: #218838; 
+  background-color: #218838;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.formImageInput,
+.formImageInput::file-selector-button {
+  background-color: white;
+  border: none;
+  color: black;
+}
+
+.formImageInput:focus,
+.formImageInput:active,
+.formImageInput:hover {
+  border: none;
+  box-shadow: none;
+}
+
+textarea {
+  resize: none;
+  background-color: white !important;
+  border: none !important;
+  color: white;
 }

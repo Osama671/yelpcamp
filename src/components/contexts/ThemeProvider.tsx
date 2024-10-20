@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import allThemes from "../../styles/themeStyles"; //All themes (css) are in this file
+import allThemes from "../../styles/themeStyles"; //All page themes (css) are in this file
 
 const ThemeContext = createContext("");
 const themes = allThemes;
