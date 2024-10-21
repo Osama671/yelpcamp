@@ -8,7 +8,6 @@ import Footer from "./Footer.tsx";
 import Carousel from "./reactbootstrap/Carousel.tsx";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import navbarStyles from "../styles/navbar.module.css";
 import ConfirmationModal from "./reactbootstrap/ConfirmationModal.tsx";
 import { Campground } from "../../types.ts";
 import { useToast } from "./contexts/ToastProvider.tsx";

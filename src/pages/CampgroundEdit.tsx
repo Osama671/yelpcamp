@@ -4,12 +4,11 @@ import { useFormik } from "formik";
 import { Campground } from "../../types";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
-import LocationPicker from "./LocationPicker";
-import Navbar from "./Navbar";
-import navbarStyles from "../styles/navbar.module.css";
-import { useToast } from "./contexts/ToastProvider";
-import { useUser } from "./contexts/UserProvider";
-import { useTheme } from "./contexts/ThemeProvider";
+import LocationPicker from "../components/LocationPicker";
+import Navbar from "../components/Navbar";
+import { useToast } from "../components/contexts/ToastProvider";
+import { useUser } from "../components/contexts/UserProvider";
+import { useTheme } from "../components/contexts/ThemeProvider";
 
 interface IFormikValues {
   title: string;
@@ -122,13 +121,15 @@ export default function CampgroundEdit() {
             <Navigate to="/campgrounds" />
           ) : (
             <>
-              <Navbar  />
+              <Navbar />
               <div className={`${styles.newCampgroundWrapper}`}>
                 <div
                   className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
                 >
                   <div className={`${styles.formWrapper}`}>
-                    <h1 className={`text-center ${styles.formHeader}`}>Edit Campground</h1>
+                    <h1 className={`text-center ${styles.formHeader}`}>
+                      Edit Campground
+                    </h1>
                     <hr />
                     <div className="col-12">
                       <form
@@ -293,7 +294,10 @@ export default function CampgroundEdit() {
                                       onChange={formik.handleChange}
                                       value={image.filename || image.url}
                                     />
-                                    <label className={`${styles.deleteImageLabel}`} htmlFor="deleteImages">
+                                    <label
+                                      className={`${styles.deleteImageLabel}`}
+                                      htmlFor="deleteImages"
+                                    >
                                       Delete?
                                     </label>
                                   </div>

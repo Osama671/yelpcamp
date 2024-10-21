@@ -1,7 +1,7 @@
 import model from "../repositories/mongoose.js";
 import { Request, Response } from "express";
-import ExpressErrorGeneric from "../../util/ExpressErrorGeneric.js";
-import ExpressError from "../../util/ExpressError.ts";
+import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
+import ExpressError from "../../src/util/ExpressError.ts";
 
 interface IImageIterable {
   filename: string;

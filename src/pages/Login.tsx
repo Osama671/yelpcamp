@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "./contexts/ToastProvider";
+import { useToast } from "../components/contexts/ToastProvider";
+import { useUser } from "../components/contexts/UserProvider";
 
 interface IFormikValues {
   username: string;
   password: string;
-  email: string;
 }
 
 const validate = (values: IFormikValues) => {
@@ -23,30 +23,27 @@ const validate = (values: IFormikValues) => {
     errors.password = "Must be less than 10 characters";
   }
 
-  if (!values.email) {
-    errors.email = "Required";
-  } else if (values.email.length >= 30) {
-    errors.email = "Must be less than 30 characters";
-  }
-
   return errors;
 };
 
 export default function Register() {
   const showToast = useToast();
+  const {getUser} = useUser()
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
-      email: "",
     },
     validate,
     onSubmit: async (values) => {
-      const response = await axios.post("/api/register", values);
+      const response = await axios.post("/api/login", values);
+      console.log("Response", response);
+      console.log(response.status);
       if (response.status === 200) {
-        if (showToast) showToast("Registration sucessful", "green");
+        if (showToast) showToast("Login sucessful", "green");
+        getUser()
         navigate("/campgrounds");
       }
     },
@@ -63,7 +60,7 @@ export default function Register() {
               src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             ></img>
             <div className="card-body">
-              <h5 className="card-title">Register</h5>
+              <h5 className="card-title">Login</h5>
               <form onSubmit={formik.handleSubmit}>
                 <div className="my-3">
                   <label className="form-label" htmlFor="username">
@@ -77,6 +74,7 @@ export default function Register() {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     value={formik.values.username}
+                    autoFocus
                   />
                   {formik.touched.username && formik.errors.username ? (
                     <div style={{ color: "red" }}>{formik.errors.username}</div>
@@ -99,26 +97,9 @@ export default function Register() {
                     <div style={{ color: "red" }}>{formik.errors.password}</div>
                   ) : null}
                 </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="email">
-                    Email
-                  </label>
-                  <input
-                    className="form-control"
-                    id="email"
-                    type="email"
-                    name="email"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                  />
-                  {formik.touched.email && formik.errors.email ? (
-                    <div style={{ color: "red" }}>{formik.errors.email}</div>
-                  ) : null}
-                </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-success">
-                    Register
+                    Login
                   </button>
                 </div>
               </form>

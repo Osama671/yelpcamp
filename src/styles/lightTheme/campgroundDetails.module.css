@@ -16,13 +16,21 @@
   background-image: url("https://media.istockphoto.com/id/1377841262/photo/the-beautiful-scenery-of-a-tent-in-a-pine-tree-forest-at-pang-oung-mae-hong-son-province.jpg?s=1024x1024&w=is&k=20&c=m1ki99jwqSpWKG0_mqqY5aALuXWQIco28cGBFIU0Gbg=");
 }
 
+.editCampgroundButton,
+.deleteCampgroundButton {
+  color: white;
+  @media (max-width: 380px) {
+    font-size: 0.75em;
+  }
+}
+
 .cardDescription {
   max-height: calc(1.5em * 7);
   scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
   overflow-y: auto;
   font-family: sans-serif;
   white-space: pre-wrap;
-  color: black
+  color: black;
 }
 
 .reviewWrapper {

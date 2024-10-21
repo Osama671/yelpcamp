@@ -1,9 +1,9 @@
 import mongoose, { Schema } from "mongoose";
-import cities from "../../seeds/cities.ts";
+import cities from "../../src/seeds/cities.ts";
 import { faker } from "@faker-js/faker";
 import Review, { findReviewById } from "./review.ts";
-import ExpressError from "../../util/ExpressError.ts";
-import cloudinary from "../../cloudinary/cloudinary.ts";
+import ExpressError from "../../src/util/ExpressError.ts";
+import cloudinary from "../../src/cloudinary/cloudinary.ts";
 
 const seedAmount = 50;
 

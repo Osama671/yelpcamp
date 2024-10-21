@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import styles from "../styles/homepage.module.css";
 
 export default function HomePage() {

@@ -3,11 +3,10 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
-import LocationPicker from "./LocationPicker";
-import { useToast } from "./contexts/ToastProvider";
-import navbarStyles from "../styles/navbar.module.css";
-import Navbar from "./Navbar";
-import { useTheme } from "./contexts/ThemeProvider";
+import LocationPicker from "../components/LocationPicker";
+import { useToast } from "../components/contexts/ToastProvider";
+import Navbar from "../components/Navbar";
+import { useTheme } from "../components/contexts/ThemeProvider";
 
 interface IFormikValues {
   title: string;

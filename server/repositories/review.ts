@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ExpressError from "../../util/ExpressError.ts";
+import ExpressError from "../../src/util/ExpressError.ts";
 
 const Schema = mongoose.Schema;
 

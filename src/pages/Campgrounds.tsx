@@ -2,14 +2,13 @@ import "normalize.css";
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar.tsx";
-import Footer from "./Footer.tsx";
-import CampgroundCard from "./CampgroundCard.tsx";
-import ClusterMap from "./Clustermap.tsx";
-import Pagination from "./Pagination.tsx";
-import navbarStyles from "../styles/navbar.module.css";
+import Navbar from "../components/Navbar.tsx";
+import Footer from "../components/Footer.tsx";
+import CampgroundCard from "../components/CampgroundCard.tsx";
+import ClusterMap from "../components/Clustermap.tsx";
+import Pagination from "../components/Pagination.tsx";
 import { Campground } from "../../types.ts";
-import { useTheme } from "./contexts/ThemeProvider.tsx";
+import { useTheme } from "../components/contexts/ThemeProvider.tsx";
 
 interface IAllCampgrounds {
   count: number;

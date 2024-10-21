@@ -1,5 +1,5 @@
 import Joi from "joi";
-import ExpressError from "../../../util/ExpressError.ts";
+import ExpressError from "../../../src/util/ExpressError.ts";
 import {Request, Response, NextFunction} from "express"
 
 const validateCampground = (req: Request, _: Response, next: NextFunction) => {

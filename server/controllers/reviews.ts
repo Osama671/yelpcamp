@@ -1,4 +1,4 @@
-import ExpressErrorGeneric from "../../util/ExpressErrorGeneric.js";
+import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
 import model from "../repositories/mongoose.js";
 import Review from "../repositories/review.ts";
 import { Request, Response } from "express";

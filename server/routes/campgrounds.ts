@@ -10,7 +10,7 @@ import express from "express";
 // import catchAsync from "../../util/catchAsync.ts";
 // import { validateCampground } from "../repositories/schemas/schema.ts";
 import multer from "multer";
-import cloudinary from "../../cloudinary/cloudinary.ts";
+import cloudinary from "../../src/cloudinary/cloudinary.ts";
 
 const upload = multer({ storage: cloudinary.storage });
 
