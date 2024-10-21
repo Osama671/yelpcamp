@@ -5,7 +5,6 @@ import axios from "axios";
 import bsCustomFileInput from "bs-custom-file-input";
 import LocationPicker from "./LocationPicker";
 import { useToast } from "./contexts/ToastProvider";
-import styles from "../styles/lightTheme/newCampground.module.css";
 import navbarStyles from "../styles/navbar.module.css";
 import Navbar from "./Navbar";
 import { useTheme } from "./contexts/ThemeProvider";

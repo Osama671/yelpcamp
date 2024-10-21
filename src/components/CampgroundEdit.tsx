@@ -9,7 +9,7 @@ import Navbar from "./Navbar";
 import navbarStyles from "../styles/navbar.module.css";
 import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
-import styles from "../styles/editcampground.module.css";
+import { useTheme } from "./contexts/ThemeProvider";
 
 interface IFormikValues {
   title: string;
@@ -22,13 +22,13 @@ const validate = (values: IFormikValues) => {
   const errors = {} as Partial<IFormikValues>;
   if (!values.title) {
     errors.title = "Required";
-  } else if (values.title.length >= 10) {
+  } else if (values.title.length <= 10) {
     errors.title = "Must be less than 10 characters";
   }
 
   if (!values.location) {
     errors.location = "Required";
-  } else if (values.location.length >= 50) {
+  } else if (values.location.length <= 50) {
     errors.location = "Must be less than 50 characters";
   }
 
@@ -47,6 +47,8 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function CampgroundEdit() {
+  const { styles: campgroundStyles } = useTheme();
+  const styles = campgroundStyles.editCampground;
   const showToast = useToast();
   const { user } = useUser();
   const [campground, setCampground] = useState<Campground | null>(null);
@@ -126,7 +128,7 @@ export default function CampgroundEdit() {
                   className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
                 >
                   <div className={`${styles.formWrapper}`}>
-                    <h1 className="text-center">Edit Campground</h1>
+                    <h1 className={`text-center ${styles.formHeader}`}>Edit Campground</h1>
                     <hr />
                     <div className="col-12">
                       <form
@@ -134,11 +136,14 @@ export default function CampgroundEdit() {
                         encType="multipart/form-data"
                       >
                         <div className="mb-3">
-                          <label className="form-label" htmlFor="title">
+                          <label
+                            className={`form-label fw-medium fs-3 ${styles.formTitleHeader}`}
+                            htmlFor="title"
+                          >
                             Title
                           </label>
                           <input
-                            className="form-control"
+                            className={`form-control ${styles.formTitleInput}`}
                             id="title"
                             type="text"
                             name="title"
@@ -154,11 +159,14 @@ export default function CampgroundEdit() {
                           ) : null}
                         </div>
                         <div className="mb-3">
-                          <label className="form-label" htmlFor="location">
+                          <label
+                            className={`form-label fw-medium fs-3 ${styles.formLocationHeader}`}
+                            htmlFor="location"
+                          >
                             Location
                           </label>
                           <input
-                            className="form-control"
+                            className={`form-control ${styles.formLocationInput}`}
                             id="location"
                             type="text"
                             name="location"
@@ -176,14 +184,24 @@ export default function CampgroundEdit() {
                         <LocationPicker
                           marker={marker}
                           onMapClick={setMarker}
+                          styles={styles}
                         />
-                        <label htmlFor="price">Price</label>
+                        <label
+                          className={`form-label mt-3 fw-medium fs-3 ${styles.formPriceHeader}`}
+                          htmlFor="price"
+                        >
+                          Price
+                        </label>
 
                         <div className="input-group">
-                          <span className="input-group-text">$</span>
+                          <span
+                            className={`input-group-text ${styles.formPriceInput}`}
+                          >
+                            $
+                          </span>
                           <input
                             type="text"
-                            className="form-control"
+                            className={`form-control ${styles.formPriceInput}`}
                             aria-label="Amount (to the nearest dollar)"
                             id="price"
                             name="price"
@@ -200,11 +218,14 @@ export default function CampgroundEdit() {
                         ) : null}
 
                         <div className="mb-3 mt-3">
-                          <label className="form-label" htmlFor="description">
+                          <label
+                            className={`form-label fw-medium fs-3 ${styles.formDescriptionHeader}`}
+                            htmlFor="description"
+                          >
                             Description
                           </label>
                           <textarea
-                            className="form-control"
+                            className={`form-control ${styles.textarea}`}
                             id="description"
                             name="description"
                             placeholder={campground.description}
@@ -223,7 +244,7 @@ export default function CampgroundEdit() {
                           <div className="mb-3 custom-file">
                             <label
                               htmlFor="images"
-                              className="form-label custom-file-label"
+                              className={`form-label custom-file-label fw-medium fs-3 ${styles.formImagesHeader}`}
                             >
                               {formik.values.images.length === 0
                                 ? "Upload Images"
@@ -233,7 +254,7 @@ export default function CampgroundEdit() {
                               id="images"
                               name="images"
                               type="file"
-                              className="form-control"
+                              className={`form-control ${styles.formImageInput}`}
                               multiple
                               onChange={(event) => {
                                 formik.setFieldValue(
@@ -261,7 +282,7 @@ export default function CampgroundEdit() {
                                   >
                                     <img
                                       src={image.url}
-                                      className="w-100 h-100 object-fit-fill"
+                                      className={`w-100 h-100 object-fit-fill ${styles.deleteImage}`}
                                       key={image._id}
                                     ></img>
                                   </div>
@@ -272,7 +293,7 @@ export default function CampgroundEdit() {
                                       onChange={formik.handleChange}
                                       value={image.filename || image.url}
                                     />
-                                    <label htmlFor="deleteImages">
+                                    <label className={`${styles.deleteImageLabel}`} htmlFor="deleteImages">
                                       Delete?
                                     </label>
                                   </div>

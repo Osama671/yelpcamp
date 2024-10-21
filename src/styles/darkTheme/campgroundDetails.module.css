@@ -1,0 +1,100 @@
+.campgroundsWrapper {
+  position: relative;
+}
+
+.campgroundsWrapper::before {
+  background-size: cover;
+  background-position: center;
+  z-index: -9999;
+  filter: blur(0px);
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("https://images.unsplash.com/photo-1514981945131-4a9ada3f8d4c?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
+.reviewWrapper {
+  background: linear-gradient(to top, #9f4e1170, #0c279075);
+}
+
+.cardCategories {
+  background: linear-gradient(
+    to right,
+    rgba(44, 22, 4, 0.61),
+    rgba(144, 85, 12, 0.667)
+  );
+  border-color: #004f596b;
+  color: white !important;
+}
+
+.cardDescription {
+  max-height: calc(1.5em * 7);
+  scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
+  overflow-y: auto;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cardLocation {
+  max-height: calc(1.5em * 7);
+  scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
+  overflow-y: auto;
+}
+
+.carouselImage {
+  filter: brightness(75%);
+}
+
+.editCampgroundButton,
+.deleteCampgroundButton {
+  filter: brightness(80%) !important;
+  color: black;
+  @media (max-width: 380px) {
+    font-size: 0.75em;
+  }
+}
+
+.reviewHeader {
+  color: rgba(255, 255, 255, 0.683);
+}
+
+.noReviewHeader {
+  color: rgba(255, 255, 255, 0.683);
+}
+
+.reviewTextarea,
+.reviewTextarea:focus {
+  background-color: #d3d3d383 !important;
+  resize: none;
+  color: white !important;
+  overflow-y: auto;
+  scrollbar-color: rgb(43, 170, 205) #01031000;
+}
+
+.userReview {
+  background-color: #0132206d;
+  border: 1px solid #23bc74;
+}
+
+.userReviewAuthor,
+.userReviewTitle {
+  color: rgba(255, 255, 255, 0.801) !important;
+}
+
+.listGroupItem {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: transparent;
+  border: none;
+}
+
+.userReviewContent {
+  overflow-y: auto;
+  scrollbar-color: rgba(255, 209, 70, 0.783) #9c6b0900;
+  color: rgba(255, 255, 255, 0.801) !important;
+  max-height: calc(1.5em * 5);
+}
+
+.reviewDeleteButton {
+  filter: brightness(75%);
+}

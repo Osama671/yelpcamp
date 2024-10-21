@@ -37,7 +37,7 @@ const ClusterMap = ({
         container: mapContainerRef.current,
         style: mapboxStyle,
         center: [-103.5917, 40.6699],
-        zoom: 3,
+        zoom: 1,
       });
       mapRef.current.addControl(new mapboxgl.NavigationControl());
 

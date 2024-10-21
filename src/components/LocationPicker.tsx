@@ -32,7 +32,7 @@ const LocationPicker = ({
 
   return (
     <div>
-      <h3 className={`${styles.formMapPicker}`}>Select a Location</h3>
+      <h3 className={`${styles?.formMapPicker}`}>Select a Location</h3>
       <Map
         {...viewState}
         style={{ width: "100%", height: "400px" }}

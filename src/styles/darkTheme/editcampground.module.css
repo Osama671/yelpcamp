@@ -1,0 +1,108 @@
+/*DARK MODE*/
+
+.newCampgroundWrapper {
+  position: relative;
+}
+
+.newCampgroundWrapper::before {
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("https://images.unsplash.com/photo-1514981945131-4a9ada3f8d4c?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center;
+  z-index: -9999;
+  filter: blur(1px);
+  filter: brightness(100%);
+}
+
+.formWrapper {
+  background-color: #11305d46;
+  padding: 32px;
+  z-index: 1;
+  position: relative;
+}
+
+.formColumn {
+  z-index: 10000;
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+.submitButton {
+  color: rgba(255, 255, 255, 0.893);
+  border-radius: 6px;
+  border: none;
+  background-color: #218837c9;
+}
+
+.submitButton:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.formHeader,
+.formTitleHeader,
+.formMapPicker,
+.formLocationHeader,
+.formPriceHeader,
+.formImagesHeader,
+.formDescriptionHeader {
+  color: rgba(255, 255, 255, 0.922);
+}
+
+.formTitleInput,
+.formLocationInput,
+.formPriceInput,
+.formImagesInput {
+  border: none !important;
+  background-color: #456 !important;
+  color: white;
+}
+
+.textarea:focus,
+.formTitleInput:focus,
+.formLocationInput:focus,
+.formPriceInput:focus {
+  color: white;
+}
+
+.formPriceInput::placeholder,
+.formTitleInput::placeholder,
+.formLocationInput::placeholder,
+.textarea::placeholder {
+  color: white;
+}
+
+.formImageInput,
+.formImageInput::file-selector-button {
+  background-color: #456;
+  border: none;
+  color: white;
+}
+
+.formImageInput:focus,
+.formImageInput:active,
+.formImageInput:hover {
+  background-color: #456;
+  border: none;
+  box-shadow: none;
+  color: white;
+}
+
+.textarea {
+  resize: none;
+  background-color: #456 !important ;
+  border: none !important;
+  color: white;
+}
+
+.deleteImage {
+  filter: brightness(80%);
+}
+
+.deleteImageLabel {
+  color: rgba(255, 255, 255, 0.8);
+}

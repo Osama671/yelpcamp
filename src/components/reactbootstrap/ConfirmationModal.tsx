@@ -1,24 +1,37 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 interface IModalItems {
-  buttonText: string,
-  title: string,
-  body: string,
-  closeButton: string,
-  submitButton: string,
+  buttonText: string;
+  title: string;
+  body: string;
+  closeButton: string;
+  submitButton: string;
+  styles?: CSSModuleClasses;
 }
 
-function ConfirmationModal({func, modalItems}: {func: () => void, modalItems: IModalItems}) {
+function ConfirmationModal({
+  func,
+  modalItems,
+}: {
+  func: () => void;
+  modalItems: IModalItems;
+}) {
   const [show, setShow] = useState(false);
+  const { styles } = modalItems;
+  console.log("Styles", styles)
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   return (
     <>
-      <Button variant="danger" onClick={handleShow}>
+      <Button
+        variant="danger"
+        onClick={handleShow}
+        className={`fs-6 ${styles?.deleteCampgroundButton}`}
+      >
         {modalItems.buttonText}
       </Button>
 
@@ -31,7 +44,12 @@ function ConfirmationModal({func, modalItems}: {func: () => void, modalItems: IM
           <Button variant="secondary" onClick={handleClose}>
             {modalItems.closeButton}
           </Button>
-          <Button variant="danger" onClick={() => {func()}}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              func();
+            }}
+          >
             {modalItems.submitButton}
           </Button>
         </Modal.Footer>

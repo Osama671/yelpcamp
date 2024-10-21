@@ -7,6 +7,15 @@ export default function CampgroundCard({
   campground: Campground;
   styles?: CSSModuleClasses;
 }) {
+  if (campground.images.length === 0) {
+    campground.images = [
+      {
+        url: "https://i.pinimg.com/736x/d6/22/4b/d6224b4bfff79ecc55a028c969d4c8e3.jpg",
+        filename: "",
+        _id: "1",
+      },
+    ];
+  }
   return (
     <>
       <div className="row d-flex flex-column col-12 col-sm-6 col-md-4 col-lg-3 ">
@@ -28,13 +37,19 @@ export default function CampgroundCard({
           </div>
           <div className="col-md-12">
             <div className="card-body">
-              <h5 className={`card-title mt-2 ${styles?.cardTitle}`}>
+              <h5
+                className={`card-title mt-2 text-truncate ${styles?.cardTitle}`}
+              >
                 {campground.title}
               </h5>
-              <p className={`card-text my-0  ${styles?.cardAuthor}`}>
+              <p
+                className={`card-text my-0 text-truncate ${styles?.cardAuthor}`}
+              >
                 <em> By: {campground.author.username}</em>
               </p>
-              <p className={`card-text my-0 ${styles?.cardLocation}`}>
+              <p
+                className={`card-text my-0 text-truncate ${styles?.cardLocation}`}
+              >
                 Location: {campground.location}
               </p>
 

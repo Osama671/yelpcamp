@@ -9,12 +9,12 @@ import Carousel from "./reactbootstrap/Carousel.tsx";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import navbarStyles from "../styles/navbar.module.css";
-import styles from "../styles/campgroundDetails.module.css";
 import ConfirmationModal from "./reactbootstrap/ConfirmationModal.tsx";
 import { Campground } from "../../types.ts";
 import { useToast } from "./contexts/ToastProvider.tsx";
 import ExpressError from "../util/ExpressError.ts";
 import { useUser } from "./contexts/UserProvider.tsx";
+import { useTheme } from "./contexts/ThemeProvider.tsx";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -33,6 +33,9 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function CampgroundDetails() {
+  const { styles: campgroundStyles, mapboxStyle } = useTheme();
+  const styles = campgroundStyles.campgroundDetails;
+
   const { user } = useUser();
   const showToast = useToast();
 
@@ -103,7 +106,7 @@ export default function CampgroundDetails() {
       mapboxgl.accessToken = mapboxEnv;
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: "mapbox://styles/mapbox/light-v10",
+        style: mapboxStyle,
         center: newCoord,
         zoom: 9,
       });
@@ -121,7 +124,7 @@ export default function CampgroundDetails() {
     return () => {
       if (mapRef.current) mapRef.current.remove();
     };
-  }, [campground]);
+  }, [campground, mapboxStyle]);
 
   const formik = useFormik({
     initialValues: {
@@ -159,52 +162,73 @@ export default function CampgroundDetails() {
         <Navbar styles={navbarStyles} />
         {campground && (
           <main>
-            <div className="row mx-5 my-3 ">
+            <div className="row mx-2 my-2 mx-md-5 my-md-3 ">
               <div className=" col-lg-6 mt-3">
                 <Carousel
                   images={campground.images}
                   showArrows={campground.images.length === 1 ? false : true}
+                  styles={styles}
                 />
-                <div className={`${styles.cardWrapper} rounded `}>
-                  <div className={`card `}>
-                    <div className="card-body">
-                      <h5 className="card-title">{campground.title}</h5>
-                      <p className="card-text">{campground.description}</p>
+                <div className={` rounded `}>
+                  <div className={`card ${styles.cardCategories}`}>
+                    <div
+                      className={`card-body `}
+                    >
+                      <h5 className={`card-title fs-3 ${styles.listGroupItem}`}>
+                        {campground.title}
+                      </h5>
+                      <p
+                        className={`card-text ${styles.cardDescription} ${styles.listGroupItem}`}
+                      >
+                        {campground.description}
+                      </p>
                     </div>
-                    <ul className="list-group list-group-flush">
-                      <li className="list-group-item">{campground.location}</li>
-                      <li className="list-group-item">
-                        Submitted by: {campground.author.username}
+                    <ul
+                      className={`list-group list-group-flush `}
+                    >
+                      <li
+                        className={`list-group-item ${styles.listGroupItem} ${styles.cardLocation} `}
+                      >
+                        Location: {campground.location}
                       </li>
-                      <li className="list-group-item">
-                        ${campground.price}/night
+                      <li
+                        className={`list-group-item ${styles.listGroupItem} `}
+                      >
+                        Created by: {campground.author.username}
+                      </li>
+                      <li
+                        className={`list-group-item ${styles.listGroupItem} `}
+                      >
+                        Price: ${campground.price}/night
                       </li>
                     </ul>
+
+                    {campground.author._id == user && (
+                      <div className="card-body p-3 d-flex gap-5 justify-content-center ">
+                        <div className="d-flex">
+                          <Link
+                            to={`/campground/${id}/edit`}
+                            className={`btn btn-info card-link ${styles.editCampgroundButton}`}
+                          >
+                            Edit Campground
+                          </Link>
+                        </div>
+                        <div className="d-flex">
+                          <ConfirmationModal
+                            func={deleteCampground}
+                            modalItems={{
+                              buttonText: "Delete Campground",
+                              title: "Delete campground",
+                              body: "Are you sure you want to delete your campground?",
+                              closeButton: "Close",
+                              submitButton: "Delete",
+                              styles: { styles },
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {campground.author._id == user && (
-                    <div className="card-body p-3 d-flex gap-5 justify-content-center ">
-                      <div className="d-flex">
-                        <Link
-                          to={`/campground/${id}/edit`}
-                          className="btn btn-info card-link "
-                        >
-                          Edit Campground
-                        </Link>
-                      </div>
-                      <div className="d-flex">
-                        <ConfirmationModal
-                          func={deleteCampground}
-                          modalItems={{
-                            buttonText: "Delete Campground",
-                            title: "Delete campground",
-                            body: "Are you sure you want to delete your campground?",
-                            closeButton: "Close",
-                            submitButton: "Delete",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
               <div className=" col-lg-6 mt-3">
@@ -213,8 +237,8 @@ export default function CampgroundDetails() {
                   ref={mapContainerRef}
                   className="mb-3"
                 />
-                <div className={`${styles.reviewWrapper}`}>
-                  <h2>Reviews:</h2>
+                <div className={`${styles.reviewWrapper} p-3`}>
+                  <h2 className={`${styles.reviewHeader}`}>Reviews:</h2>
 
                   {!user || (
                     <form onSubmit={formik.handleSubmit} className="mb-3">
@@ -283,13 +307,15 @@ export default function CampgroundDetails() {
                       </div>
 
                       <div className="mb-3">
-                        <label className="form-label fs-4" htmlFor="review">
+                        <label
+                          className={`form-label fs-4 ${styles.reviewHeader}`}
+                          htmlFor="review"
+                        >
                           Review
                         </label>
-                        <textarea style={{resize: "none"}}
-                          className="form-control" 
-                          rows={3}
-                          cols={30}
+                        <textarea
+                          className={`form-control ${styles.reviewTextarea} `}
+                          rows={5}
                           name="review"
                           id="review"
                           onBlur={formik.handleBlur}
@@ -309,8 +335,10 @@ export default function CampgroundDetails() {
                   )}
                   {campground.reviews.length === 0 && (
                     <>
-                      <h3 style={{ textAlign: "center" }}>No reviews</h3>{" "}
-                      <h5 style={{ textAlign: "center" }}>
+                      <h3 className={`text-center ${styles.noReviewHeader}`}>
+                        No reviews
+                      </h3>
+                      <h5 className={`text-center ${styles.noReviewHeader}`}>
                         Be the first to review!
                       </h5>
                     </>
@@ -318,10 +346,15 @@ export default function CampgroundDetails() {
 
                   {Object.keys(campground).length === 0 ||
                     campground.reviews.map((review) => (
-                      <div className="mb-3 card" key={review._id}>
-                        <div className="card-body">
+                      <div
+                        className={`mb-3 card ${styles.userReview}`}
+                        key={review._id}
+                      >
+                        <div className={`card-body ${styles.userReviewTitle}`}>
                           <h5>Rating: {review.rating}</h5>
-                          <h6 className="card-subtitle mb-2 text-muted">
+                          <h6
+                            className={`card-subtitle mb-2 text-muted ${styles.userReviewTitle}`}
+                          >
                             By: {review.author.username}{" "}
                           </h6>
                           <p
@@ -330,11 +363,13 @@ export default function CampgroundDetails() {
                           >
                             Rated: 3
                           </p>
-                          <p className="overflow-y-scroll" style={{maxHeight: "125px"}}>Review: {review.review}</p>
+                          <p className={` ${styles.userReviewContent}`}>
+                            {review.review}
+                          </p>
                           {user !== review.author._id ? null : (
                             <button
                               onClick={() => handleDeleteReview(review._id)}
-                              className="btn btn-sm btn-danger"
+                              className={`btn btn-sm btn-danger ${styles.reviewDeleteButton}`}
                             >
                               Delete
                             </button>

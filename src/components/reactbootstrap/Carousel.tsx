@@ -4,14 +4,16 @@ import { Image } from "../../../types";
 function ReactCarousel({
   images,
   showArrows,
+  styles
 }: {
   images: Image[];
   showArrows: boolean;
+  styles?: CSSModuleClasses
 }) {
   if (images.length === 0)
     images = [
       {
-        url: "https://placehold.co/600x400/EEE/31343C",
+        url: "https://i.pinimg.com/736x/d6/22/4b/d6224b4bfff79ecc55a028c969d4c8e3.jpg",
         filename: "",
         _id: "1",
       },
@@ -24,7 +26,7 @@ function ReactCarousel({
           style={{ height: "500px", width: "100%" }}
         >
           <img
-            className="img-fluid "
+            className={`${styles?.carouselImage}`}
             style={{ width: "100%", height: "100%", objectFit: "fill" }}
             src={images[0].url}
             alt="First slide"
@@ -36,7 +38,7 @@ function ReactCarousel({
             style={{ height: "500px", width: "100%" }}
           >
             <img
-              className="d-block w-100"
+              className={`${styles?.carouselImage} d-block w-100`}
               style={{
                 minHeight: "100%",
                 minWidth: "100%",
