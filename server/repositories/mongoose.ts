@@ -7,11 +7,6 @@ import cloudinary from "../../src/cloudinary/cloudinary.ts";
 
 const seedAmount = 50;
 
-main().catch((err) => console.log(err));
-
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
-}
 
 interface IImages {
   filename: string;
@@ -61,7 +56,7 @@ campgroundSchema.post("findOneAndDelete", async function (doc) {
   }
 });
 
-const Campground = mongoose.model("campground", campgroundSchema);
+const Campground = mongoose.model("Campground", campgroundSchema);
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
