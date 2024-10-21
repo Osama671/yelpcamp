@@ -17,8 +17,8 @@ interface IAllCampgrounds {
 }
 
 export default function Campgrounds() {
-  const {styles: campgroundStyles, mapboxStyle} = useTheme()
-  const styles = campgroundStyles.campgrounds
+  const { styles: campgroundStyles, mapboxStyle } = useTheme();
+  const styles = campgroundStyles.campgrounds;
   const [paginatedCampgrounds, setpaginatedCampgrounds] =
     useState<IAllCampgrounds | null>(null);
   const [allCampgrounds, setAllCampgrounds] = useState<IAllCampgrounds | null>(
@@ -75,7 +75,7 @@ export default function Campgrounds() {
     <>
       <div className={`campgroundsWrapper ${styles?.campgroundsWrapper}`}>
         <div className="vh-min-100">
-          <Navbar styles={navbarStyles} />
+          <Navbar />
           <main className={`mt-3`}>
             {paginatedCampgrounds && allCampgrounds ? (
               <>
@@ -132,7 +132,7 @@ export default function Campgrounds() {
               <p>Loading Campgrounds...</p>
             )}
           </main>
-          <Footer styles={navbarStyles} />
+          <Footer />
         </div>
       </div>
     </>

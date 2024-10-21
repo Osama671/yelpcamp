@@ -122,7 +122,7 @@ export default function CampgroundEdit() {
             <Navigate to="/campgrounds" />
           ) : (
             <>
-              <Navbar styles={navbarStyles} />
+              <Navbar  />
               <div className={`${styles.newCampgroundWrapper}`}>
                 <div
                   className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}

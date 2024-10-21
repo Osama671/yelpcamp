@@ -25,7 +25,7 @@
     rgba(44, 22, 4, 0.61),
     rgba(144, 85, 12, 0.667)
   );
-  border-color: #004f596b;
+  border: none;
   color: white !important;
 }
 
@@ -33,11 +33,13 @@
   max-height: calc(1.5em * 7);
   scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
   overflow-y: auto;
+  font-family: sans-serif;
+  white-space: pre-wrap;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .cardLocation {
-  max-height: calc(1.5em * 7);
+  max-height: calc(1.5em * 4);
   scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
   overflow-y: auto;
 }
@@ -70,6 +72,7 @@
   color: white !important;
   overflow-y: auto;
   scrollbar-color: rgb(43, 170, 205) #01031000;
+  border: none
 }
 
 .userReview {
@@ -93,6 +96,8 @@
   scrollbar-color: rgba(255, 209, 70, 0.783) #9c6b0900;
   color: rgba(255, 255, 255, 0.801) !important;
   max-height: calc(1.5em * 5);
+  white-space: pre-wrap;
+  font-family: sans-serif;
 }
 
 .reviewDeleteButton {

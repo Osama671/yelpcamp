@@ -159,7 +159,7 @@ export default function CampgroundDetails() {
   return (
     <>
       <div className={`campgroundsWrapper ${styles.campgroundsWrapper}`}>
-        <Navbar styles={navbarStyles} />
+        <Navbar  />
         {campground && (
           <main>
             <div className="row mx-2 my-2 mx-md-5 my-md-3 ">
@@ -177,11 +177,11 @@ export default function CampgroundDetails() {
                       <h5 className={`card-title fs-3 ${styles.listGroupItem}`}>
                         {campground.title}
                       </h5>
-                      <p
+                      <pre
                         className={`card-text ${styles.cardDescription} ${styles.listGroupItem}`}
                       >
                         {campground.description}
-                      </p>
+                      </pre>
                     </div>
                     <ul
                       className={`list-group list-group-flush `}
@@ -363,9 +363,9 @@ export default function CampgroundDetails() {
                           >
                             Rated: 3
                           </p>
-                          <p className={` ${styles.userReviewContent}`}>
+                          <pre className={` ${styles.userReviewContent}`}>
                             {review.review}
-                          </p>
+                          </pre>
                           {user !== review.author._id ? null : (
                             <button
                               onClick={() => handleDeleteReview(review._id)}
@@ -382,7 +382,7 @@ export default function CampgroundDetails() {
             </div>
           </main>
         )}
-        <Footer styles={navbarStyles} />
+        <Footer />
       </div>
     </>
   );

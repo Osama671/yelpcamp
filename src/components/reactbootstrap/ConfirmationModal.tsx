@@ -20,7 +20,7 @@ function ConfirmationModal({
 }) {
   const [show, setShow] = useState(false);
   const { styles } = modalItems;
-  console.log("Styles", styles)
+  console.log("Styles", styles);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -30,7 +30,7 @@ function ConfirmationModal({
       <Button
         variant="danger"
         onClick={handleShow}
-        className={`fs-6 ${styles?.deleteCampgroundButton}`}
+        className={` ${styles?.deleteCampgroundButton}`}
       >
         {modalItems.buttonText}
       </Button>

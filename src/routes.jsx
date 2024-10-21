@@ -7,6 +7,7 @@ import Register from "./components/Register.tsx";
 import Login from "./components/Login.tsx";
 import AuthRoute from "./components/auth/AuthRoute.tsx";
 import HomePage from "./components/HomePage.tsx";
+import Profile from "./components/Profile.tsx"
 import { HelmetProvider } from "react-helmet-async";
 
 const routes = [
@@ -31,6 +32,7 @@ const routes = [
     element: <CampgroundDetails />,
   },
   { path: "campground/:id/edit", element: <CampgroundEdit /> },
+  {path: "/profile", element: <AuthRoute Component={Profile}></AuthRoute>},
 
   { path: "/*", element: <FourOhFour /> },
 ];

@@ -101,13 +101,15 @@ export default function NewCampground() {
 
   return (
     <>
-      <Navbar styles={navbarStyles} />
+      <Navbar  />
       <div className={`${styles.newCampgroundWrapper}`}>
         <div
           className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
         >
           <div className={`${styles.formWrapper}`}>
-            <h1 className={`text-center ${styles.formHeader}`}>Create a new Campground</h1>
+            <h1 className={`text-center ${styles.formHeader}`}>
+              Create a new Campground
+            </h1>
             <hr />
             <div className="card-body">
               <form
@@ -115,7 +117,10 @@ export default function NewCampground() {
                 encType="multipart/form-data"
               >
                 <div className="mb-3">
-                  <label className={`form-label fw-medium fs-3 ${styles.formTitleHeader}`} htmlFor="title">
+                  <label
+                    className={`form-label fw-medium fs-3 ${styles.formTitleHeader}`}
+                    htmlFor="title"
+                  >
                     Title
                   </label>
                   <input
@@ -155,7 +160,11 @@ export default function NewCampground() {
                     </div>
                   ) : null}
                 </div>
-                <LocationPicker marker={marker} onMapClick={setMarker} styles={styles} />
+                <LocationPicker
+                  marker={marker}
+                  onMapClick={setMarker}
+                  styles={styles}
+                />
                 <label
                   className={`form-label mt-3 fw-medium fs-3 ${styles.formPriceHeader}`}
                   htmlFor="price"
@@ -163,7 +172,9 @@ export default function NewCampground() {
                   Price
                 </label>
                 <div className="input-group">
-                  <span className={`input-group-text ${styles.formPriceInput}`}>$</span>
+                  <span className={`input-group-text ${styles.formPriceInput}`}>
+                    $
+                  </span>
                   <input
                     placeholder="0.00"
                     type="text"
@@ -188,7 +199,7 @@ export default function NewCampground() {
                       className={`form-label custom-file-label fw-medium fs-3 ${styles.formImagesHeader}`}
                     >
                       {formik.values.images.length === 0
-                        ? "Upload Images" 
+                        ? "Upload Images"
                         : null}
                     </label>
                     <input
@@ -216,7 +227,6 @@ export default function NewCampground() {
                     Description
                   </label>
                   <textarea
-                    
                     className={`form-control ${styles.textarea}`}
                     rows={6}
                     id="description"

@@ -19,7 +19,7 @@ export default function HomePage() {
       <div
         className={`${styles.homepageWrapper} d-flex text-center bg-dark justify-content-center`}
       >
-        <Navbar styles={styles}/>
+        <Navbar stylesProp={styles}/>
         
         <div
           className={`${styles.coverContainer} d-flex w-100 h-100 p-3 mx-auto flex-column text-white`}
@@ -39,7 +39,7 @@ export default function HomePage() {
               <strong>View Campgrounds</strong>
             </Link>
           </main>
-          <Footer styles={styles}/>
+          <Footer stylesProp={styles}/>
         </div>
       </div>
     </>

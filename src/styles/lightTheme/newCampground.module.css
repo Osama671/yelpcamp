@@ -51,9 +51,9 @@
   box-shadow: none;
 }
 
-textarea {
+.textarea {
   resize: none;
-  background-color: white !important;
-  border: none !important;
+  background-color: white;
+  border: none ;
   color: white;
 }

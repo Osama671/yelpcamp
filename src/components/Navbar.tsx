@@ -4,8 +4,16 @@ import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
 import { useTheme } from "./contexts/ThemeProvider";
 
-export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
-  const { changeTheme } = useTheme();
+export default function Navbar({
+  stylesProp,
+}: {
+  stylesProp?: CSSModuleClasses;
+}) {
+  const { changeTheme, styles: campgroundStyles } = useTheme();
+  const navbarStyle = campgroundStyles.navbar;
+
+  const styles = stylesProp || navbarStyle; //If no styles is passed as props, then use useTheme() navbar styles.
+  console.log(styles);
   const showToast = useToast();
   const { removeUser, user } = useUser();
 
@@ -88,11 +96,20 @@ export default function Navbar({ styles }: { styles: CSSModuleClasses }) {
                 <li className={`nav-item ${styles.navItem}`}>
                   <Link
                     to=""
-                    className={`${styles.navLink} active p-0 m-0`}
+                    className={`${styles.navLink} active `}
                     aria-current="page"
                     onClick={() => changeTheme()}
                   >
                     Switch Theme
+                  </Link>
+                </li>
+                <li className={`nav-item ${styles.navItem}`}>
+                  <Link
+                    to="/profile"
+                    className={`${styles.navLink} active `}
+                    aria-current="page"
+                  >
+                    Profile
                   </Link>
                 </li>
                 <li className={`nav-item ${styles.navItem}`}>
