@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import express from "express";
@@ -11,11 +12,12 @@ import session from "express-session";
 import campgroundRouter from "./routes/campgrounds.js";
 import reviewRouter from "./routes/reviews.js";
 import userRouter from "./routes/users.ts";
+import bookingRouter from "./routes/bookings.ts"
 import passport from "passport";
 import { Strategy } from "passport-local";
 import helmet from "helmet";
 import User from "./repositories/users.ts";
-import mongoSanitize from "express-mongo-sanitize"
+import mongoSanitize from "express-mongo-sanitize";
 
 interface IExpressError extends Error {
   status: number;
@@ -34,6 +36,14 @@ interface ISessionConfig {
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+main()
+  .then(() => console.log(`DB Connected sucessfully XD`))
+  .catch((err) => console.log(`DB Failed to connect: ${err}`));
+
+async function main() {
+  await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
+}
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -62,6 +72,7 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.use(mongoSanitize());
 
 app.use("/api/", userRouter);
+app.use("/api/booking", bookingRouter)
 app.use("/api/campgrounds", campgroundRouter);
 app.use("/api/campgrounds/:id/review", reviewRouter);
 

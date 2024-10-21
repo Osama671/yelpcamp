@@ -1,5 +1,5 @@
 import Campgrounds from "./pages/Campgrounds.tsx";
-import CampgroundDetails from "./components/CampgroundDetails.tsx";
+import CampgroundDetails from "./pages/CampgroundDetails.tsx";
 import FourOhFour from "./pages/FourOhFour.tsx";
 import NewCampground from "./pages/NewCampground.tsx";
 import CampgroundEdit from "./pages/CampgroundEdit.tsx";

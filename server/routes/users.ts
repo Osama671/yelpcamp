@@ -30,3 +30,9 @@ router.get("/auth/getuser", (req, res) => {
   res.json(req.user);
 });
 export default router;
+
+router.post("/:id", (req, res) => {
+  console.log("Req body:", req.body);
+  console.log("Req params", req.params);
+  res.json({ wassup: "bitch" });
+});

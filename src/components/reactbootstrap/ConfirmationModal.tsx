@@ -20,7 +20,6 @@ function ConfirmationModal({
 }) {
   const [show, setShow] = useState(false);
   const styles = modalItems.styles?.styles;
-  console.log("Styles", styles);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

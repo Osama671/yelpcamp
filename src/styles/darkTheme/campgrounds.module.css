@@ -51,7 +51,7 @@
 }
 
 .cardTitle {
-  color: #ffffffc6;
+  color: rgba(255, 255, 255, 0.76);
   font-weight: 500;
 }
 
@@ -61,12 +61,12 @@
 }
 
 .cardLocation {
-  color: #ffffffc6;
+  color: #80CBC4;
   font-weight: 500;
 }
 
 .cardPrice {
-  color: #ffffffc6;
+  color: #ff6e61cc;
   font-weight: 500;
 }
 

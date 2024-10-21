@@ -13,7 +13,6 @@ export default function Navbar({
   const navbarStyle = campgroundStyles.navbar;
 
   const styles = stylesProp || navbarStyle; //If no styles is passed as props, then use useTheme() navbar styles.
-  console.log(styles);
   const showToast = useToast();
   const { removeUser, user } = useUser();
 
