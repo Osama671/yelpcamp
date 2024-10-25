@@ -7,7 +7,6 @@ import cloudinary from "../../src/cloudinary/cloudinary.ts";
 
 const seedAmount = 50;
 
-
 interface IImages {
   filename: string;
   url: string;
@@ -101,13 +100,24 @@ seedCampgrounds();
 
 async function findAllCampgrounds(
   page: number = 1,
-  productsPerPage: number = 0
+  productsPerPage: number = 0,
+  searchQuery: string = ""
 ) {
-  const campgrounds = await Campground.find({})
+  const query: {
+    $or?: Array<{ title?: { $regex: RegExp }; location?: { $regex: RegExp } }>;
+  } = {};
+
+  if (searchQuery) {
+    query.$or = [
+      { title: { $regex: new RegExp(searchQuery, "i") } },
+      { location: { $regex: new RegExp(searchQuery, "i") } },
+    ];
+  }
+  const campgrounds = await Campground.find(query)
     .populate("author")
     .skip((page - 1) * productsPerPage)
     .limit(productsPerPage);
-  const campgroundsCount = await Campground.find({}).countDocuments();
+  const campgroundsCount = await Campground.find(query).countDocuments();
   const queryData = { campgrounds: campgrounds, count: campgroundsCount };
   return queryData;
 }

@@ -36,6 +36,7 @@ const validate = (values: IFormikValues) => {
 export default function CampgroundDetails() {
   const { styles: campgroundStyles, mapboxStyle } = useTheme();
   const styles = campgroundStyles.campgroundDetails;
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -51,12 +52,25 @@ export default function CampgroundDetails() {
   const navigate = useNavigate();
 
   const submitBooking = async () => {
-    const response = await axios.post(`/api/booking/${id}`, {
-      startDate: startDate,
-      endDate: endDate,
-      user: user,
-    });
-    console.log(response);
+    try {
+      const response = await axios.post(`/api/booking/${id}`, {
+        startDate: startDate,
+        endDate: endDate,
+        user: user,
+      });
+      if (response.status === 200 && showToast)
+        showToast("Booking created sucessfully!", "green");
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+      if (e instanceof ExpressError) {
+        if (e.status === 403 && showToast) {
+          showToast("You are not logged in", "red");
+          navigate("/login");
+        }
+      }
+    }
   };
 
   const getCampground = useCallback(async () => {
@@ -247,31 +261,38 @@ export default function CampgroundDetails() {
                     className="mb-3"
                   />
                   <div
-                    className={`p-3 col-lg-12 d-flex flex-column align-items-evenly justify-content-evenly ${styles.bookingWrapper}`}
+                    className={`gap-3 p-3 col-lg-12 d-flex flex-column align-items-evenly justify-content-evenly ${styles.bookingWrapper}`}
                   >
-                    <div className="row">
+                    <div className="row col-12 text-center">
                       <h2>Book Campground?</h2>
-                      <h2>Don't </h2>
                     </div>
                     <div className="row">
-                      <DatePicker
-                        showIcon
-                        toggleCalendarOnIconClick
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                      />
-                      <DatePicker
-                        showIcon
-                        toggleCalendarOnIconClick
-                        selected={endDate}
-                        onChange={(date) => setEndDate(date)}
-                      />
-                      <button
-                        onClick={submitBooking}
-                        className="btn btn-primary"
-                      >
-                        Book Campground
-                      </button>
+                      <div className="col-6 d-flex flex-column align-items-center">
+                        <h4 className="p-0 m-0">Start date:</h4>
+                        <DatePicker
+                          showIcon
+                          toggleCalendarOnIconClick
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                        />
+                      </div>
+                      <div className="col-6 d-flex flex-column align-items-center">
+                        <h4 className="p-0 m-0">End date:</h4>
+                        <DatePicker
+                          showIcon
+                          toggleCalendarOnIconClick
+                          selected={endDate}
+                          onChange={(date) => setEndDate(date)}
+                        />
+                      </div>
+                      <div className="mt-5 d-flex col-12 justify-content-center">
+                        <button
+                          onClick={submitBooking}
+                          className="btn btn-primary"
+                        >
+                          Book Campground
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import "normalize.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar.tsx";
@@ -9,6 +9,7 @@ import ClusterMap from "../components/Clustermap.tsx";
 import Pagination from "../components/Pagination.tsx";
 import { Campground } from "../../types.ts";
 import { useTheme } from "../components/contexts/ThemeProvider.tsx";
+import e from "express";
 
 interface IAllCampgrounds {
   count: number;
@@ -18,23 +19,33 @@ interface IAllCampgrounds {
 export default function Campgrounds() {
   const { styles: campgroundStyles, mapboxStyle } = useTheme();
   const styles = campgroundStyles.campgrounds;
-  const [paginatedCampgrounds, setpaginatedCampgrounds] =
+
+  const [paginatedCampgrounds, setPaginatedCampgrounds] =
     useState<IAllCampgrounds | null>(null);
   const [allCampgrounds, setAllCampgrounds] = useState<IAllCampgrounds | null>(
     null
   );
   const [pageCount, setPageCount] = useState(1);
+  const productsPerPage = 16;
 
   const [, setSearchParams] = useSearchParams();
 
-  const productsPerPage = 16;
+  const searchRef = useRef("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPageCount(1)
+    fetchCampgrounds();
+  };
 
   const fetchCampgrounds = useCallback(async () => {
     try {
+      const searchQuery = searchRef.current;
       const info = await axios.get(
-        `/api/campgrounds?page=${pageCount}&productsPerPage=${productsPerPage}`
+        `/api/campgrounds?page=${pageCount}&productsPerPage=${productsPerPage}`,
+        { params: { searchQuery } }
       );
-      setpaginatedCampgrounds(info.data);
+      setPaginatedCampgrounds(info.data);
     } catch (e) {
       console.error(e);
     }
@@ -60,7 +71,7 @@ export default function Campgrounds() {
   useEffect(() => {
     async function getAPI() {
       const info = await axios.get(`/api/campgrounds?page=${pageCount}`);
-      setpaginatedCampgrounds(info.data);
+      setPaginatedCampgrounds(info.data);
       fetchAllCampgrounds();
     }
     getAPI();
@@ -85,13 +96,19 @@ export default function Campgrounds() {
                   ></ClusterMap>
                 </div>
                 <div className={`container col-12 col-md-6 mt-5 text-center `}>
-                  <form className="shadow-sm" role="search">
+                  <form
+                    className="shadow-sm"
+                    role="search"
+                    onSubmit={handleSearch}
+                    onChange={(e) => (searchRef.current = e.target.value)}
+                  >
                     <div className="d-flex">
                       <input
                         className={`${styles.searchBar} form-control rounded text-white`}
                         type="search"
                         placeholder="Search...            (not implemented yet :'<)"
                         aria-label="Search"
+                        name="search"
                       />
                     </div>
                   </form>
