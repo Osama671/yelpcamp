@@ -3,10 +3,10 @@ import model from "./mongoose.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 
 interface IBooking {
-  startDate: Date,
-  endDate: Date,
-  author: string,
-  campground: string
+  startDate: Date;
+  endDate: Date;
+  author: string;
+  campground: string;
 }
 
 const Schema = mongoose.Schema;
@@ -47,7 +47,7 @@ export async function createBooking(
   }
 }
 
-async function updateCampground(booking: any, campgroundId: string) {
+async function updateCampground(booking: IBooking, campgroundId: string) {
   try {
     const campground = await model.findCampgroundById(campgroundId);
     if (campground) {
@@ -59,8 +59,14 @@ async function updateCampground(booking: any, campgroundId: string) {
   }
 }
 
+async function findBookingById(BookingId: string) {
+  const booking = await Booking.findById(BookingId);
+  return booking;
+}
+
 const BookingRepo = {
   createBooking,
+  findBookingById,
 };
 
 export default BookingRepo;

@@ -60,14 +60,16 @@ export default function CampgroundDetails() {
       });
       if (response.status === 200 && showToast)
         showToast("Booking created sucessfully!", "green");
-
-      console.log(response);
     } catch (e) {
       console.error(e);
-      if (e instanceof ExpressError) {
-        if (e.status === 403 && showToast) {
+      const errorMessage = JSON.parse(e.request.response).message;
+      if (showToast) {
+        if (e.status === 403) {
           showToast("You are not logged in", "red");
           navigate("/login");
+        }
+        if (e.status === 400) {
+          showToast(`${errorMessage}`, "red");
         }
       }
     }

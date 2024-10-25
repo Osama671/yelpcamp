@@ -1,4 +1,4 @@
-import {Response} from "express"
+import { Response } from "express";
 import ExpressError from "./ExpressError.ts";
 
 export default function ExpressErrorGeneric(res: Response, e: unknown) {

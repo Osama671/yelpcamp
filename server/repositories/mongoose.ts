@@ -4,6 +4,7 @@ import { faker } from "@faker-js/faker";
 import Review, { findReviewById } from "./review.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 import cloudinary from "../../src/cloudinary/cloudinary.ts";
+import { Booking } from "./bookings.ts";
 
 const seedAmount = 50;
 
@@ -43,9 +44,9 @@ const campgroundSchema = new Schema(
     bookings: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Booking"
-      }
-    ]
+        ref: "Booking",
+      },
+    ],
   },
   opts
 );
@@ -58,6 +59,7 @@ campgroundSchema.virtual("properties.popUpMarkup").get(function () {
 campgroundSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
     await Review.deleteMany({ _id: { $in: doc.reviews } });
+    await Booking.deleteMany({ _id: { $in: doc.bookings } });
   }
 });
 
@@ -133,7 +135,7 @@ async function findCampgroundById(id: string) {
   try {
     const campground = await Campground.findById(id)
       .populate({ path: "reviews", populate: "author" })
-      .populate("author");
+      .populate("author").populate("bookings")
     return campground;
   } catch (e) {
     throw new ExpressError(`Database Error: ${e}`, 404);
