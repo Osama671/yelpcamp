@@ -1,4 +1,13 @@
 import mongoose from "mongoose";
+import model from "./mongoose.ts";
+import ExpressError from "../../src/util/ExpressError.ts";
+
+interface IBooking {
+  startDate: Date,
+  endDate: Date,
+  author: string,
+  campground: string
+}
 
 const Schema = mongoose.Schema;
 
@@ -23,13 +32,31 @@ export async function createBooking(
   userId: string,
   campgroundId: string
 ) {
-  const newBooking = new Booking({
-    startDate: startDate,
-    endDate: endDate,
-    author: userId,
-    campground: campgroundId,
-  });
-  await newBooking.save();
+  try {
+    const newBooking = new Booking({
+      startDate: startDate,
+      endDate: endDate,
+      author: userId,
+      campground: campgroundId,
+    });
+
+    await newBooking.save();
+    updateCampground(newBooking, campgroundId);
+  } catch (e) {
+    throw new ExpressError(`Error in DB: ${e}`, 500);
+  }
+}
+
+async function updateCampground(booking: any, campgroundId: string) {
+  try {
+    const campground = await model.findCampgroundById(campgroundId);
+    if (campground) {
+      campground.bookings.push(booking);
+      await campground.save();
+    }
+  } catch (e) {
+    throw new ExpressError(`Error in DB: ${e}`, 500);
+  }
 }
 
 const BookingRepo = {

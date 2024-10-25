@@ -22,6 +22,14 @@ export type Review = {
     author: Author
 }
 
+export type Booking = {
+  _id: string,
+  startDate: string,
+  endDate: string,
+  author: Author,
+  campground: Campground
+}
+
 export type Campground = {
   _id: string;
   images: Image[];
@@ -32,5 +40,6 @@ export type Campground = {
   author: Author;
   geometry: Geometry;
   reviews: Review[]
+  bookings: Booking[]
   properties?: { popUpMarkup: string };
 };

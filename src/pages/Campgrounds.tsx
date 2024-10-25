@@ -106,7 +106,7 @@ export default function Campgrounds() {
                       <input
                         className={`${styles.searchBar} form-control rounded text-white`}
                         type="search"
-                        placeholder="Search...            (not implemented yet :'<)"
+                        placeholder="Search..."
                         aria-label="Search"
                         name="search"
                       />

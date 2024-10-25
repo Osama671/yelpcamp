@@ -40,6 +40,12 @@ const campgroundSchema = new Schema(
         ref: "Review",
       },
     ],
+    bookings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Booking"
+      }
+    ]
   },
   opts
 );
@@ -117,6 +123,7 @@ async function findAllCampgrounds(
     .populate("author")
     .skip((page - 1) * productsPerPage)
     .limit(productsPerPage);
+
   const campgroundsCount = await Campground.find(query).countDocuments();
   const queryData = { campgrounds: campgrounds, count: campgroundsCount };
   return queryData;

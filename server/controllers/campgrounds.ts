@@ -9,17 +9,21 @@ interface IImageIterable {
   path: string;
 }
 export const showAllCampgrounds = async (req: Request, res: Response) => {
-  console.log(req.query);
   try {
     const page = req.query.page ? Number(req.query.page) : 1;
     const productsPerPage = req.query.productsPerPage
       ? Number(req.query.productsPerPage)
       : 0;
 
-    const searchQuery = req.query.searchQuery ? String(req.query.searchQuery) : ""
-    console.log("search query:", searchQuery)
+    const searchQuery = req.query.searchQuery
+      ? String(req.query.searchQuery)
+      : "";
 
-    const campgrounds = await model.findAllCampgrounds(page, productsPerPage, searchQuery);
+    const campgrounds = await model.findAllCampgrounds(
+      page,
+      productsPerPage,
+      searchQuery
+    );
     if (!campgrounds)
       return res.status(404).json({ message: "Campgrounds not found" });
     return res.json(campgrounds);

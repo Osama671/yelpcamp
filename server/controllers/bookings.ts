@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import BookingRepo from "../repositories/bookings.ts";
-import ExpressError from "../../src/util/ExpressError.ts";
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.ts";
 
 export const createBooking = async (req: Request, res: Response) => {
@@ -10,6 +9,7 @@ export const createBooking = async (req: Request, res: Response) => {
     if (!userId) return res.status(403).json({ message: "User not logged in" });
 
     BookingRepo.createBooking(startDate, endDate, userId, campgroundId);
+
     return res.status(200).json({ message: "Booking created" });
   } catch (e) {
     ExpressErrorGeneric(res, e);
