@@ -125,7 +125,7 @@
 }
 .bookingButton:hover {
   background-color: #17a3b898;
-  color: rgba(255, 255, 255, 0.9);
+  color: black;
 }
 
 .datePicker {

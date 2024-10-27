@@ -1,0 +1,28 @@
+.modalWrapper {
+  background-color: rgba(0, 0, 0, 0.772);
+  border-bottom: rgba(23, 3, 3, 0.507);
+  border-top: rgba(23, 3, 3, 0.507);
+}
+
+.background {
+  z-index: 999999;
+  background: linear-gradient(
+    to right,
+    rgba(38, 9, 155, 0.916),
+    rgba(34, 19, 129, 0.411)
+  );
+  color: white;
+  border-radius: 0px  !important;
+  border-width: 0px;
+}
+
+.deleteButton,
+.deleteButton:hover {
+  color: black;
+}
+
+
+.confirmButton {
+  background-color: rgba(227, 69, 69, 0.644);
+  border-color: rgba(227, 69, 69, 0.644);
+}

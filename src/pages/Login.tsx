@@ -26,7 +26,7 @@ const validate = (values: IFormikValues) => {
   return errors;
 };
 
-export default function Register() {
+export default function Login() {
   const showToast = useToast();
   const {getUser} = useUser()
   const navigate = useNavigate();

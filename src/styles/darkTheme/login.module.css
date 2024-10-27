@@ -1,0 +1,19 @@
+.loginWrapper {
+
+  background-color: transparent;
+  animation: fadeInGrey 0.5s forwards;
+}
+
+.loginCard {
+    background-color: rgba(193, 62, 62, 0.4);
+    border: none
+}
+
+@keyframes fadeInGrey {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}

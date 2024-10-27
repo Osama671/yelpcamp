@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useTheme } from "../contexts/ThemeProvider";
 
 interface IModalItems {
   buttonText: string;
@@ -8,7 +9,6 @@ interface IModalItems {
   body: string;
   closeButton: string;
   submitButton: string;
-  styles?: CSSModuleClasses;
 }
 
 function ConfirmationModal({
@@ -19,7 +19,9 @@ function ConfirmationModal({
   modalItems: IModalItems;
 }) {
   const [show, setShow] = useState(false);
-  const styles = modalItems.styles?.styles;
+  // const styles = modalItems.styles?.styles;
+  const { styles: campgroundStyles } = useTheme();
+  const styles = campgroundStyles.confirmationModal;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -29,29 +31,38 @@ function ConfirmationModal({
       <Button
         variant="danger"
         onClick={handleShow}
-        className={` ${styles?.deleteCampgroundButton}`}
+        className={` ${styles.deleteButton}`}
       >
         {modalItems.buttonText}
       </Button>
 
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{modalItems.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{modalItems.body}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            {modalItems.closeButton}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => {
-              func();
-            }}
+        <div className={`${styles.background}`}>
+          <Modal.Header
+            className={`${styles.modalWrapper} `}
+            closeVariant="white"
+            closeButton
           >
-            {modalItems.submitButton}
-          </Button>
-        </Modal.Footer>
+            <Modal.Title>{modalItems.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className={`${styles.modalWrapper}`}>
+            {modalItems.body}
+          </Modal.Body>
+          <Modal.Footer className={`${styles.modalWrapper}`}>
+            <Button variant="secondary" onClick={handleClose}>
+              {modalItems.closeButton}
+            </Button>
+            <Button
+              className={`${styles.confirmButton}`}
+              variant="danger"
+              onClick={() => {
+                func();
+              }}
+            >
+              {modalItems.submitButton}
+            </Button>
+          </Modal.Footer>
+        </div>
       </Modal>
     </>
   );

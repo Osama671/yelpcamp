@@ -6,7 +6,7 @@
   background-size: cover;
   background-position: center;
   z-index: -9999;
-  filter: blur(2px);
+  filter: blur(1px);
   content: "";
   position: absolute;
   background-attachment: fixed;
@@ -67,7 +67,7 @@
 }
 
 .noReviewHeader {
-  color: rgb(255, 255, 255);
+  color: black
 }
 
 .reviewTextarea,

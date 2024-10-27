@@ -246,7 +246,6 @@ export default function CampgroundDetails() {
                               body: "Are you sure you want to delete your campground?",
                               closeButton: "Close",
                               submitButton: "Delete",
-                              styles: { styles },
                             }}
                           />
                         </div>

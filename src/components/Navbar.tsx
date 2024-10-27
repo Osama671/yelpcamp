@@ -69,7 +69,16 @@ export default function Navbar({
             {!user ? (
               <>
                 <ul className={`navbar-nav ${styles.navbarNav}`}>
-                  <li className={`nav-item ${styles.navItem}`}></li>
+                  <li className={`nav-item ${styles.navItem}`}>
+                    <Link
+                      to=""
+                      className={`${styles.navLink} active `}
+                      aria-current="page"
+                      onClick={() => changeTheme()}
+                    >
+                      Switch Theme
+                    </Link>
+                  </li>
                   <li className={`nav-item ${styles.navItem}`}>
                     <Link
                       to="/login"
@@ -113,7 +122,7 @@ export default function Navbar({
                 </li>
                 <li className={`nav-item ${styles.navItem}`}>
                   <Link
-                    to="/login"
+                    to="/campgrounds"
                     onClick={handleLogout}
                     className={`${styles.navLink} active`}
                   >

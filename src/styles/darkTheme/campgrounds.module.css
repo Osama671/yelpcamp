@@ -1,5 +1,3 @@
-/*DARK MODE*/
-
 .campgroundsWrapper {
   position: relative;
 }
@@ -61,17 +59,17 @@
 }
 
 .cardLocation {
-  color: #80CBC4;
+  color: #80cbc4;
   font-weight: 500;
 }
 
 .cardPrice {
-  color: #ff6e61cc;
+  color: #08e668c4;
   font-weight: 500;
 }
 
 .cardThumbnail {
-  filter: brightness(85%)
+  filter: brightness(85%);
 }
 
 .paginationButtons {

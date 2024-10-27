@@ -8,6 +8,7 @@ import Login from "./pages/Login.tsx";
 import AuthRoute from "./components/auth/AuthRoute.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import Profile from "./pages/Profile.tsx";
+import NewLogin from "./pages/NewLogin.tsx"
 import { HelmetProvider } from "react-helmet-async";
 
 const routes = [
@@ -20,7 +21,7 @@ const routes = [
     ),
   },
   { path: "register", element: <Register /> },
-  { path: "login", element: <Login /> },
+  { path: "login", element: <NewLogin /> },
   { path: "/newcampground", element: <AuthRoute Component={NewCampground} /> },
 
   {
