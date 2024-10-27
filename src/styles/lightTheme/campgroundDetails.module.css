@@ -13,15 +13,34 @@
   width: 100%;
   min-height: 100%;
   /* background-color: rgba(237, 239, 243, 0.4);*/
-  background-image: url("https://media.istockphoto.com/id/1377841262/photo/the-beautiful-scenery-of-a-tent-in-a-pine-tree-forest-at-pang-oung-mae-hong-son-province.jpg?s=1024x1024&w=is&k=20&c=m1ki99jwqSpWKG0_mqqY5aALuXWQIco28cGBFIU0Gbg=");
+  background-image: url("https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
+.editCampgroundButton{
+  background-color: #0f9cb2;
+}
+
+.editCampgroundButton:hover {
+  background-color: #0f9cb2ce;
 }
 
 .editCampgroundButton,
 .deleteCampgroundButton {
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
   @media (max-width: 380px) {
     font-size: 0.75em;
   }
+}
+
+.editCampgroundButton:hover,
+.deleteCampgroundButton:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cardCategories {
+  background-color: #ffffffe6;
+  border: none;
+  color: white !important;
 }
 
 .cardDescription {
@@ -33,11 +52,78 @@
   color: black;
 }
 
-.reviewWrapper {
-  background-color: rgba(255, 255, 255, 1);
-  padding: 16px;
+.cardLocation {
+  max-height: calc(1.5em * 4);
+  scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
+  overflow-y: auto;
 }
 
-.cardWrapper {
-  background-color: rgba(255, 255, 255, 1);
+.reviewWrapper {
+  background-color: #c5c5a5de;
 }
+
+.reviewHeader {
+  color: black
+}
+
+.noReviewHeader {
+  color: rgb(255, 255, 255);
+}
+
+.reviewTextarea,
+.reviewTextarea:focus {
+  background-color: #ffffffc6 !important;
+  resize: none;
+  color: rgb(0, 0, 0) !important;
+  overflow-y: auto;
+  scrollbar-color: rgba(0, 0, 0, 0.436) #ffffffc6;
+  border: none;
+}
+
+.userReview {
+  background-color: #ffffffc6;
+}
+
+.userReviewAuthor,
+.userReviewTitle {
+  color: rgb(0, 0, 0) !important;
+}
+
+.listGroupItem {
+  color: rgb(0, 0, 0);
+  background-color: transparent;
+  border: none;
+}
+
+.userReviewContent {
+  overflow-y: auto;
+  scrollbar-color: rgba(0, 0, 0, 0.436) #9c6b0900;
+  color: rgb(0, 0, 0) !important;
+  max-height: calc(1.5em * 5);
+  white-space: pre-wrap;
+  font-family: sans-serif;
+}
+
+.bookingWrapper {
+  background-color: #f5f5dccf;
+}
+
+/* .bookingHeader,
+.bookingStartDate,
+.bookingEndDate {
+  color: rgba(255, 255, 255, 0.9);
+} */
+
+.bookingButton {
+  background-color: #17a3b8;
+  color: rgba(255, 255, 255, 0.9);
+}
+.bookingButton:hover {
+  background-color: #17a3b8d3;
+  color: rgba(255, 255, 255, 0.9);
+}
+/* 
+.datePicker {
+  background-color: #e0e0e07d;
+  color: white;
+} */

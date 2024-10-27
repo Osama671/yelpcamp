@@ -65,7 +65,7 @@ export default function CampgroundDetails() {
       const errorMessage = JSON.parse(e.request.response).message;
       if (showToast) {
         if (e.status === 403) {
-          showToast("You are not logged in", "red");
+          showToast(`${errorMessage}`, "red");
           navigate("/login");
         }
         if (e.status === 400) {
@@ -255,46 +255,52 @@ export default function CampgroundDetails() {
                   </div>
                 </div>
               </div>
-              <div className={`col-lg-6 `}>
-                <div className=" col-lg-12 mt-3">
+              <div className={` col-lg-6 d-flex flex-column mt-3`}>
+                <div
+                  id="map-container"
+                  ref={mapContainerRef}
+                  className="mb-3"
+                />
+                <div
+                  className={`gap-3 p-3 col-lg-12 d-flex flex-column ${styles.bookingWrapper}`}
+                >
                   <div
-                    id="map-container"
-                    ref={mapContainerRef}
-                    className="mb-3"
-                  />
-                  <div
-                    className={`gap-3 p-3 col-lg-12 d-flex flex-column align-items-evenly justify-content-evenly ${styles.bookingWrapper}`}
+                    className={`row col-12 text-center ${styles.bookingHeader}`}
                   >
-                    <div className="row col-12 text-center">
-                      <h2>Book Campground?</h2>
+                    <h2>Book Campground?</h2>
+                  </div>
+                  <div className="row">
+                    <div className="col-6 d-flex flex-column align-items-center">
+                      <h4 className={`p-0 mb-2 ${styles.bookingStartDate}`}>
+                        Start date:
+                      </h4>
+                      <DatePicker
+                        showIcon
+                        toggleCalendarOnIconClick
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        className={`${styles.datePicker}`}
+                      />
                     </div>
-                    <div className="row">
-                      <div className="col-6 d-flex flex-column align-items-center">
-                        <h4 className="p-0 m-0">Start date:</h4>
-                        <DatePicker
-                          showIcon
-                          toggleCalendarOnIconClick
-                          selected={startDate}
-                          onChange={(date) => setStartDate(date)}
-                        />
-                      </div>
-                      <div className="col-6 d-flex flex-column align-items-center">
-                        <h4 className="p-0 m-0">End date:</h4>
-                        <DatePicker
-                          showIcon
-                          toggleCalendarOnIconClick
-                          selected={endDate}
-                          onChange={(date) => setEndDate(date)}
-                        />
-                      </div>
-                      <div className="mt-5 d-flex col-12 justify-content-center">
-                        <button
-                          onClick={submitBooking}
-                          className="btn btn-primary"
-                        >
-                          Book Campground
-                        </button>
-                      </div>
+                    <div className="col-6 d-flex flex-column align-items-center">
+                      <h4 className={`p-0 mb-2 ${styles.bookingEndDate}`}>
+                        End date:
+                      </h4>
+                      <DatePicker
+                        showIcon
+                        toggleCalendarOnIconClick
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        className={`${styles.datePicker}`}
+                      />
+                    </div>
+                    <div className="mt-5 d-flex col-12 justify-content-center">
+                      <button
+                        onClick={submitBooking}
+                        className={`btn ${styles.bookingButton}`}
+                      >
+                        Book Campground
+                      </button>
                     </div>
                   </div>
                 </div>

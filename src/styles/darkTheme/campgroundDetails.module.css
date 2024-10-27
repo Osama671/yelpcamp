@@ -49,12 +49,17 @@
 }
 
 .editCampgroundButton,
-.deleteCampgroundButton {
+.deleteCampgroundButton,
+.deleteCampgroundButton:hover {
   filter: brightness(80%) !important;
   color: black;
   @media (max-width: 380px) {
     font-size: 0.75em;
   }
+}
+
+.editCampgroundButton:hover {
+  background-color: #0dcaf0c4;
 }
 
 .reviewHeader {
@@ -72,7 +77,7 @@
   color: white !important;
   overflow-y: auto;
   scrollbar-color: rgb(43, 170, 205) #01031000;
-  border: none
+  border: none;
 }
 
 .userReview {
@@ -100,8 +105,30 @@
   font-family: sans-serif;
 }
 
-.bookingWrapper{
-  background-color: grey;
+.bookingWrapper {
+  background: linear-gradient(
+    to right,
+    rgba(44, 22, 4, 0.61),
+    rgba(34, 19, 129, 0.411)
+  );
 }
 
+.bookingHeader,
+.bookingStartDate,
+.bookingEndDate {
+  color: rgba(255, 255, 255, 0.9);
+}
 
+.bookingButton {
+  background-color: #17a3b8d6;
+  color: black;
+}
+.bookingButton:hover {
+  background-color: #17a3b898;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.datePicker {
+  background-color: #e0e0e07d;
+  color: white;
+}

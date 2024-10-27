@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import ExpressError from "../../../src/util/ExpressError.ts";
 import ExpressErrorGeneric from "../../../src/util/ExpressErrorGeneric.ts";
 import CampgroundsModel from "../mongoose.ts";
+import { Booking } from "../../../types.ts";
 
 export const validateBooking = async (
   req: Request,
@@ -10,8 +11,13 @@ export const validateBooking = async (
 ) => {
   try {
     const { id: campgroundId } = req.params;
-    const { startDate, endDate } = req.body;
+    const { startDate, endDate, user: userId } = req.body;
+    if (!userId) throw new ExpressError("You must be logged in to book", 403);
     const currentDate = Date.parse(new Date().toDateString());
+
+    const campground = await CampgroundsModel.findCampgroundById(campgroundId);
+    if (campground?.author?._id == userId)
+      throw new ExpressError("You can't book on your own campground bruh", 400);
 
     const newStartDate = Date.parse(startDate);
     const newEndDate = Date.parse(endDate);
@@ -25,9 +31,8 @@ export const validateBooking = async (
       );
 
     // Check if the booking overlaps
-    const campground = await CampgroundsModel.findCampgroundById(campgroundId);
-    if (campground.bookings) {
-      campground.bookings.map((booking) => {
+    if (campground?.bookings) {
+      campground.bookings.map((booking: Booking) => {
         const { startDate, endDate } = booking;
         const available = IsBookingAvailable(
           Date.parse(startDate),
@@ -37,7 +42,7 @@ export const validateBooking = async (
         );
         if (available === false)
           throw new ExpressError(
-            "Booking overlapping with other bookings. Please change dates",
+            "Booking overlapping with other bookings. Please change dates.",
             400
           );
       });
