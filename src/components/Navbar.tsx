@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
 import { useTheme } from "./contexts/ThemeProvider";
+import { useState } from "react";
+import NewLogin from "../pages/NewLogin";
+import NewRegister from "../pages/newRegister"
 
 export default function Navbar({
   stylesProp,
@@ -14,7 +17,16 @@ export default function Navbar({
 
   const styles = stylesProp || navbarStyle; //If no styles is passed as props, then use useTheme() navbar styles.
   const showToast = useToast();
-  const { removeUser, user } = useUser();
+  const { user, removeUser } = useUser();
+
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  const switchForms = () => {
+    setShowLogin(!showLogin)
+    setShowRegister(!showRegister)
+  }
+
 
   const handleLogout = async () => {
     const response = await axios.get("/api/logout");
@@ -26,8 +38,14 @@ export default function Navbar({
 
   return (
     <>
+      <NewLogin LoginState={showLogin} setLoginState={setShowLogin} switchForms={switchForms}/>
+      <NewRegister
+        registerState={showRegister}
+        setRegisterState={setShowRegister}
+        switchForms={switchForms}
+      />
       <nav
-        className={`${styles.navbar}  navbar sticky-top navbar-expand-lg bg-body-tertiary mt-3`}
+        className={`${styles.navbar} navbar sticky-top navbar-expand-lg bg-body-tertiary`}
         data-bs-theme="dark"
       >
         <div className="container-fluid d-flex gap-3 ">
@@ -81,18 +99,20 @@ export default function Navbar({
                   </li>
                   <li className={`nav-item ${styles.navItem}`}>
                     <Link
-                      to="/login"
+                      to=""
                       className={`${styles.navLink} active`}
                       aria-current="page"
+                      onClick={() => setShowLogin(!showLogin)}
                     >
                       Login
                     </Link>
                   </li>
                   <li className={`nav-item ${styles.navItem}`}>
                     <Link
-                      to="/register"
+                      to=""
                       className={`${styles.navLink} active`}
                       aria-current="page"
+                      onClick={() => setShowRegister(!showRegister)}
                     >
                       Register
                     </Link>
