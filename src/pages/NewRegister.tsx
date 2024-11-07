@@ -84,7 +84,7 @@ export default function Register({
                     >
                       Login
                     </h4>
-                    <h4 className="card-title  ">Register</h4>
+                    <h4 className="card-title ">Register</h4>
                   </div>
                   <form onSubmit={formik.handleSubmit} className="p-3 mt-0">
                     <div className={`my-3`}>

@@ -10,24 +10,32 @@
 }
 
 .modalCard {
-  background-color: white;
-  border: none;
-  z-index: 9999999;
+  background-color: transparent;
+}
+
+.usernameHeader {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.passwordHeader {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .fieldUsername {
-  background-color: white !important;
+  background-color: rgba(255, 255, 255, 0.85) !important;
   border: none;
   border-bottom: 1px solid;
   border-radius: 4px 4px 0px 0px;
+  padding-left: 0.5em !important;
 }
 
-.fieldPassword {
-  background-color: white !important;
+.fieldPassword, .fieldPassword:hover {
+  background-color: rgba(255, 255, 255, 0.85) !important; 
   border: none;
   border-bottom: 1px solid;
   border-radius: 4px 4px 0px 0px;
   width: 100%;
+  padding-left: 0.5em !important;
 }
 
 .fieldUsername:hover,
@@ -36,6 +44,48 @@
 .fieldPassword:focus {
   box-shadow: none;
   border-color: black;
+}
+
+.loginCard {
+  /* background-color: rgba(95, 92, 92, 0.792); */
+  background: linear-gradient(
+    to left,
+    rgba(6, 6, 107, 0.9),
+    rgba(104, 70, 8, 0.9)
+  );
+}
+
+.loginHeader {
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid white;
+}
+
+.registerHeader {
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+}
+
+.registerHeader:hover {
+  animation: RegisterHeaderHover 0.2s forwards;
+}
+
+.submitButton {
+  color: white;
+  background-color: rgb(27, 105, 12);
+}
+
+.submitButton:hover {
+  color: white;
+  background-color: rgb(34, 133, 15);
+}
+
+@keyframes RegisterHeaderHover {
+  from {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  to {
+    color: rgba(255, 255, 255, 1);
+  }
 }
 
 @keyframes fadeInGrey {

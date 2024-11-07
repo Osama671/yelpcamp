@@ -48,7 +48,7 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
       if (response.status === 200) {
         if (showToast) showToast("Login sucessful", "green");
         getUser();
-        setLoginState(!LoginState)
+        setLoginState(!LoginState);
         navigate("/campgrounds");
       }
     },
@@ -65,25 +65,26 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
             className={`container d-flex justify-content-center align-items-center `}
           >
             <div
-              className="col-8 col-lg-4 mt-3 "
+              className="col-10  col-xl-6 col-xxl-4 mt-3 "
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="card shadow">
+              <div className={`card shadow ${styles.modalCard}`}>
                 <div className={`card-body ${styles.loginCard}`}>
                   <div className="d-flex justify-content-evenly ">
-                    <h4 className="card-title  ">Login</h4>
-                    <h4 onClick={switchForms}
-                      className={`card-title ${
-                        LoginState ? "" : "disabled"
-                      } `}
+                    <h4 className={`card-title ${styles.loginHeader} `}>
+                      Login
+                    </h4>
+                    <h4
+                      onClick={switchForms}
+                      className={`card-title ${LoginState ? "" : "disabled"} ${styles.registerHeader}`}
                     >
                       Register
                     </h4>
                   </div>
                   <form onSubmit={formik.handleSubmit} className="p-3 mt-0">
-                    <div className={`my-3`}>
+                    <div className={`my-3 text-center`}>
                       <label
-                        className="form-label py-1 px-0"
+                        className={`form-label py-1 px-0  ${styles.usernameHeader}`}
                         htmlFor="username"
                       >
                         Username
@@ -104,9 +105,9 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
                         </div>
                       ) : null}
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-3 text-center">
                       <label
-                        className="form-label py-1 px-0"
+                        className={`form-label py-1 px-0 ${styles.passwordHeader}`}
                         htmlFor="password"
                       >
                         Password
@@ -127,7 +128,7 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
                       ) : null}
                     </div>
                     <div className="d-grid">
-                      <button type="submit" className="btn btn-success">
+                      <button type="submit" className={`btn ${styles.submitButton}`}>
                         Login
                       </button>
                     </div>
