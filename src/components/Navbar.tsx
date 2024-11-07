@@ -155,7 +155,7 @@ export default function Navbar({
                 </li>
                 <li className={`nav-item ${styles.navItem}`}>
                   <Link
-                    to="/campgrounds"
+                    to=""
                     onClick={handleLogout}
                     className={`${styles.navLink} active`}
                   >

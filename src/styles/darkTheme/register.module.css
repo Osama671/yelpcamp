@@ -10,32 +10,95 @@
 }
 
 .modalCard {
-  background-color: white;
-  border: none;
-  z-index: 9999999;
+  background-color: transparent;
+}
+
+.usernameHeader {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.passwordHeader {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.emailHeader {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .fieldUsername {
-  background-color: white !important;
+  background-color: rgba(255, 255, 255, 0.85) !important;
   border: none;
   border-bottom: 1px solid;
   border-radius: 4px 4px 0px 0px;
+  padding-left: 0.5em !important;
 }
 
-.fieldPassword {
-  background-color: white !important;
+.fieldPassword,
+.fieldPassword:hover {
+  background-color: rgba(255, 255, 255, 0.85) !important;
   border: none;
   border-bottom: 1px solid;
   border-radius: 4px 4px 0px 0px;
-  width: 100%;
+  padding-left: 0.5em !important;
+}
+
+.fieldEmail {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 4px 4px 0px 0px;
+  padding-left: 0.5em !important;
 }
 
 .fieldUsername:hover,
 .fieldUsername:focus,
 .fieldPassword:hover,
-.fieldPassword:focus {
+.fieldPassword:focus,
+.fieldEmail:hover,
+.fieldEmail:focus {
   box-shadow: none;
   border-color: black;
+}
+
+.cardForm {
+  background: linear-gradient(
+    to left,
+    rgba(6, 6, 107, 0.9),
+    rgba(104, 70, 8, 0.9)
+  );
+}
+
+.loginHeader {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.loginHeader:hover {
+  animation: LoginHeaderHover 0.2s forwards;
+}
+
+.registerHeader {
+  border-bottom: 2px solid white;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.submitButton {
+  color: white;
+  background-color: rgb(27, 105, 12);
+}
+
+.submitButton:hover {
+  color: white;
+  background-color: rgb(34, 133, 15);
+}
+
+@keyframes LoginHeaderHover {
+  from {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  to {
+    color: rgba(255, 255, 255, 1);
+  }
 }
 
 @keyframes fadeInGrey {

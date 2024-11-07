@@ -46,8 +46,7 @@
   border-color: black;
 }
 
-.loginCard {
-  /* background-color: rgba(95, 92, 92, 0.792); */
+.cardForm {
   background: linear-gradient(
     to left,
     rgba(6, 6, 107, 0.9),

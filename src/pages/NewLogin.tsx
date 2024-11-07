@@ -49,7 +49,6 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
         if (showToast) showToast("Login sucessful", "green");
         getUser();
         setLoginState(!LoginState);
-        navigate("/campgrounds");
       }
     },
   });
@@ -69,7 +68,7 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
               onClick={(e) => e.stopPropagation()}
             >
               <div className={`card shadow ${styles.modalCard}`}>
-                <div className={`card-body ${styles.loginCard}`}>
+                <div className={`card-body ${styles.cardForm}`}>
                   <div className="d-flex justify-content-evenly ">
                     <h4 className={`card-title ${styles.loginHeader} `}>
                       Login

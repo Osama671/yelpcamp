@@ -55,7 +55,6 @@ export default function Register({
       if (response.status === 200) {
         if (showToast) showToast("Registration sucessful", "green");
         setRegisterState(!registerState)
-        navigate("/campgrounds");
       }
     },
   });
@@ -74,22 +73,22 @@ export default function Register({
               className="col-8 col-lg-4 mt-3 "
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="card shadow">
-                <div className={`card-body ${styles?.modalCard}`}>
+              <div className={`card shadow ${styles?.modalCard}`}>
+                <div className={`card-body ${styles.cardForm}`}>
                   <div className="d-flex justify-content-evenly ">
                     <h4 onClick={switchForms}
                       className={`card-title ${
                         registerState ? "" : "disabled"
-                      } `}
+                      } ${styles.loginHeader}`}
                     >
                       Login
                     </h4>
-                    <h4 className="card-title ">Register</h4>
+                    <h4 className={`card-title ${styles.registerHeader}`}>Register</h4>
                   </div>
                   <form onSubmit={formik.handleSubmit} className="p-3 mt-0">
                     <div className={`my-3`}>
                       <label
-                        className="form-label py-1 px-0"
+                        className={`form-label py-1 px-0 ${styles.usernameHeader}`}
                         htmlFor="username"
                       >
                         Username
@@ -112,7 +111,7 @@ export default function Register({
                     </div>
                     <div className="mb-3">
                       <label
-                        className="form-label py-1 px-0"
+                        className={`form-label py-1 px-0 ${styles.passwordHeader}`}
                         htmlFor="password"
                       >
                         Password
@@ -133,11 +132,11 @@ export default function Register({
                       ) : null}
                     </div>
                     <div className={`my-3`}>
-                      <label className="form-label py-1 px-0" htmlFor="email">
+                      <label className={`form-label py-1 px-0 ${styles.emailHeader}`} htmlFor="email">
                         Email
                       </label>
                       <input
-                        className={`form-control ${styles?.fieldUsername} py-1 px-0`}
+                        className={`form-control ${styles?.fieldEmail} py-1 px-0`}
                         id="email"
                         type="text"
                         name="email"
@@ -153,7 +152,7 @@ export default function Register({
                       ) : null}
                     </div>
                     <div className="d-grid">
-                      <button type="submit" className="btn btn-success">
+                      <button type="submit" className={`btn ${styles.submitButton}`}>
                         Register
                       </button>
                     </div>
