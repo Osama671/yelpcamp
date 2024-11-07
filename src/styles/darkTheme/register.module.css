@@ -87,7 +87,7 @@
   background-color: rgb(27, 105, 12);
 }
 
-.submitButton:hover {
+.submitButton:hover, .submitButton:focus {
   color: white;
   background-color: rgb(34, 133, 15);
 }

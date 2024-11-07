@@ -1,0 +1,111 @@
+.fullpageWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: transparent;
+  animation: fadeInGrey 0.5s forwards;
+}
+
+.modalCard {
+  background-color: transparent;
+}
+
+.usernameHeader {
+  font-weight: 500;
+  color: black;
+}
+
+.passwordHeader {
+  font-weight: 500;
+  color: black;
+}
+
+.emailHeader {
+  font-weight: 500;
+  color: black;
+}
+
+.fieldUsername {
+  background-color: rgba(255, 255, 255, 1) !important;
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 4px 4px 0px 0px;
+  padding-left: 0.5em !important;
+}
+
+.fieldPassword,
+.fieldPassword:hover {
+  background-color: rgba(255, 255, 255, 1) !important;
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 4px 4px 0px 0px;
+  padding-left: 0.5em !important;
+}
+
+.fieldEmail {
+  background-color: rgba(255, 255, 255, 1) !important;
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 4px 4px 0px 0px;
+  padding-left: 0.5em !important;
+}
+
+.fieldUsername:hover,
+.fieldUsername:focus,
+.fieldPassword:hover,
+.fieldPassword:focus,
+.fieldEmail:hover,
+.fieldEmail:focus {
+  box-shadow: none;
+  border-color: black;
+}
+
+.cardForm {
+  background-color: #f5f5dcb3;
+}
+
+.loginHeader {
+  cursor: pointer;
+  color: black;
+}
+
+.loginHeader:hover {
+  animation: LoginHeaderHover 0.2s forwards;
+}
+
+.registerHeader {
+  border-bottom: 2px solid black;
+  color: black;
+}
+
+.submitButton {
+  color: white;
+  background-color: rgb(27, 105, 12);
+}
+
+.submitButton:hover,
+.submitButton:focus {
+  color: white;
+  background-color: rgb(34, 133, 15);
+}
+
+@keyframes LoginHeaderHover {
+  from {
+    color: black;
+  }
+  to {
+    color: rgb(45, 45, 45);
+  }
+}
+
+@keyframes fadeInGrey {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
