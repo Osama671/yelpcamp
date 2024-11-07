@@ -1,5 +1,8 @@
+import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.ts";
 import User from "../repositories/users.ts";
 import { Request, Response, NextFunction } from "express";
+import { fetchUserDataFromDB } from "../repositories/users.ts";
+import ExpressError from "../../src/util/ExpressError.ts";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { username, password, email } = req.body;
@@ -24,4 +27,16 @@ export const logout = (req: Request, res: Response, next: NextFunction) => {
     }
   });
   res.status(200).send("Logged out sucessfully");
+};
+
+export const fetchUserData = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.query;
+    const userId = String(id)
+    if (!userId) throw new ExpressError("User not found", 401);
+    const userData = await fetchUserDataFromDB(userId);
+    return res.status(200).json(userData);
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
 };

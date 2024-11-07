@@ -99,7 +99,7 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
                         autoFocus
                       />
                       {formik.touched.username && formik.errors.username ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", textAlign: "start"}}>
                           {formik.errors.username}
                         </div>
                       ) : null}
@@ -121,7 +121,7 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
                         value={formik.values.password}
                       />
                       {formik.touched.password && formik.errors.password ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", textAlign: "start" }}>
                           {formik.errors.password}
                         </div>
                       ) : null}

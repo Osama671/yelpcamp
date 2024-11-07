@@ -70,7 +70,7 @@ export default function Register({
             className={`container d-flex justify-content-center align-items-center `}
           >
             <div
-              className="col-8 col-lg-4 mt-3 "
+              className="col-10 col-md-8  col-xl-6 col-xxl-4 mt-3 "
               onClick={(e) => e.stopPropagation()}
             >
               <div className={`card shadow ${styles?.modalCard}`}>
@@ -104,7 +104,7 @@ export default function Register({
                         autoFocus
                       />
                       {formik.touched.username && formik.errors.username ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", textAlign: "start" }}>
                           {formik.errors.username}
                         </div>
                       ) : null}
@@ -126,7 +126,7 @@ export default function Register({
                         value={formik.values.password}
                       />
                       {formik.touched.password && formik.errors.password ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", textAlign: "start" }}>
                           {formik.errors.password}
                         </div>
                       ) : null}
@@ -146,7 +146,7 @@ export default function Register({
                         autoFocus
                       />
                       {formik.touched.email && formik.errors.email ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", textAlign: "start" }}>
                           {formik.errors.email}
                         </div>
                       ) : null}

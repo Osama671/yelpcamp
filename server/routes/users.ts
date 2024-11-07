@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport";
-import { registerUser, logout } from "../controllers/users.ts";
+import { registerUser, logout, fetchUserData } from "../controllers/users.ts";
 const router = express.Router();
 
 router.post("/register", registerUser);
@@ -16,6 +16,9 @@ router.post(
   }
 );
 
+// Fetches user info/records
+router.get("/user", fetchUserData);
+
 router.get("/logout", logout);
 
 router.get("/auth/check", (req, res) => {
@@ -26,9 +29,8 @@ router.get("/auth/check", (req, res) => {
   }
 });
 
+// Fetches user ID
 router.get("/auth/getuser", (req, res) => {
   res.json(req.user);
 });
 export default router;
-
-
