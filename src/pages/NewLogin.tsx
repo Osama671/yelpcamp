@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../components/contexts/ToastProvider";
 import { useUser } from "../components/contexts/UserProvider";
 import { useTheme } from "../components/contexts/ThemeProvider";
+import Login from "./Login";
 
 interface IFormikValues {
   username: string;
@@ -47,6 +48,7 @@ export default function NewLogin({ LoginState, setLoginState, switchForms }) {
       if (response.status === 200) {
         if (showToast) showToast("Login sucessful", "green");
         getUser();
+        setLoginState(!LoginState)
         navigate("/campgrounds");
       }
     },

@@ -9,7 +9,6 @@ import ClusterMap from "../components/Clustermap.tsx";
 import Pagination from "../components/Pagination.tsx";
 import { Campground } from "../../types.ts";
 import { useTheme } from "../components/contexts/ThemeProvider.tsx";
-import NewLogin from "./NewLogin.tsx"
 
 interface IAllCampgrounds {
   count: number;

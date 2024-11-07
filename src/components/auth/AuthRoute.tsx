@@ -20,6 +20,6 @@ export default function AuthRoute({ Component }: {Component: React.ComponentType
   if (isLoading) {
     return <div>Loading...</div>;
   } else {
-    return isAuthenticated ? <Component /> : <Navigate to="/login" replace />;
+    return isAuthenticated ? <Component /> : <Navigate to="/campgrounds" replace />;
   }
 }

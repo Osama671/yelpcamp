@@ -54,6 +54,7 @@ export default function Register({
       const response = await axios.post("/api/register", values);
       if (response.status === 200) {
         if (showToast) showToast("Registration sucessful", "green");
+        setRegisterState(!registerState)
         navigate("/campgrounds");
       }
     },

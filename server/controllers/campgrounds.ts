@@ -2,6 +2,7 @@ import model from "../repositories/mongoose.js";
 import { Request, Response } from "express";
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
 import ExpressError from "../../src/util/ExpressError.ts";
+import redisClient from "../redis.ts";
 
 interface IImageIterable {
   filename: string;
@@ -19,13 +20,36 @@ export const showAllCampgrounds = async (req: Request, res: Response) => {
       ? String(req.query.searchQuery)
       : "";
 
+    //Return cached campgrounds
+    if (searchQuery === "") {
+      if (productsPerPage === 0) {
+        const cacheSuccess = await cacheAllCampgrounds(res);
+        if (cacheSuccess === true) return;
+      }
+      if (productsPerPage !== 0) {
+        const cachceSuccess = await cachePaginatedCampgrounds(res, page);
+        if (cachceSuccess === true) return;
+      }
+    }
+    console.log("Fetching campgrounds...");
     const campgrounds = await model.findAllCampgrounds(
       page,
       productsPerPage,
       searchQuery
     );
+
     if (!campgrounds)
       return res.status(404).json({ message: "Campgrounds not found" });
+
+    if (searchQuery === "") {
+      if (productsPerPage === 0)
+        await redisClient.set("allCampgrounds", JSON.stringify(campgrounds));
+      if (productsPerPage !== 0)
+        await redisClient.set(
+          `paginatedCampgrounds/${page}`,
+          JSON.stringify(campgrounds)
+        );
+    }
     return res.json(campgrounds);
   } catch (e) {
     ExpressErrorGeneric(res, e);
@@ -43,6 +67,7 @@ export const showCampgroundEdit = async (req: Request, res: Response) => {
     if (!campground.author.equals(userid)) {
       throw new ExpressError("You are not the author of this campground", 403);
     }
+    await redisClient.del("allCampgrounds");
     return res.status(200).json(campground);
   } catch (e) {
     ExpressErrorGeneric(res, e);
@@ -81,6 +106,7 @@ export const editCampground = async (req: Request, res: Response) => {
       userid,
       deleteImages
     );
+    clearCache();
     res.status(200).send("Campground Edited Sucessfully");
   } catch (e) {
     ExpressErrorGeneric(res, e);
@@ -127,6 +153,7 @@ export const createCampground = async (req: Request, res: Response) => {
       campgroundImages,
       userid
     );
+    clearCache();
     return res.status(200).send("Campground created!");
   } catch (e) {
     ExpressErrorGeneric(res, e);
@@ -141,8 +168,50 @@ export const deleteCampground = async (req: Request, res: Response) => {
     const { id } = req.params;
     const userid = req.user._id;
     await model.deleteCampgroundById(id, userid);
+    clearCache();
     return res.status(200).json({ message: `Campground ID ${id} Deleted.` });
   } catch (e) {
     ExpressErrorGeneric(res, e);
   }
 };
+
+async function cacheAllCampgrounds(res: Response) {
+  const cacheValue = await redisClient.get("allCampgrounds");
+  if (cacheValue) {
+    res.status(200).json(JSON.parse(cacheValue));
+    return true;
+  } else {
+    return false;
+  }
+}
+
+async function cachePaginatedCampgrounds(res: Response, pageNumber: number) {
+  const cacheValue = await redisClient.get(
+    `paginatedCampgrounds/${pageNumber}`
+  );
+  if (cacheValue) {
+    res.status(200).json(JSON.parse(cacheValue));
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export async function clearCache() {
+  await redisClient.del("allCampgrounds");
+  const pattern = "paginatedCampgrounds/*";
+  let cursor = 0;
+
+  do {
+    const reply = await redisClient.scan(cursor, {
+      MATCH: pattern,
+      COUNT: 100,
+    });
+    cursor = reply.cursor;
+    const keys = reply.keys;
+
+    if (keys.length > 0) {
+      await redisClient.del(keys);
+    }
+  } while (cursor !== 0);
+}

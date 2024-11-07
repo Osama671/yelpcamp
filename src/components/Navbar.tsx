@@ -5,7 +5,7 @@ import { useUser } from "./contexts/UserProvider";
 import { useTheme } from "./contexts/ThemeProvider";
 import { useState } from "react";
 import NewLogin from "../pages/NewLogin";
-import NewRegister from "../pages/newRegister"
+import NewRegister from "../pages/newRegister";
 
 export default function Navbar({
   stylesProp,
@@ -23,10 +23,9 @@ export default function Navbar({
   const [showRegister, setShowRegister] = useState(false);
 
   const switchForms = () => {
-    setShowLogin(!showLogin)
-    setShowRegister(!showRegister)
-  }
-
+    setShowLogin(!showLogin);
+    setShowRegister(!showRegister);
+  };
 
   const handleLogout = async () => {
     const response = await axios.get("/api/logout");
@@ -38,7 +37,11 @@ export default function Navbar({
 
   return (
     <>
-      <NewLogin LoginState={showLogin} setLoginState={setShowLogin} switchForms={switchForms}/>
+      <NewLogin
+        LoginState={showLogin}
+        setLoginState={setShowLogin}
+        switchForms={switchForms}
+      />
       <NewRegister
         registerState={showRegister}
         setRegisterState={setShowRegister}
@@ -72,6 +75,16 @@ export default function Navbar({
               </li>
               <li className={`nav-item ${styles.navItem}`}>
                 <Link
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      showToast(
+                        "You must be logged in to create a campground",
+                        "red"
+                      );
+                      setShowLogin(!showLogin);
+                    }
+                  }}
                   className={`${styles.navLink} active`}
                   to="/newcampground"
                 >

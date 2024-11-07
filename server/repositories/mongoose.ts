@@ -67,6 +67,7 @@ const Campground = mongoose.model("Campground", campgroundSchema);
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
+
   Array(seedAmount)
     .fill(undefined)
     .map(async (_, i) => {
@@ -135,7 +136,8 @@ async function findCampgroundById(id: string) {
   try {
     const campground = await Campground.findById(id)
       .populate({ path: "reviews", populate: "author" })
-      .populate("author").populate("bookings")
+      .populate("author")
+      .populate("bookings");
     return campground;
   } catch (e) {
     throw new ExpressError(`Database Error: ${e}`, 404);

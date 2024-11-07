@@ -61,7 +61,13 @@ function IsBookingAvailable(
   newStartDate: number,
   newEndDate: number
 ) {
-  if (newStartDate === oldStartDate || newEndDate === oldEndDate) return false;
+  if (
+    newStartDate === oldStartDate ||
+    newStartDate === oldEndDate ||
+    newEndDate === oldEndDate ||
+    newEndDate === oldStartDate
+  )
+    return false;
   else if (newStartDate > oldStartDate) {
     if (newStartDate > oldEndDate) {
       return true;

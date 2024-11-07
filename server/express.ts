@@ -18,6 +18,7 @@ import { Strategy } from "passport-local";
 import helmet from "helmet";
 import User from "./repositories/users.ts";
 import mongoSanitize from "express-mongo-sanitize";
+import { clearCache } from "./controllers/campgrounds.ts";
 
 interface IExpressError extends Error {
   status: number;
@@ -75,6 +76,8 @@ app.use("/api/", userRouter);
 app.use("/api/booking", bookingRouter)
 app.use("/api/campgrounds", campgroundRouter);
 app.use("/api/campgrounds/:id/review", reviewRouter);
+clearCache()
+
 
 app.get("/api/test", async (_: Request, res: Response) => {
   const user = new User({ email: "test@hotmail.com", username: "Osama" });
