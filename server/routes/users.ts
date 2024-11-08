@@ -1,6 +1,9 @@
 import express from "express";
 import passport from "passport";
 import { registerUser, logout, fetchUserData } from "../controllers/users.ts";
+import { fetchReviewsByUserId } from "../controllers/reviews.ts";
+import { fetchCampgroundsByUserId } from "../controllers/campgrounds.ts";
+import { fetchBookingsByUserId } from "../controllers/bookings.ts";
 const router = express.Router();
 
 router.post("/register", registerUser);
@@ -18,6 +21,12 @@ router.post(
 
 // Fetches user info/records
 router.get("/user", fetchUserData);
+
+router.get("/user/reviews", fetchReviewsByUserId);
+
+router.get("/user/campgrounds", fetchCampgroundsByUserId);
+
+router.get("/user/bookings", fetchBookingsByUserId);
 
 router.get("/logout", logout);
 

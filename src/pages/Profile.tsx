@@ -34,10 +34,32 @@ export default function Profile() {
 
   const fetchCampgrounds = useCallback(async () => {
     try {
-      const response = await axios.get("/api/campgrounds/user", {
+      const response = await axios.get("/api/user/campgrounds", {
         params: { id: user },
       });
-      console.log(response)
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [user]);
+
+  const fetchBookings = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/user/bookings", {
+        params: { id: user },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [user]);
+
+  const fetchReviews = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/user/reviews", {
+        params: { id: user },
+      });
+      console.log(response);
     } catch (e) {
       console.error(e);
     }
@@ -96,9 +118,15 @@ export default function Profile() {
           <hr />
           <div className="container my-3 text-center">
             <div className="row justify-content-between">
-              <div onClick={fetchCampgrounds} className="col-4 fs-3 ">My Campgrounds</div>
-              <div className="col-4 fs-3">Bookings</div>
-              <div className="col-4 fs-3">Reviews</div>
+              <div onClick={fetchCampgrounds} className="col-4 fs-3 ">
+                My Campgrounds
+              </div>
+              <div onClick={fetchBookings} className="col-4 fs-3">
+                Bookings
+              </div>
+              <div onClick={fetchReviews} className="col-4 fs-3">
+                Reviews
+              </div>
             </div>
           </div>
           <Campgrounds />

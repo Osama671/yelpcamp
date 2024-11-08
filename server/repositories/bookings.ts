@@ -64,9 +64,15 @@ async function findBookingById(BookingId: string) {
   return booking;
 }
 
+async function fetchBookingsByUserId(userId: string) {
+  const campgrounds = await Booking.find({author: userId});
+  return campgrounds;
+}
+
 const BookingRepo = {
   createBooking,
   findBookingById,
+  fetchBookingsByUserId,
 };
 
 export default BookingRepo;

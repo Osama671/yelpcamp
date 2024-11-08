@@ -1,6 +1,7 @@
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
 import model from "../repositories/mongoose.js";
-import Review from "../repositories/review.ts";
+import Review, {modelFetchReviewsByUserId} from "../repositories/review.ts";
+import ExpressError from "../../src/util/ExpressError.ts";
 import { Request, Response } from "express";
 
 export const createReview = async (req: Request, res: Response) => {
@@ -41,3 +42,18 @@ export const deleteReview = async (req: Request, res: Response) => {
     ExpressErrorGeneric(res, e);
   }
 };
+
+export const fetchReviewsByUserId = async (req: Request, res: Response) => {
+  try{
+    if(!req.user) {
+      throw new ExpressError("User not found", 401)
+    }
+    const {id} = req.query
+    const userId = String(id)
+    const campgrounds = await modelFetchReviewsByUserId(userId)
+    return res.status(200).json(campgrounds)
+  }
+  catch (e){
+    ExpressErrorGeneric(res, e)
+  }
+}

@@ -5,7 +5,6 @@ import {
   showCampgroundDetails,
   createCampground,
   deleteCampground,
-  fetchCampgroundsByUserId,
 } from "../controllers/campgrounds.ts";
 import express from "express";
 // import catchAsync from "../../util/catchAsync.ts";
@@ -30,7 +29,6 @@ router.post(
   }
 );
 
-router.get("/user", fetchCampgroundsByUserId)
 
 router.get("/:id", showCampgroundDetails);
 

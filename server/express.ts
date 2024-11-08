@@ -79,12 +79,6 @@ app.use("/api/campgrounds/:id/review", reviewRouter);
 clearCache()
 
 
-app.get("/api/test", async (_: Request, res: Response) => {
-  const user = new User({ email: "test@hotmail.com", username: "Osama" });
-  const newUser = await User.register(user, "monkey");
-  res.send(newUser);
-});
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   const { status = 500, message = "Internal Server Error" } =

@@ -21,6 +21,11 @@ export async function findReviewById(id: string, userid?: string) {
   }
   return review;
 }
+
+export async function modelFetchReviewsByUserId(userId: string) {
+  const campgrounds = await Review.find({author: userId});
+  return campgrounds;
+}
 // async function createReview(review, rating) {
 //   const newReview = new Review({
 //     review: review,
