@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useToast } from "../components/contexts/ToastProvider";
 import { useNavigate } from "react-router-dom";
+import Campgrounds from "../components/profile/Campgrounds";
 
 export default function Profile() {
   const { user } = useUser();
@@ -21,6 +22,7 @@ export default function Profile() {
       setIsLoading(false);
     } catch (e) {
       if (e.status === 401) {
+        console.error(e);
         showToast("User not found", "red");
         navigate("/campgrounds");
       } else {
@@ -30,10 +32,20 @@ export default function Profile() {
     }
   }, [user, navigate, showToast]);
 
+  const fetchCampgrounds = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/campgrounds/user", {
+        params: { id: user },
+      });
+      console.log(response)
+    } catch (e) {
+      console.error(e);
+    }
+  }, [user]);
+
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
-  console.log(user);
   return (
     <>
       {isLoading === true || !userData ? (
@@ -42,33 +54,38 @@ export default function Profile() {
         <>
           <Navbar />
           <div className="container ">
-            <div className="flex-column d-flex justify-content-center align-items-center">
-              <div className="col-12 col-xl-6">
-                <div className="card mt-3 p-3">
-                  <h1 className="text-center">User Information</h1>
-                  <div className="d-flex mt-3 ">
-                    <h3 className="m-0">Username:&nbsp;</h3>
-                    <h5 style={{ padding: "4px" }}>Ayayayaa</h5>
-                  </div>
-                  <div className="d-flex mt-3">
-                    <h3 className="m-0">Email:&nbsp;</h3>
-                    <h5 style={{ padding: "4px" }}>Ayayayaa@hotmail.com</h5>
-                  </div>
-                </div>
-                <div className="card mt-3 p-3">
-                  <h1 className="text-center">Change Password</h1>
-                  <div className="flex-column d-flex">
-                    <div className="d-flex flex-row mb-2">
-                      <div className="col-md-auto">Old Password: &nbsp;</div>
-                      <input className="col-3" type="password" />
+            <div className=" d-flex justify-content-center ">
+              <div className="col-12 col-xl-9">
+                <div className="card mt-3 p-3 d-flex flex-row col-12 flex-wrap justify-content-between">
+                  <div className="col-12 col-lg-6">
+                    <h1 className="text-lg-center text-start">
+                      User Information
+                    </h1>
+                    <div className="d-flex mt-3 ">
+                      <h3 className="m-0">Username:&nbsp;</h3>
+                      <h5 style={{ padding: "4px" }}>{userData.username}</h5>
                     </div>
-                    <div className="d-flex align-items-center mt-3">
-                      <div className="col-md-auto">New Password: &nbsp;</div>
-                      <input className="col-3" type="password" />
+                    <div className="d-flex mt-3 flex-wrap">
+                      <h3 className="m-0">Email:&nbsp;</h3>
+                      <h5 style={{ padding: "4px" }}>{userData.email}</h5>
                     </div>
-                    <div>
-                      <button className="mt-3 btn btn-primary col-6">
-                        Confirm
+                  </div>
+                  <div className="col-12 col-lg-6 mt-lg-0 mt-3 justify-content-end align-items-end">
+                    <h1 className="text-lg-end text-start">Change Password</h1>
+                    <div className="flex-column d-flex align-items-lg-end">
+                      <div className="d-flex justify-content-start justify-content-lg-end mb-2">
+                        <div className="">Old Password: &nbsp;</div>
+                        <input
+                          className="col-6 align-self-stretch"
+                          type="password"
+                        />
+                      </div>
+                      <div className="d-flex justify-content-start justify-content-lg-end  mt-3">
+                        <div className="">New Password: &nbsp;</div>
+                        <input className="col-6" type="password" />
+                      </div>
+                      <button className="col-8 col-lg-7 align-self-start align-self-lg-end mt-3 btn btn-primary">
+                        Change Password
                       </button>
                     </div>
                   </div>
@@ -79,14 +96,12 @@ export default function Profile() {
           <hr />
           <div className="container my-3 text-center">
             <div className="row justify-content-between">
-              <div className="col-4 fs-3 ">My Campgrounds</div>
+              <div onClick={fetchCampgrounds} className="col-4 fs-3 ">My Campgrounds</div>
               <div className="col-4 fs-3">Bookings</div>
               <div className="col-4 fs-3">Reviews</div>
             </div>
           </div>
-          <div>
-            <h1 className="text-center m-5">INFO FROM COMPONENTS/PROFILE</h1>
-          </div>
+          <Campgrounds />
           <Footer />
         </>
       )}

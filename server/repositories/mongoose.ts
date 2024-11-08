@@ -256,6 +256,11 @@ async function deleteCampgroundById(id: string, userid: string) {
   await Campground.findByIdAndDelete({ _id: id });
 }
 
+async function fetchCampgroundsByUserId(userId: string) {
+  const campgrounds = await Campground.find({author: userId});
+  return campgrounds;
+}
+
 const campgroundModel = {
   findAllCampgrounds,
   findCampgroundById,
@@ -263,6 +268,7 @@ const campgroundModel = {
   editCampground,
   deleteCampgroundById,
   deleteReviewInCampground,
+  fetchCampgroundsByUserId,
 };
 
 export default campgroundModel;

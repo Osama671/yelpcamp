@@ -175,6 +175,21 @@ export const deleteCampground = async (req: Request, res: Response) => {
   }
 };
 
+export const fetchCampgroundsByUserId = async (req: Request, res: Response) => {
+  try{
+    if(!req.user) {
+      throw new ExpressError("User not found", 401)
+    }
+    const {id} = req.query
+    const userId = String(id)
+    const campgrounds = await model.fetchCampgroundsByUserId(userId)
+    return res.status(200).json(campgrounds)
+  }
+  catch (e){
+    ExpressErrorGeneric(res, e)
+  }
+}
+
 async function cacheAllCampgrounds(res: Response) {
   const cacheValue = await redisClient.get("allCampgrounds");
   if (cacheValue) {

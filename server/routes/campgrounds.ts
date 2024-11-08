@@ -5,6 +5,7 @@ import {
   showCampgroundDetails,
   createCampground,
   deleteCampground,
+  fetchCampgroundsByUserId,
 } from "../controllers/campgrounds.ts";
 import express from "express";
 // import catchAsync from "../../util/catchAsync.ts";
@@ -16,17 +17,6 @@ const upload = multer({ storage: cloudinary.storage });
 
 const router = express.Router();
 
-// GOING TO TRY USING THIS LATER. WILL KEEP FOR NOW.
-// const isAuthor = async(req, res, next) => {
-//   const { id } = req.params;
-//   const campground = await findCampgroundById(id);
-//   console.log(campground.author)
-//   console.log(req.user._id)
-//   if (!campground) throw new ExpressError("Campground not found", 500);
-//   if (!campground.author.equals(req.user._id)) {
-//     return new ExpressError("You are not the author of this campground", 403);
-//   }
-// };
 
 router.get("/", showAllCampgrounds);
 router.post(
@@ -39,6 +29,8 @@ router.post(
     res.status(200).send("Upload completed");
   }
 );
+
+router.get("/user", fetchCampgroundsByUserId)
 
 router.get("/:id", showCampgroundDetails);
 
