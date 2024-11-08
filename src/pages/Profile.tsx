@@ -80,15 +80,15 @@ export default function Profile() {
               <div className="col-12 col-xl-9">
                 <div className="card mt-3 p-3 d-flex flex-row col-12 flex-wrap justify-content-between">
                   <div className="col-12 col-lg-6">
-                    <h1 className="text-lg-center text-start">
+                    <h1 className="text-lg-start text-start">
                       User Information
                     </h1>
                     <div className="d-flex mt-3 ">
-                      <h3 className="m-0">Username:&nbsp;</h3>
+                      <h4 className="m-0">Username:&nbsp;</h4>
                       <h5 style={{ padding: "4px" }}>{userData.username}</h5>
                     </div>
                     <div className="d-flex mt-3 flex-wrap">
-                      <h3 className="m-0">Email:&nbsp;</h3>
+                      <h4 className="m-0">Email:&nbsp;</h4>
                       <h5 style={{ padding: "4px" }}>{userData.email}</h5>
                     </div>
                   </div>
@@ -129,6 +129,7 @@ export default function Profile() {
               </div>
             </div>
           </div>
+          <Campgrounds />
           <Campgrounds />
           <Footer />
         </>
