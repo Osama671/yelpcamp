@@ -22,9 +22,13 @@ export const fetchBookingsByUserId = async (req: Request, res: Response) => {
     if(!req.user) {
       throw new ExpressError("User not found", 401)
     }
+    const page = req.query.page ? Number(req.query.page) : 1;
+    const productsPerPage = req.query.productsPerPage
+      ? Number(req.query.productsPerPage)
+      : 0;
     const {id} = req.query
     const userId = String(id)
-    const campgrounds = await BookingRepo.fetchBookingsByUserId(userId)
+    const campgrounds = await BookingRepo.fetchBookingsByUserId(userId, page, productsPerPage)
     return res.status(200).json(campgrounds)
   }
   catch (e){

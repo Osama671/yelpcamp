@@ -64,9 +64,22 @@ async function findBookingById(BookingId: string) {
   return booking;
 }
 
-async function fetchBookingsByUserId(userId: string) {
-  const campgrounds = await Booking.find({author: userId});
-  return campgrounds;
+async function fetchBookingsByUserId(
+  userId: string,
+  page: number = 1,
+  productsPerPage: number = 0
+) {
+  const bookings = await Booking.find({ author: userId })
+    .populate("campground")
+    .populate("author")
+    .skip((page - 1) * productsPerPage)
+    .limit(productsPerPage);
+
+  const bookingsCount = await Booking.find({
+    author: userId,
+  }).countDocuments();
+  const queryData = { bookings: bookings, count: bookingsCount };
+  return queryData;
 }
 
 const BookingRepo = {

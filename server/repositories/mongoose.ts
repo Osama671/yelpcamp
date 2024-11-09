@@ -256,9 +256,19 @@ async function deleteCampgroundById(id: string, userid: string) {
   await Campground.findByIdAndDelete({ _id: id });
 }
 
-async function fetchCampgroundsByUserId(userId: string) {
-  const campgrounds = await Campground.find({author: userId});
-  return campgrounds;
+async function fetchCampgroundsByUserId(
+  userId: string,
+  page: number = 1,
+  productsPerPage: number = 0
+) {
+  const campgrounds = await Campground.find({ author: userId })
+    .skip((page - 1) * productsPerPage)
+    .limit(productsPerPage);
+  const campgroundsCount = await Campground.find({
+    author: userId,
+  }).countDocuments();
+  const queryData = { campgrounds: campgrounds, count: campgroundsCount };
+  return queryData;
 }
 
 const campgroundModel = {

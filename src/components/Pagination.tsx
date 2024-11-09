@@ -3,7 +3,7 @@ interface paginatedProducts {
   currentPageCount: number;
   campgroundsCount: number;
   productsPerPage: number;
-  styles: CSSModuleClasses;
+  styles?: CSSModuleClasses;
 }
 
 export default function Pagination({
@@ -70,7 +70,7 @@ export default function Pagination({
             onPageChange(currentPageCount + 1)
           }
         >
-          <a className={`page-link ${styles.paginationButtons}`} href="#" aria-label="Next">
+          <a className={`page-link ${styles?.paginationButtons}`} href="#" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

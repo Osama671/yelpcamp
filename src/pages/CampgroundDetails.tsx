@@ -186,7 +186,7 @@ export default function CampgroundDetails() {
 
   return (
     <>
-      <div className={`campgroundsWrapper ${styles.campgroundsWrapper}`}>
+      <div className={`${styles.campgroundsWrapper}`}>
         <Navbar />
         {campground && (
           <main>

@@ -7,6 +7,7 @@ import lightFooterStyle from "./lightTheme/footer.module.css";
 import lightConfirmationModalStyle from "./lightTheme/confirmationModal.module.css";
 import lightLoginStyle from "./lightTheme/login.module.css";
 import lightRegisterStyle from "./lightTheme/register.module.css";
+import lightProfileStyle from './lightTheme/profile.module.css'
 
 import darkCampgroundsStyle from "./darkTheme/campgrounds.module.css";
 import darkNewCampgroundStyle from "./darkTheme/newCampground.module.css";
@@ -17,6 +18,7 @@ import darkFooterStyle from "./darkTheme/footer.module.css";
 import darkConfirmationModalStyle from "./darkTheme/confirmationModal.module.css";
 import darkLoginStyle from "./darkTheme/login.module.css";
 import darkRegisterStyle from "./darkTheme/register.module.css";
+import darkProfileStyle from "./darkTheme/profile.module.css"
 
 const themes = {
   light: {
@@ -29,6 +31,7 @@ const themes = {
     confirmationModal: lightConfirmationModalStyle,
     login: lightLoginStyle,
     register: lightRegisterStyle,
+    profile: lightProfileStyle,
   },
   dark: {
     campgrounds: darkCampgroundsStyle,
@@ -40,6 +43,7 @@ const themes = {
     confirmationModal: darkConfirmationModalStyle,
     login: darkLoginStyle,
     register: darkRegisterStyle,
+    profile: darkProfileStyle,
   },
 };
 
