@@ -60,7 +60,7 @@ export default function Campgrounds({ campground }) {
                 <div className="col">Upcoming bookings</div>
               </div>
               <div className="d-flex flex-row justify-content-evenly">
-                <Link to={`/campground/${campground._id}`}>
+                <Link to={`/campground/${campground._id}/edit`}>
                   <button className="btn btn-secondary">Edit Campground</button>
                 </Link>
                 <button className="btn btn-primary">Check Bookings</button>
