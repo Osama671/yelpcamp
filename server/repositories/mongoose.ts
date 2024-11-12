@@ -64,7 +64,7 @@ campgroundSchema.post("findOneAndDelete", async function (doc) {
   }
 });
 
-const Campground = mongoose.model("Campground", campgroundSchema);
+export const Campground = mongoose.model("Campground", campgroundSchema);
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
@@ -273,6 +273,8 @@ async function fetchCampgroundsByUserId(
   const queryData = { campgrounds: campgrounds, count: campgroundsCount };
   return queryData;
 }
+
+
 
 const campgroundModel = {
   findAllCampgrounds,

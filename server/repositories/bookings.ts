@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import model from "./mongoose.ts";
+import mongoose, { Types } from "mongoose";
+import campgroundRepo, { Campground } from "./mongoose.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 
 interface IBooking {
@@ -7,6 +7,11 @@ interface IBooking {
   endDate: Date;
   author: string;
   campground: string;
+}
+
+interface IFetchBookingByCampground {
+  _id: Types.ObjectId;
+  bookings: [];
 }
 
 const Schema = mongoose.Schema;
@@ -49,7 +54,7 @@ export async function createBooking(
 
 async function updateCampground(booking: IBooking, campgroundId: string) {
   try {
-    const campground = await model.findCampgroundById(campgroundId);
+    const campground = await campgroundRepo.findCampgroundById(campgroundId);
     if (campground) {
       campground.bookings.push(booking);
       await campground.save();
@@ -82,10 +87,19 @@ async function fetchBookingsByUserId(
   return queryData;
 }
 
+async function fetchBookingsByCampgroundId(campgroundId: string) {
+  const campground = await Campground.findById(campgroundId)
+    .select("bookings")
+    .populate("bookings")
+    .populate({path: "bookings", populate: "author"});
+  return campground.bookings;
+}
+
 const BookingRepo = {
   createBooking,
   findBookingById,
   fetchBookingsByUserId,
+  fetchBookingsByCampgroundId,
 };
 
 export default BookingRepo;

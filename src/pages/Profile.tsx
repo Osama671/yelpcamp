@@ -45,6 +45,8 @@ export default function Profile() {
   const [showFutureBookings, setFutureBookings] = useState(false);
   const [showPastBookings, setShowPastBookings] = useState(false);
 
+  const [campgroundBookings, setCampgroundBookings] = useState([])
+
   const switchForms = () => {
     setFutureBookings(!showFutureBookings);
     setShowPastBookings(!showPastBookings);
@@ -129,6 +131,11 @@ export default function Profile() {
     if (fetchedData.dataType === "reviews") fetchReviews();
   }, [fetchCampgrounds, fetchBookings, fetchReviews, fetchedData.dataType]);
 
+  const fetchBookingsByCampground = async (campgroundId: string) => {
+    const response = await axios.get(`/api/booking/${campgroundId}`)
+    setCampgroundBookings(response.data)
+  }
+
   useEffect(() => {
     setPageNumInURL();
     callAPIAgain();
@@ -143,10 +150,12 @@ export default function Profile() {
         <h1>Loading User Info...</h1>
       ) : (
         <>
+        {console.log(campgroundBookings)}
           <FutureBookings
             futureBookingsState={showFutureBookings}
             setFutureBookingsState={setFutureBookings}
             switchForms={switchForms}
+            bookings={campgroundBookings}
           />
           <PastBookings
             pastBookingsState={showPastBookings}
@@ -254,6 +263,7 @@ export default function Profile() {
                       key={campground._id}
                       campground={campground}
                       checkBookingsToggle={() => setFutureBookings(!showFutureBookings)}
+                      fetchBookingsByCampground={fetchBookingsByCampground}
                     />
                   ))
                 )

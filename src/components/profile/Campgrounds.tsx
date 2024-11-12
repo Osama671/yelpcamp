@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
-export default function Campgrounds({ campground, checkBookingsToggle }) {
+export default function Campgrounds({
+  campground,
+  checkBookingsToggle,
+  fetchBookingsByCampground,
+}) {
   return (
     <>
       <div className="container d-flex flex-wrap my-5">
@@ -63,7 +67,15 @@ export default function Campgrounds({ campground, checkBookingsToggle }) {
                 <Link to={`/campground/${campground._id}/edit`}>
                   <button className="btn btn-secondary">Edit Campground</button>
                 </Link>
-                <button onClick={checkBookingsToggle} className="btn btn-primary">Check Bookings</button>
+                <button
+                  onClick={() => {
+                    checkBookingsToggle();
+                    fetchBookingsByCampground(campground._id)
+                  }}
+                  className="btn btn-primary"
+                >
+                  Check Bookings
+                </button>
               </div>
             </div>
           </div>

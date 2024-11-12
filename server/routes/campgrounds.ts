@@ -16,19 +16,9 @@ const upload = multer({ storage: cloudinary.storage });
 
 const router = express.Router();
 
-
 router.get("/", showAllCampgrounds);
-router.post(
-  "/",
 
-  upload.array("images"),
-  createCampground,
-  (req, res) => {
-    console.log(req.body, "-----", req.files);
-    res.status(200).send("Upload completed");
-  }
-);
-
+router.post("/", upload.array("images"), createCampground);
 
 router.get("/:id", showCampgroundDetails);
 
