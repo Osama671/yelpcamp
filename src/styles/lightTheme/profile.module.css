@@ -1,5 +1,8 @@
 .profileWrapper {
   position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .profileWrapper::before {
@@ -16,5 +19,5 @@
 }
 
 .profileContainer {
-    background-color: #f5f5dcb3;
+  background-color: #f5f5dcb3;
 }

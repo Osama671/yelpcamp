@@ -64,10 +64,12 @@ export const showCampgroundEdit = async (req: Request, res: Response) => {
     const { id } = req.params;
     const userid = req.user._id;
     const campground = await model.findCampgroundById(id);
-    if (!campground.author.equals(userid)) {
+    if (!campground) {
+      throw new ExpressError("Campground not found", 404);
+    }
+    if (!campground.author?.equals(userid)) {
       throw new ExpressError("You are not the author of this campground", 403);
     }
-    await redisClient.del("allCampgrounds");
     return res.status(200).json(campground);
   } catch (e) {
     ExpressErrorGeneric(res, e);

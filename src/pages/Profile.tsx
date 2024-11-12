@@ -12,6 +12,8 @@ import RedirectBox from "../components/profile/RedirectBox";
 import { useTheme } from "../components/contexts/ThemeProvider";
 import Pagination from "../components/Pagination";
 import { Booking, Campground, Review } from "../../types";
+import FutureBookings from "../components/profile/checkbookings/FutureBookings";
+import PastBookings from "../components/profile/checkbookings/PastBookings";
 
 interface IAllData {
   data: Campground[] | Review[] | Booking[];
@@ -39,6 +41,14 @@ export default function Profile() {
   const cardPerPage = 4;
 
   const [, setSearchParams] = useSearchParams();
+
+  const [showFutureBookings, setFutureBookings] = useState(false);
+  const [showPastBookings, setShowPastBookings] = useState(false);
+
+  const switchForms = () => {
+    setFutureBookings(!showFutureBookings);
+    setShowPastBookings(!showPastBookings);
+  };
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -133,7 +143,16 @@ export default function Profile() {
         <h1>Loading User Info...</h1>
       ) : (
         <>
-          {console.log("DATA: ", fetchedData)}
+          <FutureBookings
+            futureBookingsState={showFutureBookings}
+            setFutureBookingsState={setFutureBookings}
+            switchForms={switchForms}
+          />
+          <PastBookings
+            pastBookingsState={showPastBookings}
+            setPastBookingsState={setShowPastBookings}
+            switchForms={switchForms}
+          />
           <div className={`${styles.profileWrapper}`}>
             <Navbar />
             <div className={` container ${styles.profileContainer}`}>
@@ -231,7 +250,11 @@ export default function Profile() {
                   />
                 ) : (
                   fetchedData.data.map((campground) => (
-                    <Campgrounds key={campground._id} campground={campground} />
+                    <Campgrounds
+                      key={campground._id}
+                      campground={campground}
+                      checkBookingsToggle={() => setFutureBookings(!showFutureBookings)}
+                    />
                   ))
                 )
               ) : null}

@@ -5,6 +5,7 @@ import Review, { findReviewById } from "./review.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 import cloudinary from "../../src/cloudinary/cloudinary.ts";
 import { Booking } from "./bookings.ts";
+import { clearCache } from "../controllers/campgrounds.ts";
 
 const seedAmount = 50;
 
@@ -67,7 +68,9 @@ const Campground = mongoose.model("Campground", campgroundSchema);
 
 async function seedCampgrounds() {
   await Campground.deleteMany({});
-
+  await Review.deleteMany({})
+  await Booking.deleteMany({})
+  clearCache()
   Array(seedAmount)
     .fill(undefined)
     .map(async (_, i) => {

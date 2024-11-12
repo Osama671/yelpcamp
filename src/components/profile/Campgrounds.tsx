@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Campgrounds({ campground }) {
+export default function Campgrounds({ campground, checkBookingsToggle }) {
   return (
     <>
       <div className="container d-flex flex-wrap my-5">
@@ -63,7 +63,7 @@ export default function Campgrounds({ campground }) {
                 <Link to={`/campground/${campground._id}/edit`}>
                   <button className="btn btn-secondary">Edit Campground</button>
                 </Link>
-                <button className="btn btn-primary">Check Bookings</button>
+                <button onClick={checkBookingsToggle} className="btn btn-primary">Check Bookings</button>
               </div>
             </div>
           </div>

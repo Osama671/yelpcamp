@@ -4,8 +4,8 @@ import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
 import { useTheme } from "./contexts/ThemeProvider";
 import { useState } from "react";
-import NewLogin from "../pages/NewLogin";
-import NewRegister from "../pages/newRegister";
+import Login from "./Login";
+import Register from "./Register";
 
 export default function Navbar({
   stylesProp,
@@ -37,12 +37,12 @@ export default function Navbar({
 
   return (
     <>
-      <NewLogin
+      <Login
         LoginState={showLogin}
         setLoginState={setShowLogin}
         switchForms={switchForms}
       />
-      <NewRegister
+      <Register
         registerState={showRegister}
         setRegisterState={setShowRegister}
         switchForms={switchForms}

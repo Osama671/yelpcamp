@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../components/contexts/ToastProvider";
-import { useTheme } from "../components/contexts/ThemeProvider";
+import { useToast } from "./contexts/ToastProvider";
+import { useUser } from "./contexts/UserProvider";
+import { useTheme } from "./contexts/ThemeProvider";
 
 interface IFormikValues {
   username: string;
   password: string;
-  email: string;
 }
 
 const validate = (values: IFormikValues) => {
@@ -24,77 +24,71 @@ const validate = (values: IFormikValues) => {
     errors.password = "Must be less than 10 characters";
   }
 
-  if (!values.email) {
-    errors.email = "Required";
-  } else if (values.email.length >= 30) {
-    errors.email = "Must be less than 30 characters";
-  }
-
   return errors;
 };
 
-export default function Register({
-  registerState,
-  setRegisterState,
-  switchForms,
-}) {
+export default function Login({ LoginState, setLoginState, switchForms }) {
   const { styles: campgroundStyles } = useTheme();
-  const styles = campgroundStyles.register;
+  const styles = campgroundStyles.login;
   const showToast = useToast();
+  const { getUser } = useUser();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
-      email: "",
     },
     validate,
     onSubmit: async (values) => {
-      const response = await axios.post("/api/register", values);
+      const response = await axios.post("/api/login", values);
+      console.log("Response", response);
+      console.log(response.status);
       if (response.status === 200) {
-        if (showToast) showToast("Registration sucessful", "green");
-        setRegisterState(!registerState)
+        if (showToast) showToast("Login sucessful", "green");
+        getUser();
+        setLoginState(!LoginState);
       }
     },
   });
 
   return (
     <>
-      {registerState && (
+      {LoginState && (
         <div
-          className={`min-vh-100 d-flex ${styles?.fullpageWrapper}`}
-          onClick={() => setRegisterState(!registerState)}
+          className={`min-vh-100 d-flex ${styles.fullpageWrapper}`}
+          onClick={() => setLoginState(!LoginState)}
         >
           <div
             className={`container d-flex justify-content-center align-items-center `}
           >
             <div
-              className="col-10 col-md-8  col-xl-6 col-xxl-4 mt-3 "
+              className="col-10  col-xl-6 col-xxl-4 mt-3 "
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={`card shadow ${styles?.modalCard}`}>
+              <div className={`card shadow ${styles.modalCard}`}>
                 <div className={`card-body ${styles.cardForm}`}>
                   <div className="d-flex justify-content-evenly ">
-                    <h4 onClick={switchForms}
-                      className={`card-title ${
-                        registerState ? "" : "disabled"
-                      } ${styles.loginHeader}`}
-                    >
+                    <h4 className={`card-title ${styles.loginHeader} `}>
                       Login
                     </h4>
-                    <h4 className={`card-title ${styles.registerHeader}`}>Register</h4>
+                    <h4
+                      onClick={switchForms}
+                      className={`card-title ${LoginState ? "" : "disabled"} ${styles.registerHeader}`}
+                    >
+                      Register
+                    </h4>
                   </div>
                   <form onSubmit={formik.handleSubmit} className="p-3 mt-0">
-                    <div className={`my-3`}>
+                    <div className={`my-3 text-center`}>
                       <label
-                        className={`form-label py-1 px-0 ${styles.usernameHeader}`}
+                        className={`form-label py-1 px-0  ${styles.usernameHeader}`}
                         htmlFor="username"
                       >
                         Username
                       </label>
                       <input
-                        className={`form-control ${styles?.fieldUsername} py-1 px-0`}
+                        className={`form-control ${styles.fieldUsername} py-1 px-0`}
                         id="username"
                         type="text"
                         name="username"
@@ -104,12 +98,12 @@ export default function Register({
                         autoFocus
                       />
                       {formik.touched.username && formik.errors.username ? (
-                        <div style={{ color: "red", textAlign: "start" }}>
+                        <div style={{ color: "red", textAlign: "start"}}>
                           {formik.errors.username}
                         </div>
                       ) : null}
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-3 text-center">
                       <label
                         className={`form-label py-1 px-0 ${styles.passwordHeader}`}
                         htmlFor="password"
@@ -117,7 +111,7 @@ export default function Register({
                         Password
                       </label>
                       <input
-                        className={`form-control ${styles?.fieldPassword} py-1 px-0`}
+                        className={`form-control ${styles.fieldPassword} py-1 px-0`}
                         id="password"
                         type="password"
                         name="password"
@@ -131,29 +125,9 @@ export default function Register({
                         </div>
                       ) : null}
                     </div>
-                    <div className={`my-3`}>
-                      <label className={`form-label py-1 px-0 ${styles.emailHeader}`} htmlFor="email">
-                        Email
-                      </label>
-                      <input
-                        className={`form-control ${styles?.fieldEmail} py-1 px-0`}
-                        id="email"
-                        type="text"
-                        name="email"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
-                        autoFocus
-                      />
-                      {formik.touched.email && formik.errors.email ? (
-                        <div style={{ color: "red", textAlign: "start" }}>
-                          {formik.errors.email}
-                        </div>
-                      ) : null}
-                    </div>
                     <div className="d-grid">
                       <button type="submit" className={`btn ${styles.submitButton}`}>
-                        Register
+                        Login
                       </button>
                     </div>
                   </form>
