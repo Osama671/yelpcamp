@@ -4,6 +4,7 @@ export default function Campgrounds({
   campground,
   checkBookingsToggle,
   fetchBookingsByCampground,
+  setSelectedCampgroundID
 }) {
   return (
     <>
@@ -71,6 +72,7 @@ export default function Campgrounds({
                   onClick={() => {
                     checkBookingsToggle();
                     fetchBookingsByCampground(campground._id)
+                    setSelectedCampgroundID(campground._id)
                   }}
                   className="btn btn-primary"
                 >

@@ -46,6 +46,7 @@ export default function Profile() {
   const [showPastBookings, setShowPastBookings] = useState(false);
 
   const [campgroundBookings, setCampgroundBookings] = useState([])
+  const [selectedCampgroundId, setSelectedCampgroundID] = useState("")
 
   const switchForms = () => {
     setFutureBookings(!showFutureBookings);
@@ -161,11 +162,16 @@ export default function Profile() {
             setFutureBookingsState={setFutureBookings}
             switchForms={switchForms}
             campgrounds={campgroundBookings}
+            fetchPastBookingsByCampground={fetchPastBookingsByCampground}
+            campgroundId={selectedCampgroundId}
           />
           <PastBookings
             pastBookingsState={showPastBookings}
             setPastBookingsState={setShowPastBookings}
             switchForms={switchForms}
+            campgrounds={campgroundBookings}
+            fetchFutureBookingsByCampground={fetchFutureBookingsByCampground}
+            campgroundId={selectedCampgroundId}
           />
           <div className={`${styles.profileWrapper}`}>
             <Navbar />
@@ -269,6 +275,7 @@ export default function Profile() {
                       campground={campground}
                       checkBookingsToggle={() => setFutureBookings(!showFutureBookings)}
                       fetchBookingsByCampground={fetchFutureBookingsByCampground}
+                      setSelectedCampgroundID={setSelectedCampgroundID}
                     />
                   ))
                 )

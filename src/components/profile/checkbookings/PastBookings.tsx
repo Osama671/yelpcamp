@@ -1,10 +1,13 @@
-import axios from "axios";
 import { useTheme } from "../../contexts/ThemeProvider";
+import moment from "moment";
 
 export default function PastBookings({
   pastBookingsState,
   setPastBookingsState,
   switchForms,
+  campgrounds,
+  fetchFutureBookingsByCampground,
+  campgroundId,
 }) {
   const { styles: campgroundStyles } = useTheme();
   const styles = campgroundStyles.register;
@@ -27,7 +30,10 @@ export default function PastBookings({
                 <div className={`card-body ${styles.cardForm}`}>
                   <div className="d-flex justify-content-evenly ">
                     <h4
-                      onClick={switchForms}
+                      onClick={() => {
+                        switchForms();
+                        fetchFutureBookingsByCampground(campgroundId);
+                      }}
                       className={`card-title ${
                         pastBookingsState ? "" : "disabled"
                       } ${styles.loginHeader}`}
@@ -42,6 +48,57 @@ export default function PastBookings({
                     >
                       Past Bookings
                     </h4>
+                  </div>
+                  <div className="col-12 mt-4 ">
+                    <div
+                      className="d-flex flex-column justify-content-between overflow-y-auto"
+                      style={{ maxHeight: "50vh" }}
+                    >
+                      {campgrounds.length === 0 ? (
+                        <h2 className="text-center">No upcoming bookings</h2>
+                      ) : (
+                        campgrounds.map((campground) => (
+                          <>
+                            {console.log(campground)}
+                            <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
+                              <div className="col">Username</div>
+                              <div className="col">Start Date</div>
+                              <div className="col">End Date</div>
+                            </div>
+                            <div className="d-flex flex-row align-items-center px-4 py-2 text-center">
+                              <div
+                                className="col "
+                                style={{
+                                  overflow: "auto",
+                                  whiteSpace: "normal",
+                                  maxHeight: "25vh",
+                                }}
+                              >
+                                {campground.author.username}
+                              </div>
+                              <div
+                                className="col "
+                                style={{
+                                  overflow: "auto",
+                                  whiteSpace: "normal",
+                                  maxHeight: "25vh",
+                                }}
+                              >
+                                {moment(campground.bookings.startDate).format(
+                                  "L"
+                                )}
+                              </div>
+                              <div className="col">
+                                {moment(campground.bookings.endDate).format(
+                                  "L"
+                                )}
+                              </div>
+                            </div>
+                            <hr />
+                          </>
+                        ))
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

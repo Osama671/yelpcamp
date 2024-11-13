@@ -39,7 +39,7 @@ export const fetchBookingsByUserId = async (req: Request, res: Response) => {
   }
 };
 
-export const fetchBookingsByCampgroundId = async (
+export const fetchFutureBookingsByCampgroundId = async (
   req: Request,
   res: Response
 ) => {
@@ -48,7 +48,25 @@ export const fetchBookingsByCampgroundId = async (
       throw new ExpressError("User not found", 401);
     }
     const { campground: campgroundId } = req.params;
-    const bookings = await BookingRepo.fetchBookingsByCampgroundId(
+    const bookings = await BookingRepo.fetchFutureBookingsByCampgroundId(
+      campgroundId
+    );
+    res.status(200).json(bookings);
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
+};
+
+export const fetchPastBookingsByCampgroundId = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    if (!req.user) {
+      throw new ExpressError("User not found", 401);
+    }
+    const { campground: campgroundId } = req.params;
+    const bookings = await BookingRepo.fetchPastBookingsByCampgroundId(
       campgroundId
     );
     res.status(200).json(bookings);

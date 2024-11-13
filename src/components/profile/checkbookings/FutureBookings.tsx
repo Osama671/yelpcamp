@@ -6,13 +6,14 @@ export default function FutureBookings({
   setFutureBookingsState,
   switchForms,
   campgrounds,
+  fetchPastBookingsByCampground,campgroundId
 }) {
   const { styles: campgroundStyles } = useTheme();
   const styles = campgroundStyles.login;
 
   return (
     <>
-    {console.log("BOOKINGS:", campgrounds)}
+      {console.log("BOOKINGS:", campgrounds)}
       {futureBookingsState && (
         <div
           className={`min-vh-100 d-flex ${styles.fullpageWrapper}`}
@@ -32,7 +33,10 @@ export default function FutureBookings({
                       Future Bookings
                     </h4>
                     <h4
-                      onClick={switchForms}
+                      onClick={() => {
+                        switchForms();
+                        fetchPastBookingsByCampground(campgroundId);
+                      }}
                       className={`card-title ${
                         futureBookingsState ? "" : "disabled"
                       } ${styles.registerHeader}`}
@@ -75,10 +79,14 @@ export default function FutureBookings({
                                   maxHeight: "25vh",
                                 }}
                               >
-                                {moment(campground.bookings.startDate).format("L")}
+                                {moment(campground.bookings.startDate).format(
+                                  "L"
+                                )}
                               </div>
                               <div className="col">
-                                {moment(campground.bookings.endDate).format("L")}
+                                {moment(campground.bookings.endDate).format(
+                                  "L"
+                                )}
                               </div>
                             </div>
                             <hr />

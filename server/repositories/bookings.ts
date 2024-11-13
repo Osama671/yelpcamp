@@ -87,7 +87,7 @@ async function fetchBookingsByUserId(
   return queryData;
 }
 
-async function fetchBookingsByCampgroundId(campgroundId: string) {
+async function fetchFutureBookingsByCampgroundId(campgroundId: string) {
   const campground = await Campground.aggregate([
     {
       $match: {
@@ -146,11 +146,71 @@ async function fetchBookingsByCampgroundId(campgroundId: string) {
   return campground;
 }
 
+async function fetchPastBookingsByCampgroundId(campgroundId: string) {
+  const campground = await Campground.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(campgroundId),
+      },
+    },
+    {
+      $unwind: {
+        path: "$bookings",
+      },
+    },
+    {
+      $lookup: {
+        from: "bookings",
+        localField: "bookings",
+        foreignField: "_id",
+        as: "bookings",
+      },
+    },
+    {
+      $unwind: {
+        path: "$bookings",
+      },
+    },
+    {
+      $match: {
+        "bookings.startDate": {
+          $lt: new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate()
+          ),
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+      },
+    },
+    {
+      $unwind: {
+        path: "$author",
+      },
+    },
+    {
+      $sort: {
+        "bookings.startDate": 1,
+      },
+    },
+  ]);
+  console.log("DB Campgrounds:", campground);
+  return campground;
+}
+
 const BookingRepo = {
   createBooking,
   findBookingById,
   fetchBookingsByUserId,
-  fetchBookingsByCampgroundId,
+  fetchFutureBookingsByCampgroundId,
+  fetchPastBookingsByCampgroundId
 };
 
 export default BookingRepo;
