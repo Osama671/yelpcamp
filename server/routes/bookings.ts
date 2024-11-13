@@ -1,11 +1,14 @@
 import express from "express";
-import { createBooking, fetchBookingsByCampgroundId } from "../controllers/bookings.ts";
+import {
+  createBooking,
+  fetchFutureBookingsByCampgroundId,
+} from "../controllers/bookings.ts";
 import { validateBooking } from "../repositories/schemas/bookings.ts";
 
 const router = express.Router();
 
-router.get("/:campground", fetchBookingsByCampgroundId)
-
 router.post("/:id", validateBooking, createBooking);
+
+router.get("/:campground/future", fetchFutureBookingsByCampgroundId);
 
 export default router;

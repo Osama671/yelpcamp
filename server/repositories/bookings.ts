@@ -113,27 +113,36 @@ async function fetchBookingsByCampgroundId(campgroundId: string) {
       },
     },
     {
+      $match: {
+        "bookings.startDate": {
+          $gte: new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate()
+          ),
+        },
+      },
+    },
+    {
       $lookup: {
         from: "users",
-        localField: "bookings.author",
+        localField: "author",
         foreignField: "_id",
-        as: "bookings.author",
+        as: "author",
       },
     },
     {
       $unwind: {
-        path: "$bookings.author",
+        path: "$author",
       },
     },
     {
-      $match: {
-        "bookings.startDate": {
-          $gt: new Date(),
-        },
+      $sort: {
+        "bookings.startDate": 1,
       },
     },
   ]);
-
+  console.log("DB Campgrounds:", campground);
   return campground;
 }
 

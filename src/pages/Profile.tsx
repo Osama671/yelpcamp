@@ -131,8 +131,13 @@ export default function Profile() {
     if (fetchedData.dataType === "reviews") fetchReviews();
   }, [fetchCampgrounds, fetchBookings, fetchReviews, fetchedData.dataType]);
 
-  const fetchBookingsByCampground = async (campgroundId: string) => {
-    const response = await axios.get(`/api/booking/${campgroundId}`)
+  const fetchFutureBookingsByCampground = async (campgroundId: string) => {
+    const response = await axios.get(`/api/booking/${campgroundId}/future`)
+    setCampgroundBookings(response.data)
+  }
+
+  const fetchPastBookingsByCampground = async (campgroundId: string) => {
+    const response = await axios.get(`/api/booking/${campgroundId}/past`)
     setCampgroundBookings(response.data)
   }
 
@@ -155,7 +160,7 @@ export default function Profile() {
             futureBookingsState={showFutureBookings}
             setFutureBookingsState={setFutureBookings}
             switchForms={switchForms}
-            bookings={campgroundBookings}
+            campgrounds={campgroundBookings}
           />
           <PastBookings
             pastBookingsState={showPastBookings}
@@ -263,7 +268,7 @@ export default function Profile() {
                       key={campground._id}
                       campground={campground}
                       checkBookingsToggle={() => setFutureBookings(!showFutureBookings)}
-                      fetchBookingsByCampground={fetchBookingsByCampground}
+                      fetchBookingsByCampground={fetchFutureBookingsByCampground}
                     />
                   ))
                 )

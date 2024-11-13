@@ -47,7 +47,6 @@ export const validateBooking = async (
           oldEndDate,
           newStartDate,
           newEndDate,
-          newCurrentDate
         );
         if (available === false)
           throw new ExpressError(
@@ -69,13 +68,7 @@ function IsBookingAvailable(
   oldEndDate: number,
   newStartDate: number,
   newEndDate: number,
-  currentDate: number
 ) {
-  console.log("oldStartDate:", oldStartDate);
-  console.log("oldEndDate:", oldEndDate);
-  console.log("newStartDate:", newStartDate);
-  console.log("newEndDate:", newEndDate);
-  console.log("currentDate:", currentDate);
   if (
     newStartDate === oldStartDate ||
     newStartDate === oldEndDate ||
