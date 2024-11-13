@@ -88,11 +88,53 @@ async function fetchBookingsByUserId(
 }
 
 async function fetchBookingsByCampgroundId(campgroundId: string) {
-  const campground = await Campground.findById(campgroundId)
-    .select("bookings")
-    .populate("bookings")
-    .populate({path: "bookings", populate: "author"});
-  return campground.bookings;
+  const campground = await Campground.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(campgroundId),
+      },
+    },
+    {
+      $unwind: {
+        path: "$bookings",
+      },
+    },
+    {
+      $lookup: {
+        from: "bookings",
+        localField: "bookings",
+        foreignField: "_id",
+        as: "bookings",
+      },
+    },
+    {
+      $unwind: {
+        path: "$bookings",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "bookings.author",
+        foreignField: "_id",
+        as: "bookings.author",
+      },
+    },
+    {
+      $unwind: {
+        path: "$bookings.author",
+      },
+    },
+    {
+      $match: {
+        "bookings.startDate": {
+          $gt: new Date(),
+        },
+      },
+    },
+  ]);
+
+  return campground;
 }
 
 const BookingRepo = {

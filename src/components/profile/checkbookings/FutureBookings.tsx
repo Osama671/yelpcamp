@@ -1,4 +1,5 @@
 import { useTheme } from "../../contexts/ThemeProvider";
+import moment from "moment"
 
 export default function FutureBookings({
   futureBookingsState,
@@ -42,7 +43,6 @@ export default function FutureBookings({
                     <div
                       className="d-flex flex-column justify-content-between overflow-y-auto"
                       style={{ maxHeight: "50vh" }}
-                      /*Insert .map() function for all bookings */
                     >
                       {bookings.length === 0 ? (
                         <h2 className="text-center">No upcoming bookings</h2>
@@ -73,10 +73,10 @@ export default function FutureBookings({
                                   maxHeight: "25vh",
                                 }}
                               >
-                                {booking.startDate.split("T")[0]}
+                                {moment(booking.startDate).format("L")}
                               </div>
                               <div className="col">
-                                {booking.endDate.split("T")[0]}
+                                {moment(booking.endDate).format("L")}
                               </div>
                             </div>
                             <hr />

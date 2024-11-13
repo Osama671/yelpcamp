@@ -16,6 +16,7 @@ import { useUser } from "../components/contexts/UserProvider.tsx";
 import { useTheme } from "../components/contexts/ThemeProvider.tsx";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -52,10 +53,12 @@ export default function CampgroundDetails() {
   const navigate = useNavigate();
 
   const submitBooking = async () => {
+    console.log("Start dateF: ", moment(startDate).format("L"));
+    console.log("End DateF: ", moment(endDate).format("L"));
     try {
       const response = await axios.post(`/api/booking/${id}`, {
-        startDate: startDate,
-        endDate: endDate,
+        startDate: moment(startDate).format("L"),
+        endDate: moment(endDate).format("L"),
         user: user,
       });
       if (response.status === 200 && showToast)

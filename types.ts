@@ -24,8 +24,8 @@ export type Review = {
 
 export type Booking = {
   _id: string,
-  startDate: string,
-  endDate: string,
+  startDate: Date,
+  endDate: Date,
   author: Author,
   campground: Campground
 }

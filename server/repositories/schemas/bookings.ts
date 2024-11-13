@@ -3,6 +3,7 @@ import ExpressError from "../../../src/util/ExpressError.ts";
 import ExpressErrorGeneric from "../../../src/util/ExpressErrorGeneric.ts";
 import CampgroundsModel from "../mongoose.ts";
 import { Booking } from "../../../types.ts";
+import moment from "moment";
 
 export const validateBooking = async (
   req: Request,
@@ -12,8 +13,10 @@ export const validateBooking = async (
   try {
     const { id: campgroundId } = req.params;
     const { startDate, endDate, user: userId } = req.body;
+    console.log("startDate", startDate);
+    console.log("ayaya", Date.parse(startDate));
     if (!userId) throw new ExpressError("You must be logged in to book", 403);
-    const currentDate = Date.parse(new Date().toDateString());
+    const currentDate = moment(new Date()).format("L");
 
     const campground = await CampgroundsModel.findCampgroundById(campgroundId);
     if (campground?.author?._id == userId)
@@ -21,10 +24,12 @@ export const validateBooking = async (
 
     const newStartDate = Date.parse(startDate);
     const newEndDate = Date.parse(endDate);
+    const newCurrentDate = Date.parse(currentDate);
+    console.log("currentDate:", newCurrentDate);
 
     if (newStartDate > newEndDate)
       throw new ExpressError("Start date can't be ahead of end date", 400);
-    else if (newStartDate < +currentDate || newEndDate < +currentDate)
+    else if (newStartDate < newCurrentDate || newEndDate < newCurrentDate)
       throw new ExpressError(
         "Start date or end date can't be before your own date, C'mon bro",
         400
@@ -34,11 +39,15 @@ export const validateBooking = async (
     if (campground?.bookings) {
       campground.bookings.map((booking: Booking) => {
         const { startDate, endDate } = booking;
+        const oldStartDate = Date.parse(moment(startDate).format("L"));
+        const oldEndDate = Date.parse(moment(endDate).format("L"));
+
         const available = IsBookingAvailable(
-          Date.parse(startDate),
-          Date.parse(endDate),
+          oldStartDate,
+          oldEndDate,
           newStartDate,
-          newEndDate
+          newEndDate,
+          newCurrentDate
         );
         if (available === false)
           throw new ExpressError(
@@ -59,8 +68,14 @@ function IsBookingAvailable(
   oldStartDate: number,
   oldEndDate: number,
   newStartDate: number,
-  newEndDate: number
+  newEndDate: number,
+  currentDate: number
 ) {
+  console.log("oldStartDate:", oldStartDate);
+  console.log("oldEndDate:", oldEndDate);
+  console.log("newStartDate:", newStartDate);
+  console.log("newEndDate:", newEndDate);
+  console.log("currentDate:", currentDate);
   if (
     newStartDate === oldStartDate ||
     newStartDate === oldEndDate ||
