@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 export default function Bookings({ booking }) {
   return (
     <>
-    {console.log(booking)}
       <div className="container d-flex flex-wrap my-5">
         <div className="card flex-row d-flex col-12 p-3">
           <div className="col-3">

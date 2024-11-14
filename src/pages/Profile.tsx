@@ -156,7 +156,6 @@ export default function Profile() {
         <h1>Loading User Info...</h1>
       ) : (
         <>
-        {console.log(campgroundBookings)}
           <FutureBookings
             futureBookingsState={showFutureBookings}
             setFutureBookingsState={setFutureBookings}

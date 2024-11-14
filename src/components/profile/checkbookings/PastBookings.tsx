@@ -55,11 +55,10 @@ export default function PastBookings({
                       style={{ maxHeight: "50vh" }}
                     >
                       {campgrounds.length === 0 ? (
-                        <h2 className="text-center">No upcoming bookings</h2>
+                        <h2 className="text-center">No previous bookings</h2>
                       ) : (
                         campgrounds.map((campground) => (
                           <>
-                            {console.log(campground)}
                             <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
                               <div className="col">Username</div>
                               <div className="col">Start Date</div>

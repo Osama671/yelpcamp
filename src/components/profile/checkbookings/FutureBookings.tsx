@@ -13,7 +13,6 @@ export default function FutureBookings({
 
   return (
     <>
-      {console.log("BOOKINGS:", campgrounds)}
       {futureBookingsState && (
         <div
           className={`min-vh-100 d-flex ${styles.fullpageWrapper}`}
@@ -54,7 +53,6 @@ export default function FutureBookings({
                       ) : (
                         campgrounds.map((campground) => (
                           <>
-                            {console.log(campground)}
                             <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
                               <div className="col">Username</div>
                               <div className="col">Start Date</div>

@@ -8,6 +8,8 @@ export default function Campgrounds({
 }) {
   return (
     <>
+    {console.log(campground)}
+
       <div className="container d-flex flex-wrap my-5">
         <div className="card flex-row d-flex col-12 p-3">
           <div className="col-3">
@@ -61,8 +63,8 @@ export default function Campgrounds({
                   {campground.location}
                 </div>
                 <div className="col">{campground.reviews.length}</div>
-                <div className="col">Average rating :(</div>
-                <div className="col">Upcoming bookings</div>
+                <div className="col">{campground.avgReviewRating}</div>
+                <div className="col">{campground.upcomingBookings}</div>
               </div>
               <div className="d-flex flex-row justify-content-evenly">
                 <Link to={`/campground/${campground._id}/edit`}>
