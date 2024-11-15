@@ -8,6 +8,9 @@ import lightConfirmationModalStyle from "./lightTheme/confirmationModal.module.c
 import lightLoginStyle from "./lightTheme/login.module.css";
 import lightRegisterStyle from "./lightTheme/register.module.css";
 import lightProfileStyle from './lightTheme/profile.module.css'
+import lightProfileCampgroundsStyle from "./lightTheme/profileComponents/campgrounds.module.css"
+import lightProfileBookingsStyle from './lightTheme/profileComponents/bookings.module.css'
+import lightProfileReviewsStyle from "./lightTheme/profileComponents/reviews.module.css"
 
 import darkCampgroundsStyle from "./darkTheme/campgrounds.module.css";
 import darkNewCampgroundStyle from "./darkTheme/newCampground.module.css";
@@ -32,6 +35,9 @@ const themes = {
     login: lightLoginStyle,
     register: lightRegisterStyle,
     profile: lightProfileStyle,
+    profileCampgrounds: lightProfileCampgroundsStyle,
+    profileBookings: lightProfileBookingsStyle,
+    profileReviews: lightProfileReviewsStyle,
   },
   dark: {
     campgrounds: darkCampgroundsStyle,

@@ -1,6 +1,11 @@
 import express from "express";
 import passport from "passport";
-import { registerUser, logout, fetchUserData } from "../controllers/users.ts";
+import {
+  registerUser,
+  logout,
+  fetchUserData,
+  resetUserPassword,
+} from "../controllers/users.ts";
 import { fetchReviewsByUserId } from "../controllers/reviews.ts";
 import { fetchCampgroundsByUserId } from "../controllers/campgrounds.ts";
 import { fetchBookingsByUserId } from "../controllers/bookings.ts";
@@ -18,6 +23,8 @@ router.post(
     res.status(200).send("Sucessfully logged");
   }
 );
+
+router.post("/changepassword", resetUserPassword);
 
 // Fetches user info/records
 router.get("/user", fetchUserData);

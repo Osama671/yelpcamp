@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "../contexts/ThemeProvider";
 
 export default function Reviews({ review }) {
+  const { styles: profileCampgroundStyle } = useTheme();
+  const styles = profileCampgroundStyle.profileReviews;
   return (
     <>
-      {console.log("REVIEW:", review)}
       <div className="container d-flex flex-wrap my-5">
-        <div className="card flex-row d-flex col-12 p-3">
-          <div className="col-3">
+        <div className="card flex-row d-flex col-12 p-3 flex-wrap">
+          <div className="col-lg-3 col-12">
             <Link to={`/campground/${review.campground._id}`}>
               <img
                 className="w-100 rounded"
@@ -23,53 +25,58 @@ export default function Reviews({ review }) {
               ></img>
             </Link>
           </div>
-          <div className="col-9 ">
+          <div className="col-12 col-lg-9 my-3 mt-lg-0 flex-wrap">
             <div
-              className="d-flex flex-column justify-content-between overflow-x-auto"
+              className="d-flex flex-column justify-content-between "
               style={{ minHeight: "30vh" }}
             >
-              <div className="d-flex flex-row  px-4 py-2 text-center fw-bold">
-                <div className="col-3">Campground</div>
-                <div className="col-2">Rating</div>
-                <div className="col-7">Review</div>
+              <div
+                className={`flex-column d-flex justify-content-evenly ${styles.reviewsInfo}`}
+                style={{ minHeight: "20vh" }}
+              >
+                <div className="d-flex flex-row  px-4 py-2 text-center fw-bold">
+                  <div className="col-lg-3 col-4">Campground</div>
+                  <div className="col-lg-2 col-4">Rating</div>
+                  <div className="col-lg-7 col-8">Review</div>
+                </div>
+                <div className="d-flex flex-row px-4 py-2 align-items-center text-center">
+                  <div
+                    className="col-lg-3 col-4"
+                    style={{
+                      overflow: "hidden",
+                      whiteSpace: "normal",
+                      maxHeight: "16vh",
+                    }}
+                  >
+                    {review.campground.title}
+                  </div>
+                  <div
+                    className="col-lg-2 col-4"
+                    style={{
+                      overflow: "hidden",
+                    }}
+                  >
+                    {review.rating}
+                  </div>
+                  <div
+                    className="col-lg-7 col-8"
+                    style={{
+                      overflow: "auto",
+                      whiteSpace: "normal",
+                      maxHeight: "16vh",
+                    }}
+                  >
+                    {review.review}
+                  </div>
+                </div>
               </div>
-              <div className="d-flex flex-row px-4 py-2 align-items-center text-center">
-                <div
-                  className="col-3"
-                  style={{
-                    overflow: "hidden",
-                    whiteSpace: "normal",
-                    maxHeight: "25vh",
-                  }}
+              <div className="d-flex flex-row justify-content-evenly mt-3">
+                <Link
+                  to={`/campground/${review.campground._id}`}
                 >
-                  {review.campground.title}
-                </div>
-                <div
-                  className="col-2"
-                  style={{
-                    overflow: "hidden",
-                  }}
-                >
-                  {review.rating}
-                </div>
-                <div
-                  className="col-7"
-                  style={{
-                    overflow: "auto",
-                    whiteSpace: "normal",
-                    maxHeight: "25vh",
-                  }}
-                >
-                  {review.review}
-                </div>
+                  <button className="btn btn-success">Check Campground</button>
+                </Link>
               </div>
-              <Link to={`/campground/${review.campground._id}`}>
-                <div className="d-flex flex-row justify-content-evenly">
-                  <button className="btn btn-secondary">
-                    Check Campground
-                  </button>
-                </div>
-              </Link>
             </div>
           </div>
         </div>

@@ -40,3 +40,15 @@ export const fetchUserData = async (req: Request, res: Response) => {
     ExpressErrorGeneric(res, e);
   }
 };
+
+export const resetUserPassword = async (req: Request, res: Response) => {
+  try{
+    const {userId, oldPassword, newPassword} = req.body
+    const user = await fetchUserDataFromDB(userId)
+    await user.changePassword(oldPassword, newPassword)
+    res.status(200).json({message: "Password changed sucessfully"})
+  }
+  catch (e){
+    ExpressErrorGeneric(res, e)
+  }
+}

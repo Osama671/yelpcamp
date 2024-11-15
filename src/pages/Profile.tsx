@@ -26,7 +26,7 @@ export default function Profile() {
   const styles = profileStyles.profile;
 
   const { user } = useUser();
-  const { showToast } = useToast();
+  const showToast = useToast();
   const navigate = useNavigate();
 
   const [fetchedData, setFetchedData] = useState<IAllData>({
@@ -45,8 +45,8 @@ export default function Profile() {
   const [showFutureBookings, setFutureBookings] = useState(false);
   const [showPastBookings, setShowPastBookings] = useState(false);
 
-  const [campgroundBookings, setCampgroundBookings] = useState([])
-  const [selectedCampgroundId, setSelectedCampgroundID] = useState("")
+  const [campgroundBookings, setCampgroundBookings] = useState([]);
+  const [selectedCampgroundId, setSelectedCampgroundID] = useState("");
 
   const switchForms = () => {
     setFutureBookings(!showFutureBookings);
@@ -133,14 +133,35 @@ export default function Profile() {
   }, [fetchCampgrounds, fetchBookings, fetchReviews, fetchedData.dataType]);
 
   const fetchFutureBookingsByCampground = async (campgroundId: string) => {
-    const response = await axios.get(`/api/booking/${campgroundId}/future`)
-    setCampgroundBookings(response.data)
-  }
+    const response = await axios.get(`/api/booking/${campgroundId}/future`);
+    setCampgroundBookings(response.data);
+  };
 
   const fetchPastBookingsByCampground = async (campgroundId: string) => {
-    const response = await axios.get(`/api/booking/${campgroundId}/past`)
-    setCampgroundBookings(response.data)
-  }
+    const response = await axios.get(`/api/booking/${campgroundId}/past`);
+    setCampgroundBookings(response.data);
+  };
+
+  const handleChangePassword = async (e) => {
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      const response = await axios.post("/api/changepassword", {
+        userId: user,
+        oldPassword: formData.get("oldPassword"),
+        newPassword: formData.get("newPassword"),
+      });
+      console.log("response", response);
+      console.log("SHOW TOAST");
+
+      if (showToast) showToast("Passwowrd reset sucessfully", "green");
+    } catch (e) {
+      if (e) {
+        if (showToast) showToast("Passwords do not match", "red");
+      }
+    }
+  };
 
   useEffect(() => {
     setPageNumInURL();
@@ -194,7 +215,10 @@ export default function Profile() {
                           <h5 style={{ padding: "4px" }}>{userData.email}</h5>
                         </div>
                       </div>
-                      <div className="col-12 col-lg-6 mt-lg-0 mt-3 justify-content-end align-items-end">
+                      <form
+                        className="col-12 col-lg-6 mt-lg-0 mt-3 justify-content-end align-items-end"
+                        onSubmit={handleChangePassword}
+                      >
                         <h1 className="text-lg-end text-start">
                           Change Password
                         </h1>
@@ -204,17 +228,22 @@ export default function Profile() {
                             <input
                               className="col-6 align-self-stretch"
                               type="password"
+                              name="oldPassword"
                             />
                           </div>
                           <div className="d-flex justify-content-start justify-content-lg-end  mt-3">
                             <div className="">New Password: &nbsp;</div>
-                            <input className="col-6" type="password" />
+                            <input
+                              className="col-6"
+                              type="password"
+                              name="newPassword"
+                            />
                           </div>
                           <button className="col-8 col-lg-7 align-self-start align-self-lg-end mt-3 btn btn-primary">
                             Change Password
                           </button>
                         </div>
-                      </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -272,8 +301,12 @@ export default function Profile() {
                     <Campgrounds
                       key={campground._id}
                       campground={campground}
-                      checkBookingsToggle={() => setFutureBookings(!showFutureBookings)}
-                      fetchBookingsByCampground={fetchFutureBookingsByCampground}
+                      checkBookingsToggle={() =>
+                        setFutureBookings(!showFutureBookings)
+                      }
+                      fetchBookingsByCampground={
+                        fetchFutureBookingsByCampground
+                      }
                       setSelectedCampgroundID={setSelectedCampgroundID}
                     />
                   ))

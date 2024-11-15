@@ -1,4 +1,4 @@
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 import campgroundRepo, { Campground } from "./mongoose.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 
@@ -7,11 +7,6 @@ interface IBooking {
   endDate: Date;
   author: string;
   campground: string;
-}
-
-interface IFetchBookingByCampground {
-  _id: Types.ObjectId;
-  bookings: [];
 }
 
 const Schema = mongoose.Schema;
@@ -74,9 +69,48 @@ async function fetchBookingsByUserId(
   page: number = 1,
   productsPerPage: number = 0
 ) {
-  const bookings = await Booking.find({ author: userId })
-    .populate("campground")
-    .populate("author")
+  try{
+  const bookings = await Booking.aggregate([
+    {
+      $match:
+        {
+          author: new mongoose.Types.ObjectId(userId)
+        }
+    },
+    {
+      $lookup:
+        {
+          from: "campgrounds",
+          localField: "campground",
+          foreignField: "_id",
+          as: "campground"
+        }
+    },
+    {
+      $unwind:
+        {
+          path: "$campground"
+        }
+    },
+    {
+      $match:
+        {
+          startDate: {
+            $gte: new Date(
+              new Date().getFullYear(),
+              new Date().getMonth(),
+              new Date().getDate()
+            )
+          }
+        }
+    },
+    {
+      $sort:
+        {
+          startDate: 1
+        }
+    }
+  ])
     .skip((page - 1) * productsPerPage)
     .limit(productsPerPage);
 
@@ -85,6 +119,10 @@ async function fetchBookingsByUserId(
   }).countDocuments();
   const queryData = { bookings: bookings, count: bookingsCount };
   return queryData;
+}
+catch(e){
+  throw new Error(`DB Error: ${e}`)
+}
 }
 
 async function fetchFutureBookingsByCampgroundId(campgroundId: string) {
