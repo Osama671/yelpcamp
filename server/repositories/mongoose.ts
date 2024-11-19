@@ -266,28 +266,11 @@ async function fetchCampgroundsByUserId(
 ) {
   const campgrounds = await Campground.aggregate([
     {
-      $match:
-        /**
-         * query: The query in MQL.
-         */
-        {
-          author: new mongoose.Types.ObjectId(userId),
-        },
+      $match: {
+        author: new mongoose.Types.ObjectId(userId),
+      },
     },
-    // {
-    //   $limit:
-    //     /**
-    //      * Provide the number of documents to limit.
-    //      */
-    //     4
-    // }
-    // {
-    //   $skip:
-    //     /**
-    //      * Provide the number of documents to skip.
-    //      */
-    //     1
-    // }
+
     {
       $lookup: {
         from: "reviews",

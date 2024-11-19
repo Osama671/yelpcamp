@@ -1,0 +1,35 @@
+.campgroundInfo {
+  overflow-x: auto;
+}
+
+.campgroundWrapper {
+  background-color: rgba(78, 59, 6, 0.58);
+}
+
+.titleHeader,
+.locationHeader,
+.reviewsHeader,
+.avgRatingHeader,
+.upcomingBookingsHeader {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.titleContent,
+.locationContent,
+.reviewsContent,
+.avgRatingContent,
+.upcomingBookingsContent {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.editCampgroundButton{
+
+}
+
+.checkCampgroundButton{
+
+}
+
+.checkBookingsButton{
+
+}

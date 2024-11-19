@@ -10,7 +10,6 @@ export default function AuthRoute({ Component }: {Component: React.ComponentType
   useEffect(() => {
     async function getAuthentication() {
       const response = await axios.get("/api/auth/check");
-      console.log(response.data.authenticated)
       setIsAuthenticated(() => response.data.authenticated);
       setIsLoading(false);
     }

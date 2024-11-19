@@ -197,7 +197,7 @@ export default function CampgroundDetails() {
               <div className=" col-lg-6 mt-3">
                 <Carousel
                   images={campground.images}
-                  showArrows={campground.images.length === 1 ? false : true}
+                  showArrows={campground.images.length <= 1 ? false : true}
                   styles={styles}
                 />
                 <div className={` rounded `}>
@@ -216,17 +216,17 @@ export default function CampgroundDetails() {
                       <li
                         className={`list-group-item ${styles.listGroupItem} ${styles.cardLocation} `}
                       >
-                        Location: {campground.location}
+                        <strong>Location:</strong> {campground.location}
                       </li>
                       <li
                         className={`list-group-item ${styles.listGroupItem} `}
                       >
-                        Created by: {campground.author.username}
+                        <strong>Created by:</strong> {campground.author.username}
                       </li>
                       <li
                         className={`list-group-item ${styles.listGroupItem} `}
                       >
-                        Price: ${campground.price}/night
+                        <strong>Price:</strong> ${campground.price}/night
                       </li>
                     </ul>
 
@@ -266,45 +266,63 @@ export default function CampgroundDetails() {
                 <div
                   className={`gap-3 p-3 col-lg-12 d-flex flex-column ${styles.bookingWrapper}`}
                 >
-                  <div
-                    className={`row col-12 text-center ${styles.bookingHeader}`}
-                  >
-                    <h2>Book Campground?</h2>
-                  </div>
-                  <div className="row">
-                    <div className="col-6 d-flex flex-column align-items-center">
-                      <h4 className={`p-0 mb-2 ${styles.bookingStartDate}`}>
-                        Start date:
-                      </h4>
-                      <DatePicker
-                        showIcon
-                        toggleCalendarOnIconClick
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        className={`${styles.datePicker}`}
-                      />
-                    </div>
-                    <div className="col-6 d-flex flex-column align-items-center">
-                      <h4 className={`p-0 mb-2 ${styles.bookingEndDate}`}>
-                        End date:
-                      </h4>
-                      <DatePicker
-                        showIcon
-                        toggleCalendarOnIconClick
-                        selected={endDate}
-                        onChange={(date) => setEndDate(date)}
-                        className={`${styles.datePicker}`}
-                      />
-                    </div>
-                    <div className="mt-5 d-flex col-12 justify-content-center">
-                      <button
-                        onClick={submitBooking}
-                        className={`btn ${styles.bookingButton}`}
+                  {campground.author._id === user ? (
+                    <>
+                      <div className={`text-center fs-2 fw-bold ${styles.campgroundAuthorText}`}>
+                        This is your campground
+                      </div>
+                      <div className={`fs-4 text-center fw-bold ${styles.campgroundAuthorText}`}>
+                        Click below to see if you have any bookings!
+                      </div>
+                      <div className="align-self-center">
+                        <Link to="/profile">
+                          <button className="btn btn-success ">Profile</button>
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className={`row col-12 text-center ${styles.bookingHeader}`}
                       >
-                        Book Campground
-                      </button>
-                    </div>
-                  </div>
+                        <h2>Book Campground?</h2>
+                      </div>
+                      <div className="row">
+                        <div className="col-6 d-flex flex-column align-items-center">
+                          <h4 className={`p-0 mb-2 ${styles.bookingStartDate}`}>
+                            Start date:
+                          </h4>
+                          <DatePicker
+                            showIcon
+                            toggleCalendarOnIconClick
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            className={`${styles.datePicker}`}
+                          />
+                        </div>
+                        <div className="col-6 d-flex flex-column align-items-center">
+                          <h4 className={`p-0 mb-2 ${styles.bookingEndDate}`}>
+                            End date:
+                          </h4>
+                          <DatePicker
+                            showIcon
+                            toggleCalendarOnIconClick
+                            selected={endDate}
+                            onChange={(date) => setEndDate(date)}
+                            className={`${styles.datePicker}`}
+                          />
+                        </div>
+                        <div className="mt-5 d-flex col-12 justify-content-center">
+                          <button
+                            onClick={submitBooking}
+                            className={`btn ${styles.bookingButton}`}
+                          >
+                            Book Campground
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className={`${styles.reviewWrapper} p-3 mt-3`}>

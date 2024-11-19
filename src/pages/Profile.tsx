@@ -59,16 +59,9 @@ export default function Profile() {
       setUserData(response.data);
       setIsLoading(false);
     } catch (e) {
-      if (e.status === 401) {
-        console.error(e);
-        showToast("User not found", "red");
-        navigate("/campgrounds");
-      } else {
-        showToast("Whoops, something went wrong");
-        navigate("/campgrounds");
-      }
+      console.error(e);
     }
-  }, [user, navigate, showToast]);
+  }, [user]);
 
   const fetchCampgrounds = useCallback(async () => {
     try {
@@ -199,18 +192,24 @@ export default function Profile() {
               <div className={`container `}>
                 <div className=" d-flex justify-content-center ">
                   <div className="col-12 col-xl-9">
-                    <div className="card mt-3 p-3 d-flex flex-row col-12 flex-wrap justify-content-between">
+                    <div
+                      className={`card mt-3 p-3 d-flex flex-row col-12 flex-wrap justify-content-between ${styles.topCard}`}
+                    >
                       <div className="col-12 col-lg-6">
-                        <h1 className="text-lg-start text-start">
+                        <h1
+                          className={`text-lg-start text-start ${styles.userInformationHeader}`}
+                        >
                           User Information
                         </h1>
-                        <div className="d-flex mt-3 ">
+                        <div className={`d-flex mt-3 ${styles.username}`}>
                           <h4 className="m-0">Username:&nbsp;</h4>
                           <h5 style={{ padding: "4px" }}>
                             {userData.username}
                           </h5>
                         </div>
-                        <div className="d-flex mt-3 flex-wrap">
+                        <div
+                          className={`d-flex mt-3 flex-wrap ${styles.email}`}
+                        >
                           <h4 className="m-0">Email:&nbsp;</h4>
                           <h5 style={{ padding: "4px" }}>{userData.email}</h5>
                         </div>
@@ -219,12 +218,16 @@ export default function Profile() {
                         className="col-12 col-lg-6 mt-lg-0 mt-3 justify-content-end align-items-end"
                         onSubmit={handleChangePassword}
                       >
-                        <h1 className="text-lg-end text-start">
+                        <h1
+                          className={`text-lg-end text-start ${styles.changePasswordHeader}`}
+                        >
                           Change Password
                         </h1>
                         <div className="flex-column d-flex align-items-lg-end">
                           <div className="d-flex justify-content-start justify-content-lg-end mb-2">
-                            <div className="">Old Password: &nbsp;</div>
+                            <div className={`${styles.oldPassword}`}>
+                              Old Password: &nbsp;
+                            </div>
                             <input
                               className="col-6 align-self-stretch"
                               type="password"
@@ -232,14 +235,18 @@ export default function Profile() {
                             />
                           </div>
                           <div className="d-flex justify-content-start justify-content-lg-end  mt-3">
-                            <div className="">New Password: &nbsp;</div>
+                            <div className={`${styles.newPassword}`}>
+                              New Password: &nbsp;
+                            </div>
                             <input
                               className="col-6"
                               type="password"
                               name="newPassword"
                             />
                           </div>
-                          <button className="col-8 col-lg-7 align-self-start align-self-lg-end mt-3 btn btn-primary">
+                          <button
+                            className={`col-8 col-lg-7 align-self-start align-self-lg-end mt-3 btn  ${styles.changePasswordButton}`}
+                          >
                             Change Password
                           </button>
                         </div>
@@ -253,8 +260,8 @@ export default function Profile() {
                 <div className="row justify-content-between">
                   <div className="col-4 ">
                     <h3
-                      style={{ display: "inline" }}
-                      className="fw-bold"
+                      style={{ display: "inline", cursor: "pointer" }}
+                      className={`fw-bold ${styles.myCampgroundsHeader}`}
                       onClick={() => {
                         setPageCount(1);
                         fetchCampgrounds();
@@ -265,8 +272,8 @@ export default function Profile() {
                   </div>
                   <div className="col-4 ">
                     <h3
-                      style={{ display: "inline" }}
-                      className="fw-bold "
+                      style={{ display: "inline", cursor: "pointer" }}
+                      className={`fw-bold ${styles.bookingsHeader}`}
                       onClick={() => {
                         setPageCount(1);
                         fetchBookings();
@@ -277,8 +284,8 @@ export default function Profile() {
                   </div>
                   <div className="col-4">
                     <h3
-                      style={{ display: "inline" }}
-                      className="fw-bold"
+                      style={{ display: "inline", cursor: "pointer" }}
+                      className={`fw-bold ${styles.reviewsHeader}`}
                       onClick={() => {
                         setPageCount(1);
                         fetchReviews();
@@ -344,6 +351,7 @@ export default function Profile() {
                   currentPageCount={pageCount}
                   campgroundsCount={fetchedData.dataCount}
                   productsPerPage={cardPerPage}
+                  styles={styles}
                 />
               )}
             </div>

@@ -132,3 +132,7 @@
   background-color: #e0e0e07d;
   color: white;
 }
+
+.campgroundAuthorText {
+  color: rgba(255, 255, 255, 0.801)
+}

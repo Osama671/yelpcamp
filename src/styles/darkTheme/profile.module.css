@@ -1,0 +1,61 @@
+.profileWrapper {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileWrapper::before {
+  background-size: cover;
+  background-position: center;
+  z-index: -9999;
+  filter: blur(0px);
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("https://images.unsplash.com/photo-1511316652-1a5eed7732e5?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
+.profileContainer {
+  background-color: rgba(30, 30, 104, 0.34);
+}
+
+.topCard {
+  background: linear-gradient(to top, #9f4e1170, #0c279075);
+}
+
+.changePasswordHeader {
+  color: rgba(255, 255, 255, 0.92);
+}
+.userInformationHeader {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.oldPassword,
+.newPassword,
+.email,
+.username,
+.myCampgroundsHeader,
+.bookingsHeader,
+.reviewsHeader {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.changePasswordButton {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgb(255, 193, 7, 0.8);
+}
+
+.changePasswordButton:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgb(255, 193, 7, 0.6);
+  border: none;
+}
+
+.paginationButtons {
+  color: rgba(255, 255, 255, 0.751) !important;
+  border: 0px;
+  background-color: #2d3269b3 !important;
+}
