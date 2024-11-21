@@ -59,7 +59,6 @@ export default function CampgroundDetails() {
       const response = await axios.post(`/api/booking/${id}`, {
         startDate: moment(startDate).format("L"),
         endDate: moment(endDate).format("L"),
-        user: user,
       });
       if (response.status === 200 && showToast)
         showToast("Booking created sucessfully!", "green");

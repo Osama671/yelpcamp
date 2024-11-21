@@ -9,7 +9,7 @@
   background-size: cover;
   background-position: center;
   z-index: -9999;
-  filter: blur(0px);
+  filter: blur(1px);
   content: "";
   position: absolute;
   background-attachment: fixed;
@@ -22,13 +22,14 @@
   background-color: #f5f5dcb3;
 }
 .topCard {
-background-color: white;}
+  background-color: white;
+}
 
 .changePasswordHeader {
-  color: black
+  color: black;
 }
 .userInformationHeader {
-  color: black
+  color: black;
 }
 
 .oldPassword,

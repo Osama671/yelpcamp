@@ -1,13 +1,26 @@
 import { Request, Response } from "express";
 import ExpressError from "../../src/util/ExpressError.ts";
 import BookingRepo from "../repositories/bookings.ts";
+import CampgroundRepo from "../repositories/mongoose.ts";
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.ts";
+import moment from "moment";
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
     const { id: campgroundId } = req.params;
-    const { startDate, endDate, user: userId } = req.body;
-    if (!userId) return res.status(403).json({ message: "User not logged in" });
+    let { startDate, endDate } = req.body;
+    startDate = moment(startDate).format("L");
+    endDate = moment(endDate).format("L");
+
+    if (!req.user)
+      return res.status(403).json({ message: "User not logged in" });
+    const campground = await CampgroundRepo.findCampgroundById(campgroundId);
+    if (campground?.author?._id.equals(req.user._id))
+      return res
+        .status(401)
+        .json({ message: "You cannot book your own campground" });
+
+    const userId = req.user._id.toString();
 
     BookingRepo.createBooking(startDate, endDate, userId, campgroundId);
 
