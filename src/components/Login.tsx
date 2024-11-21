@@ -32,7 +32,6 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
   const styles = campgroundStyles.login;
   const showToast = useToast();
   const { getUser } = useUser();
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -42,8 +41,6 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
     validate,
     onSubmit: async (values) => {
       const response = await axios.post("/api/login", values);
-      console.log("Response", response);
-      console.log(response.status);
       if (response.status === 200) {
         if (showToast) showToast("Login sucessful", "green");
         getUser();
@@ -74,7 +71,9 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
                     </h4>
                     <h4
                       onClick={switchForms}
-                      className={`card-title ${LoginState ? "" : "disabled"} ${styles.registerHeader}`}
+                      className={`card-title ${LoginState ? "" : "disabled"} ${
+                        styles.registerHeader
+                      }`}
                     >
                       Register
                     </h4>
@@ -98,7 +97,7 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
                         autoFocus
                       />
                       {formik.touched.username && formik.errors.username ? (
-                        <div style={{ color: "red", textAlign: "start"}}>
+                        <div style={{ color: "red", textAlign: "start" }}>
                           {formik.errors.username}
                         </div>
                       ) : null}
@@ -126,7 +125,10 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
                       ) : null}
                     </div>
                     <div className="d-grid">
-                      <button type="submit" className={`btn ${styles.submitButton}`}>
+                      <button
+                        type="submit"
+                        className={`btn ${styles.submitButton}`}
+                      >
                         Login
                       </button>
                     </div>

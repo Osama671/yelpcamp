@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "./contexts/ToastProvider";
 import { useTheme } from "./contexts/ThemeProvider";
 
@@ -10,24 +9,35 @@ interface IFormikValues {
   email: string;
 }
 
+const usernameRegex = /^[a-zA-Z0-9_-]+$/
+// const passwordRegex = 
+
 const validate = (values: IFormikValues) => {
   const errors = {} as Partial<IFormikValues>;
   if (!values.username) {
     errors.username = "Required";
-  } else if (values.username.length >= 10) {
-    errors.username = "Must be less than 10 characters";
+  } else if (values.username.length >= 20) {
+    errors.username = "Must be less than 20 characters";
+  } else if (values.username.length < 3) {
+    errors.username = "Must be more than 2 characters"
+  } else if(usernameRegex.test(values.username) === false){
+    errors.username = "Only hyphens and underscores are allowed"
   }
-
+  
   if (!values.password) {
     errors.password = "Required";
-  } else if (values.password.length >= 10) {
-    errors.password = "Must be less than 10 characters";
+  } else if (values.password.length < 8) {
+    errors.password = "Must be more than 8 characters";
+  } else if(values.password.length > 64){
+    errors.password = "A little too much, I'm gonna have to stop you right there (64 max)"
   }
 
   if (!values.email) {
     errors.email = "Required";
-  } else if (values.email.length >= 30) {
-    errors.email = "Must be less than 30 characters";
+  } else if (values.email.length >= 250) {
+    errors.email = "Must be less than 250 characters";
+  } else if (values.email.includes(" ")) {
+    errors.email = "Email must not have spaces"
   }
 
   return errors;

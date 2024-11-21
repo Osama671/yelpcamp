@@ -9,18 +9,14 @@ import {
 import { fetchReviewsByUserId } from "../controllers/reviews.ts";
 import { fetchCampgroundsByUserId } from "../controllers/campgrounds.ts";
 import { fetchBookingsByUserId } from "../controllers/bookings.ts";
+import { validateRegisterUser } from "../repositories/schemas/schema.ts";
 const router = express.Router();
 
-router.post("/register", registerUser);
+router.post("/register", validateRegisterUser, registerUser);
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-  }),
-  (_, res) => {
-    res.status(200).send("Sucessfully logged");
-  }
-);
+router.post("/login", passport.authenticate("local", {}), (_, res) => {
+  res.status(200).send("Sucessfully logged in");
+});
 
 router.post("/changepassword", resetUserPassword);
 
