@@ -9,7 +9,7 @@ const mapboxTheme = {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
   const [styles, setStyles] = useState(themes[theme]);
   const [mapboxStyle, setMapboxStyle] = useState(mapboxTheme[theme]);
 

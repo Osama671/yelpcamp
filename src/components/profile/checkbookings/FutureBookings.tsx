@@ -9,7 +9,7 @@ export default function FutureBookings({
   fetchPastBookingsByCampground,campgroundId
 }) {
   const { styles: campgroundStyles } = useTheme();
-  const styles = campgroundStyles.login;
+  const styles = campgroundStyles.futureBooking;
 
   return (
     <>
@@ -28,7 +28,7 @@ export default function FutureBookings({
               <div className={`card shadow ${styles.modalCard}`}>
                 <div className={`card-body ${styles.cardForm}`}>
                   <div className="d-flex justify-content-evenly ">
-                    <h4 className={`card-title ${styles.loginHeader} `}>
+                    <h4 className={`card-title ${styles.futureBookingsHeader} `}>
                       Future Bookings
                     </h4>
                     <h4
@@ -38,7 +38,7 @@ export default function FutureBookings({
                       }}
                       className={`card-title ${
                         futureBookingsState ? "" : "disabled"
-                      } ${styles.registerHeader}`}
+                      } ${styles.pastBookingHeader}`}
                     >
                       Past Bookings
                     </h4>
@@ -49,18 +49,18 @@ export default function FutureBookings({
                       style={{ maxHeight: "50vh" }}
                     >
                       {campgrounds.length === 0 ? (
-                        <h2 className="text-center">No upcoming bookings</h2>
+                        <h2 className={`text-center ${styles.upcomingBookingsMessage}`}>No upcoming bookings</h2>
                       ) : (
                         campgrounds.map((campground) => (
                           <>
                             <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
-                              <div className="col">Username</div>
-                              <div className="col">Start Date</div>
-                              <div className="col">End Date</div>
+                              <div className={`col ${styles.usernameHeader}`}>Username</div>
+                              <div className={`col ${styles.startDateHeader}`}>Start Date</div>
+                              <div className={`col ${styles.endDateHeader}`}>End Date</div>
                             </div>
                             <div className="d-flex flex-row align-items-center px-4 py-2 text-center">
                               <div
-                                className="col "
+                                className={`col ${styles.usernameContent}`}
                                 style={{
                                   overflow: "auto",
                                   whiteSpace: "normal",
@@ -70,7 +70,7 @@ export default function FutureBookings({
                                 {campground.author.username}
                               </div>
                               <div
-                                className="col "
+                                className={`col ${styles.startDateContent}`}
                                 style={{
                                   overflow: "auto",
                                   whiteSpace: "normal",
@@ -81,7 +81,7 @@ export default function FutureBookings({
                                   "L"
                                 )}
                               </div>
-                              <div className="col">
+                              <div className={`col ${styles.endDateContent}`}>
                                 {moment(campground.bookings.endDate).format(
                                   "L"
                                 )}

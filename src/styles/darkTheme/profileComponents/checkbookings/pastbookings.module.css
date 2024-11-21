@@ -1,0 +1,70 @@
+.fullpageWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: transparent;
+  animation: fadeInGrey 0.5s forwards;
+}
+
+.modalCard {
+  background-color: transparent;
+}
+
+.cardForm {
+  background: linear-gradient(
+    to left,
+    rgba(6, 6, 107, 0.9),
+    rgba(104, 70, 8, 0.9)
+  );
+}
+
+.pastBookingsHeader {
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid white;
+}
+
+.pastBookingsMessage {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.futureBookingsHeader {
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+}
+
+.futureBookingsHeader:hover {
+  animation: RegisterHeaderHover 0.2s forwards;
+}
+
+.usernameHeader,
+.startDateHeader,
+.endDateHeader {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.usernameContent,
+.startDateContent,
+.endDateContent {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes RegisterHeaderHover {
+  from {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  to {
+    color: rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes fadeInGrey {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}

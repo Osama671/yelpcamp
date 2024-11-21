@@ -221,7 +221,8 @@ export default function CampgroundDetails() {
                       <li
                         className={`list-group-item ${styles.listGroupItem} `}
                       >
-                        <strong>Created by:</strong> {campground.author.username}
+                        <strong>Created by:</strong>{" "}
+                        {campground.author.username}
                       </li>
                       <li
                         className={`list-group-item ${styles.listGroupItem} `}
@@ -268,10 +269,14 @@ export default function CampgroundDetails() {
                 >
                   {campground.author._id === user ? (
                     <>
-                      <div className={`text-center fs-2 fw-bold ${styles.campgroundAuthorText}`}>
+                      <div
+                        className={`text-center fs-2 fw-bold ${styles.campgroundAuthorText}`}
+                      >
                         This is your campground
                       </div>
-                      <div className={`fs-4 text-center fw-bold ${styles.campgroundAuthorText}`}>
+                      <div
+                        className={`fs-4 text-center fw-bold ${styles.campgroundAuthorText}`}
+                      >
                         Click below to see if you have any bookings!
                       </div>
                       <div className="align-self-center">
@@ -328,7 +333,7 @@ export default function CampgroundDetails() {
               <div className={`${styles.reviewWrapper} p-3 mt-3`}>
                 <h2 className={`${styles.reviewHeader}`}>Reviews:</h2>
 
-                {!user || (
+                {!user || user === campground.author._id || (
                   <form onSubmit={formik.handleSubmit} className="mb-3">
                     <div className="mb-3">
                       <fieldset className="starability-basic ">
@@ -421,16 +426,23 @@ export default function CampgroundDetails() {
                     </div>
                   </form>
                 )}
-                {campground.reviews.length === 0 && (
-                  <>
-                    <h3 className={`text-center ${styles.noReviewHeader}`}>
-                      No reviews
+                {campground.reviews.length === 0 &&
+                  campground.author._id !== user && (
+                    <>
+                      <h3 className={`text-center ${styles.noReviewHeader}`}>
+                        No reviews
+                      </h3>
+                      <h5 className={`text-center ${styles.noReviewHeader}`}>
+                        Be the first to review!
+                      </h5>
+                    </>
+                  )}
+                {campground.reviews.length === 0 &&
+                  campground.author._id === user && (
+                    <h3 className="text-center">
+                      There are currently no reviews on this campground
                     </h3>
-                    <h5 className={`text-center ${styles.noReviewHeader}`}>
-                      Be the first to review!
-                    </h5>
-                  </>
-                )}
+                  )}
 
                 {Object.keys(campground).length === 0 ||
                   campground.reviews.map((review) => (

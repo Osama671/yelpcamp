@@ -10,7 +10,7 @@ export default function PastBookings({
   campgroundId,
 }) {
   const { styles: campgroundStyles } = useTheme();
-  const styles = campgroundStyles.register;
+  const styles = campgroundStyles.pastBooking;
 
   return (
     <>
@@ -36,7 +36,7 @@ export default function PastBookings({
                       }}
                       className={`card-title ${
                         pastBookingsState ? "" : "disabled"
-                      } ${styles.loginHeader}`}
+                      } ${styles.futureBookingsHeader}`}
                     >
                       Future Bookings
                     </h4>
@@ -44,7 +44,7 @@ export default function PastBookings({
                       onClick={switchForms}
                       className={`card-title ${
                         pastBookingsState ? "" : "disabled"
-                      } ${styles.registerHeader}`}
+                      } ${styles.pastBookingsHeader}`}
                     >
                       Past Bookings
                     </h4>
@@ -55,18 +55,18 @@ export default function PastBookings({
                       style={{ maxHeight: "50vh" }}
                     >
                       {campgrounds.length === 0 ? (
-                        <h2 className="text-center">No previous bookings</h2>
+                        <h2 className={`text-center ${styles.pastBookingsMessage}`}>No previous bookings</h2>
                       ) : (
                         campgrounds.map((campground) => (
                           <>
                             <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
-                              <div className="col">Username</div>
-                              <div className="col">Start Date</div>
-                              <div className="col">End Date</div>
+                              <div className={`col ${styles.usernameHeader}`}>Username</div>
+                              <div className={`col ${styles.startDateHeader}`}>Start Date</div>
+                              <div className={`col ${styles.endDateHeader}`}>End Date</div>
                             </div>
                             <div className="d-flex flex-row align-items-center px-4 py-2 text-center">
                               <div
-                                className="col "
+                                className={`col ${styles.usernameContent}`}
                                 style={{
                                   overflow: "auto",
                                   whiteSpace: "normal",
@@ -76,7 +76,7 @@ export default function PastBookings({
                                 {campground.author.username}
                               </div>
                               <div
-                                className="col "
+                                className={`col ${styles.startDateContent}`}
                                 style={{
                                   overflow: "auto",
                                   whiteSpace: "normal",
@@ -87,7 +87,7 @@ export default function PastBookings({
                                   "L"
                                 )}
                               </div>
-                              <div className="col">
+                              <div className={`col ${styles.endDateContent}`}>
                                 {moment(campground.bookings.endDate).format(
                                   "L"
                                 )}

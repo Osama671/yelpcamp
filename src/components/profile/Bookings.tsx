@@ -7,7 +7,7 @@ export default function Bookings({ booking }) {
   return (
     <>
       <div className="container d-flex flex-wrap my-5">
-        <div className="card flex-row d-flex col-12 p-3 flex-wrap">
+        <div className={`card flex-row d-flex col-12 p-3 flex-wrap ${styles.bookingsWrapper}`}>
           <div className="col-lg-3 col-12">
             <Link to={`/campground/${booking.campground._id}`}>
               <img
@@ -35,14 +35,14 @@ export default function Bookings({ booking }) {
                 style={{ minHeight: "20vh" }}
               >
                 <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
-                  <div className="col-4 col-lg fs-6">Campground</div>
-                  <div className="col-4 col-lg fs-6">Location</div>
-                  <div className="col-4 col-lg fs-6">Start Date</div>
-                  <div className="col-4 col-lg fs-6">End Date</div>
+                  <div className={`col-4 col-lg fs-6 ${styles.campgroundHeader}`}>Campground</div>
+                  <div className={`col-4 col-lg fs-6 ${styles.locationHeader}`}>Location</div>
+                  <div className={`col-4 col-lg fs-6 ${styles.startDateHeader}`}>Start Date</div>
+                  <div className={`col-4 col-lg fs-6 ${styles.endDateHeader}`}>End Date</div>
                 </div>
                 <div className="d-flex flex-row align-items-center px-4 py-2 text-center">
                   <div
-                    className="col-4 col-lg fs-6"
+                    className={`col-4 col-lg fs-6 ${styles.campgroundContent}`}
                     style={{
                       overflow: "hidden",
                       whiteSpace: "normal",
@@ -52,7 +52,7 @@ export default function Bookings({ booking }) {
                     {booking.campground.title}
                   </div>
                   <div
-                    className="col-4 col-lg fs-6"
+                    className={`col-4 col-lg fs-6 ${styles.locationContent}`}
                     style={{
                       overflow: "hidden",
                       whiteSpace: "normal",
@@ -61,10 +61,10 @@ export default function Bookings({ booking }) {
                   >
                     {booking.campground.location}
                   </div>
-                  <div className="col-4 col-lg fs-6">
+                  <div className={`col-4 col-lg fs-6 ${styles.startDateContent}`}>
                     {booking.startDate.split("T")[0]}
                   </div>
-                  <div className="col-4 col-lg fs-6">
+                  <div className={`col-4 col-lg fs-6 ${styles.endDateContent}`}>
                     {booking.endDate.split("T")[0]}
                   </div>
                 </div>

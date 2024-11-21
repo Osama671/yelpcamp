@@ -26,7 +26,7 @@ export default function Pagination({
 
   return (
     <>
-      <ul className="pagination justify-content-center mt-3">
+      <ul className="pagination justify-content-center">
         <li
           className={`page-item ${currentPageCount <= 1 ? "disabled" : ""}`}
           onClick={() =>

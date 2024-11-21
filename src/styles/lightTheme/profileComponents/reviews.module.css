@@ -1,5 +1,19 @@
 .reviewsInfo {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
+.reviewWrapper {
+  background-color: white;
+}
 
+.campgroundHeader,
+.ratingHeader,
+.reviewHeader {
+  color: black
+}
+
+.campgroundContent,
+.ratingContent,
+.reviewContent {
+  color: black
+}

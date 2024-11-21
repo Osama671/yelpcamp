@@ -27,7 +27,6 @@ export default function Profile() {
 
   const { user } = useUser();
   const showToast = useToast();
-  const navigate = useNavigate();
 
   const [fetchedData, setFetchedData] = useState<IAllData>({
     data: [],
@@ -151,7 +150,7 @@ export default function Profile() {
       if (showToast) showToast("Passwowrd reset sucessfully", "green");
     } catch (e) {
       if (e) {
-        if (showToast) showToast("Passwords do not match", "red");
+        if (showToast) showToast("Incorrect old password", "red");
       }
     }
   };

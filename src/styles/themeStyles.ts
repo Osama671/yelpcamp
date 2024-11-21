@@ -11,6 +11,9 @@ import lightProfileStyle from "./lightTheme/profile.module.css";
 import lightProfileCampgroundsStyle from "./lightTheme/profileComponents/campgrounds.module.css";
 import lightProfileBookingsStyle from "./lightTheme/profileComponents/bookings.module.css";
 import lightProfileReviewsStyle from "./lightTheme/profileComponents/reviews.module.css";
+import lightRedirectBoxStyle from "./lightTheme/profileComponents/redirectBox.module.css"
+import lightFutureBookingStyle from "./lightTheme/profileComponents/checkbookings/futurebookings.module.css"
+import lightPastBookingStyle from "./lightTheme/profileComponents/checkbookings/pastbookings.module.css"
 
 import darkCampgroundsStyle from "./darkTheme/campgrounds.module.css";
 import darkNewCampgroundStyle from "./darkTheme/newCampground.module.css";
@@ -25,6 +28,9 @@ import darkProfileStyle from "./darkTheme/profile.module.css";
 import darkProfileCampgroundsStyle from "./darkTheme/profileComponents/campgrounds.module.css";
 import darkProfileBookingsStyle from "./darkTheme/profileComponents/bookings.module.css";
 import darkProfileReviewsStyle from "./darkTheme/profileComponents/reviews.module.css";
+import darkRedirectBoxStyle from "./darkTheme/profileComponents/redirectBox.module.css"
+import darkFutureBookingStyle from "./darkTheme/profileComponents/checkbookings/futurebookings.module.css"
+import darkPastBookingStyle from "./darkTheme/profileComponents/checkbookings/pastbookings.module.css"
 
 const themes = {
   light: {
@@ -41,6 +47,9 @@ const themes = {
     profileCampgrounds: lightProfileCampgroundsStyle,
     profileBookings: lightProfileBookingsStyle,
     profileReviews: lightProfileReviewsStyle,
+    redirectBox: lightRedirectBoxStyle,
+    futureBooking: lightFutureBookingStyle,
+    pastBooking: lightPastBookingStyle,
   },
   dark: {
     campgrounds: darkCampgroundsStyle,
@@ -56,6 +65,9 @@ const themes = {
     profileCampgrounds: darkProfileCampgroundsStyle,
     profileBookings: darkProfileBookingsStyle,
     profileReviews: darkProfileReviewsStyle,
+    redirectBox: darkRedirectBoxStyle,
+    futureBooking: darkFutureBookingStyle,
+    pastBooking: darkPastBookingStyle,
   },
 };
 

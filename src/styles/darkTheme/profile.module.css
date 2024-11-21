@@ -43,6 +43,12 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.myCampgroundsHeader:hover,
+.bookingsHeader:hover,
+.reviewsHeader:hover {
+  animation: highlightHeader 0.5 forwards;
+}
+
 .changePasswordButton {
   color: rgba(255, 255, 255, 0.8);
   background-color: rgb(255, 193, 7, 0.8);
@@ -51,11 +57,19 @@
 .changePasswordButton:hover {
   color: rgba(255, 255, 255, 0.8);
   background-color: rgb(255, 193, 7, 0.6);
-  border: none;
 }
 
 .paginationButtons {
   color: rgba(255, 255, 255, 0.751) !important;
   border: 0px;
   background-color: #2d3269b3 !important;
+}
+
+@keyframes highlightHeader {
+  from {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  to {
+    color: rgba(255, 255, 255, 1);
+  }
 }

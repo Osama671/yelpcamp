@@ -1,3 +1,21 @@
 .bookingsInfo {
-    overflow-x: auto;
+  overflow-x: auto;
+}
+
+.bookingsWrapper {
+  background-color: white
+}
+
+.campgroundHeader,
+.locationHeader,
+.startDateHeader,
+.endDateHeader {
+  color: black
+}
+
+.campgroundContent,
+.locationContent,
+.startDateContent,
+.endDateContent {
+  color: black
 }

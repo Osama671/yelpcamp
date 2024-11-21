@@ -15,9 +15,53 @@
   background-attachment: fixed;
   width: 100%;
   min-height: 100%;
-  background-image: url("https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-image: url("https://images.unsplash.com/photo-1563024767-5bd8ee292c3f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
 }
 
 .profileContainer {
   background-color: #f5f5dcb3;
+}
+.topCard {
+background-color: white;}
+
+.changePasswordHeader {
+  color: black
+}
+.userInformationHeader {
+  color: black
+}
+
+.oldPassword,
+.newPassword,
+.email,
+.username,
+.myCampgroundsHeader,
+.bookingsHeader,
+.reviewsHeader {
+  color: black;
+}
+
+.myCampgroundsHeader:hover,
+.bookingsHeader:hover,
+.reviewsHeader:hover {
+  animation: highlightHeader 0.3s forwards;
+}
+
+.changePasswordButton {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(40, 7, 255, 0.8);
+}
+
+.changePasswordButton:hover {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(40, 7, 255, 0.694);
+}
+
+@keyframes highlightHeader {
+  from {
+    color: black;
+  }
+  to {
+    color: rgba(0, 0, 0, 0.75);
+  }
 }

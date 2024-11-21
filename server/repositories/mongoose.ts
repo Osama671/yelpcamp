@@ -318,13 +318,9 @@ async function fetchCampgroundsByUserId(
               input: "$bookings",
               as: "booking",
               cond: {
-                $lte: [
-                  "booking.startDate",
-                  new Date(
-                    new Date().getFullYear(),
-                    new Date().getMonth(),
-                    new Date().getDate()
-                  ),
+                $gte: [
+                  "$$booking.startDate",
+                  new Date(new Date().setHours(0, 0, 0, 0)),
                 ],
               },
             },

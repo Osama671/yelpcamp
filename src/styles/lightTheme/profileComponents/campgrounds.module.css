@@ -1,5 +1,23 @@
 .campgroundInfo {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
+.campgroundWrapper {
+  background-color: white;
+}
 
+.titleHeader,
+.locationHeader,
+.reviewsHeader,
+.avgRatingHeader,
+.upcomingBookingsHeader {
+  color: black;
+}
+
+.titleContent,
+.locationContent,
+.reviewsContent,
+.avgRatingContent,
+.upcomingBookingsContent {
+  color: black
+}

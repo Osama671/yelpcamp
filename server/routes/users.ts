@@ -16,8 +16,6 @@ router.post("/register", registerUser);
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureFlash: true,
-    failureRedirect: "/login",
   }),
   (_, res) => {
     res.status(200).send("Sucessfully logged");

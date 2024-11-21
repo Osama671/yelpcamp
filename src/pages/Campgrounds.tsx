@@ -33,7 +33,7 @@ export default function Campgrounds() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setPageCount(1)
+    setPageCount(1);
     fetchCampgrounds();
   };
 
@@ -134,13 +134,15 @@ export default function Campgrounds() {
                 </div>
 
                 {Object.keys(paginatedCampgrounds).length === 0 || (
-                  <Pagination
-                    onPageChange={onPageChange}
-                    currentPageCount={pageCount}
-                    campgroundsCount={paginatedCampgrounds.count}
-                    productsPerPage={productsPerPage}
-                    styles={styles}
-                  />
+                  <div className="mt-3">
+                    <Pagination
+                      onPageChange={onPageChange}
+                      currentPageCount={pageCount}
+                      campgroundsCount={paginatedCampgrounds.count}
+                      productsPerPage={productsPerPage}
+                      styles={styles}
+                    />
+                  </div>
                 )}
               </>
             ) : (

@@ -11,10 +11,10 @@ export default function Campgrounds({
   const styles = profileCampgroundStyle.profileCampgrounds;
   return (
     <>
-      {console.log(campground)}
-
       <div className={`container d-flex flex-wrap my-5`}>
-        <div className={`card flex-row d-flex col-12 p-3 flex-wrap  ${styles.campgroundWrapper}`}>
+        <div
+          className={`card flex-row d-flex col-12 p-3 flex-wrap  ${styles.campgroundWrapper}`}
+        >
           <div className="col-lg-3 col-12">
             <Link to={`/campground/${campground._id}`}>
               <img
@@ -42,11 +42,25 @@ export default function Campgrounds({
                 style={{ minHeight: "20vh" }}
               >
                 <div className="d-flex flex-row justify-content-between px-4 py-2 text-center fw-bold">
-                  <div className={`col-4 col-lg fs-6 ${styles.titleHeader}`}>Title</div>
-                  <div className={`col-4 col-lg fs-6 ${styles.locationHeader}`}>Location</div>
-                  <div className={`col-4 col-lg fs-6 ${styles.reviewsHeader}`}>Reviews</div>
-                  <div className={`col-4 col-lg fs-6 ${styles.avgRatingHeader}`}>Average Rating</div>
-                  <div className={`col-4 col-lg fs-6 ${styles.upcomingBookingsHeader}`}>Upcoming Bookings</div>
+                  <div className={`col-4 col-lg fs-6 ${styles.titleHeader}`}>
+                    Title
+                  </div>
+                  <div className={`col-4 col-lg fs-6 ${styles.locationHeader}`}>
+                    Location
+                  </div>
+                  <div className={`col-4 col-lg fs-6 ${styles.reviewsHeader}`}>
+                    Reviews
+                  </div>
+                  <div
+                    className={`col-4 col-lg fs-6 ${styles.avgRatingHeader}`}
+                  >
+                    Average Rating
+                  </div>
+                  <div
+                    className={`col-4 col-lg fs-6 ${styles.upcomingBookingsHeader}`}
+                  >
+                    Upcoming Bookings
+                  </div>
                 </div>
                 <div className="d-flex flex-row align-items-center px-4 py-2 text-center">
                   <div
@@ -72,22 +86,30 @@ export default function Campgrounds({
                   <div className={`col-4 col-lg fs-4 ${styles.reviewsContent}`}>
                     {campground.reviews.length}
                   </div>
-                  <div className={`col-4 col-lg fs-4 ${styles.avgRatingContent}`}>
+                  <div
+                    className={`col-4 col-lg fs-4 ${styles.avgRatingContent}`}
+                  >
                     {campground.avgReviewRating}
                   </div>
-                  <div className={`col-4 col-lg fs-4 ${styles.upcomingBookingsContent}`}>
+                  <div
+                    className={`col-4 col-lg fs-4 ${styles.upcomingBookingsContent}`}
+                  >
                     {campground.upcomingBookings}
                   </div>
                 </div>
               </div>
               <div className="d-flex flex-sm-row flex-column justify-content-evenly align-items-center gap-3 mt-3 mt-sm-0 gap-sm-0">
                 <Link to={`/campground/${campground._id}/edit`}>
-                  <button className={`col btn btn-secondary ${styles.editCampgroundButton}`}>
+                  <button
+                    className={`col btn btn-secondary ${styles.editCampgroundButton}`}
+                  >
                     Edit Campground
                   </button>
                 </Link>
                 <Link to={`/campground/${campground._id}`}>
-                  <button className={`col btn btn-success ${styles.checkCampgroundButton}`}>
+                  <button
+                    className={`col btn btn-success ${styles.checkCampgroundButton}`}
+                  >
                     Check Campground
                   </button>
                 </Link>

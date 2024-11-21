@@ -1,5 +1,19 @@
 .reviewsInfo {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
+.reviewWrapper {
+  background-color: rgba(78, 59, 6, 0.58);
+}
 
+.campgroundHeader,
+.ratingHeader,
+.reviewHeader {
+  color: rgba(255, 255, 255, 1);
+}
+
+.campgroundContent,
+.ratingContent,
+.reviewContent {
+  color: rgba(255, 255, 255, 0.8);
+}

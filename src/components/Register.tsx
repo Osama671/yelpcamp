@@ -41,7 +41,6 @@ export default function Register({
   const { styles: campgroundStyles } = useTheme();
   const styles = campgroundStyles.register;
   const showToast = useToast();
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -54,7 +53,7 @@ export default function Register({
       const response = await axios.post("/api/register", values);
       if (response.status === 200) {
         if (showToast) showToast("Registration sucessful", "green");
-        setRegisterState(!registerState)
+        setRegisterState(!registerState);
       }
     },
   });
@@ -76,14 +75,17 @@ export default function Register({
               <div className={`card shadow ${styles?.modalCard}`}>
                 <div className={`card-body ${styles.cardForm}`}>
                   <div className="d-flex justify-content-evenly ">
-                    <h4 onClick={switchForms}
+                    <h4
+                      onClick={switchForms}
                       className={`card-title ${
                         registerState ? "" : "disabled"
                       } ${styles.loginHeader}`}
                     >
                       Login
                     </h4>
-                    <h4 className={`card-title ${styles.registerHeader}`}>Register</h4>
+                    <h4 className={`card-title ${styles.registerHeader}`}>
+                      Register
+                    </h4>
                   </div>
                   <form onSubmit={formik.handleSubmit} className="p-3 mt-0">
                     <div className={`my-3`}>
@@ -132,7 +134,10 @@ export default function Register({
                       ) : null}
                     </div>
                     <div className={`my-3`}>
-                      <label className={`form-label py-1 px-0 ${styles.emailHeader}`} htmlFor="email">
+                      <label
+                        className={`form-label py-1 px-0 ${styles.emailHeader}`}
+                        htmlFor="email"
+                      >
                         Email
                       </label>
                       <input
@@ -152,7 +157,10 @@ export default function Register({
                       ) : null}
                     </div>
                     <div className="d-grid">
-                      <button type="submit" className={`btn ${styles.submitButton}`}>
+                      <button
+                        type="submit"
+                        className={`btn ${styles.submitButton}`}
+                      >
                         Register
                       </button>
                     </div>
