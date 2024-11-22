@@ -39,7 +39,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 main()
-  .then(() => console.log(`DB Connected sucessfully XD`))
+  .then(() => console.log(`DB Connected sucessfully`))
   .catch((err) => console.log(`DB Failed to connect: ${err}`));
 
 async function main() {

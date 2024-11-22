@@ -17,7 +17,7 @@ export default function AuthRoute({ Component }: {Component: React.ComponentType
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return null;
   } else {
     return isAuthenticated ? <Component /> : <Navigate to="/campgrounds" replace />;
   }

@@ -1,14 +1,16 @@
 import "normalize.css";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar.tsx";
 import Footer from "../components/Footer.tsx";
 import CampgroundCard from "../components/CampgroundCard.tsx";
 import ClusterMap from "../components/Clustermap.tsx";
 import Pagination from "../components/Pagination.tsx";
+import Loader from "../components/Loader.tsx";
 import { Campground } from "../../types.ts";
 import { useTheme } from "../components/contexts/ThemeProvider.tsx";
+import { useToast } from "../components/contexts/ToastProvider.tsx";
 
 interface IAllCampgrounds {
   count: number;
@@ -18,6 +20,8 @@ interface IAllCampgrounds {
 export default function Campgrounds() {
   const { styles: campgroundStyles, mapboxStyle } = useTheme();
   const styles = campgroundStyles.campgrounds;
+
+  const showToast = useToast();
 
   const [paginatedCampgrounds, setPaginatedCampgrounds] =
     useState<IAllCampgrounds | null>(null);
@@ -30,6 +34,8 @@ export default function Campgrounds() {
   const [, setSearchParams] = useSearchParams();
 
   const searchRef = useRef("");
+
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -45,8 +51,10 @@ export default function Campgrounds() {
         { params: { searchQuery } }
       );
       setPaginatedCampgrounds(info.data);
+      return true;
     } catch (e) {
       console.error(e);
+      return false;
     }
   }, [pageCount]);
 
@@ -78,8 +86,20 @@ export default function Campgrounds() {
 
   useEffect(() => {
     setPageNumInURL();
-    fetchCampgrounds();
-  }, [pageCount, setPageNumInURL, fetchCampgrounds]);
+    async function fetchCampgroundsAPI() {
+      const pageTimer = new Promise((resolve) => {
+        setTimeout(() => resolve(""), 5000);
+      });
+      const promiseResult = await Promise.all([fetchCampgrounds(), pageTimer]);
+      if (promiseResult[0] === false) {
+        if (showToast) {
+          showToast("Server error, please try again later.", "red");
+          navigate("/");
+        }
+      }
+    }
+    fetchCampgroundsAPI();
+  }, [pageCount, setPageNumInURL, fetchCampgrounds, navigate, showToast]);
   return (
     <>
       <div className={`campgroundsWrapper ${styles?.campgroundsWrapper}`}>
@@ -146,7 +166,7 @@ export default function Campgrounds() {
                 )}
               </>
             ) : (
-              <p>Loading Campgrounds...</p>
+              <Loader loadingMessage={"Loading Campgrounds..."} />
             )}
           </main>
           <Footer />

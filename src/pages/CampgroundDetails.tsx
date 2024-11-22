@@ -1,4 +1,4 @@
-import "../css/stars.css";
+import "../styles/stars.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -17,6 +17,7 @@ import { useTheme } from "../components/contexts/ThemeProvider.tsx";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import Loader from "../components/Loader.tsx";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -86,12 +87,9 @@ export default function CampgroundDetails() {
       }
       setCampground(response.data);
     } catch (e) {
-      if (e instanceof ExpressError)
-        if (e.status) {
-          console.error(e);
-          if (showToast) showToast("Campground does not exist", "red");
-          navigate("/campgrounds");
-        }
+      console.error(e);
+      if (showToast) showToast("Campground does not exist", "red");
+      navigate("/campgrounds");
     }
   }, [id, navigate, showToast]);
 
@@ -190,7 +188,9 @@ export default function CampgroundDetails() {
     <>
       <div className={`${styles.campgroundsWrapper}`}>
         <Navbar />
-        {campground && (
+        {!campground ? (
+          <Loader loadingMessage="Loading Campground Details..." />
+        ) : (
           <main>
             <div className="row mx-2 my-2 mx-md-5 my-md-3 ">
               <div className=" col-lg-6 mt-3">
@@ -397,6 +397,7 @@ export default function CampgroundDetails() {
                         </label>
                       </fieldset>
                     </div>
+                    <div><h3 className={`mt-0 ${styles.ratingHeader}`}>Rating: {formik.values.rating} stars </h3></div>
 
                     <div className="mb-3">
                       <label
@@ -438,7 +439,9 @@ export default function CampgroundDetails() {
                   )}
                 {campground.reviews.length === 0 &&
                   campground.author._id === user && (
-                    <h3 className="text-center">
+                    <h3
+                      className={`text-center ${styles.noReviewsOnCampground}`}
+                    >
                       There are currently no reviews on this campground
                     </h3>
                   )}

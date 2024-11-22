@@ -14,6 +14,7 @@ import Pagination from "../components/Pagination";
 import { Booking, Campground, Review } from "../../types";
 import FutureBookings from "../components/profile/checkbookings/FutureBookings";
 import PastBookings from "../components/profile/checkbookings/PastBookings";
+import Loader from "../components/Loader";
 
 interface IAllData {
   data: Campground[] | Review[] | Booking[];
@@ -165,27 +166,27 @@ export default function Profile() {
   }, [fetchUserData]);
   return (
     <>
-      {isLoading === true || !userData ? (
-        <h1>Loading User Info...</h1>
-      ) : (
-        <>
-          <FutureBookings
-            futureBookingsState={showFutureBookings}
-            setFutureBookingsState={setFutureBookings}
-            switchForms={switchForms}
-            campgrounds={campgroundBookings}
-            fetchPastBookingsByCampground={fetchPastBookingsByCampground}
-            campgroundId={selectedCampgroundId}
-          />
-          <PastBookings
-            pastBookingsState={showPastBookings}
-            setPastBookingsState={setShowPastBookings}
-            switchForms={switchForms}
-            campgrounds={campgroundBookings}
-            fetchFutureBookingsByCampground={fetchFutureBookingsByCampground}
-            campgroundId={selectedCampgroundId}
-          />
-          <div className={`${styles.profileWrapper}`}>
+      <div className={`${styles.profileWrapper}`}>
+        {isLoading === true || !userData ? (
+          <Loader loadingMessage="Loading Profile..." />
+        ) : (
+          <>
+            <FutureBookings
+              futureBookingsState={showFutureBookings}
+              setFutureBookingsState={setFutureBookings}
+              switchForms={switchForms}
+              campgrounds={campgroundBookings}
+              fetchPastBookingsByCampground={fetchPastBookingsByCampground}
+              campgroundId={selectedCampgroundId}
+            />
+            <PastBookings
+              pastBookingsState={showPastBookings}
+              setPastBookingsState={setShowPastBookings}
+              switchForms={switchForms}
+              campgrounds={campgroundBookings}
+              fetchFutureBookingsByCampground={fetchFutureBookingsByCampground}
+              campgroundId={selectedCampgroundId}
+            />
             <Navbar />
             <div className={` container ${styles.profileContainer}`}>
               <div className={`container `}>
@@ -355,9 +356,9 @@ export default function Profile() {
               )}
             </div>
             <Footer />
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </>
   );
 }

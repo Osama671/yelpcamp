@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import { useToast } from "../components/contexts/ToastProvider";
 import { useUser } from "../components/contexts/UserProvider";
 import { useTheme } from "../components/contexts/ThemeProvider";
+import Loader from "../components/Loader";
 
 interface IFormikValues {
   title: string;
@@ -71,20 +72,20 @@ export default function CampgroundEdit() {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      location: "",
-      price: "",
+      title: campground?.title || "",
+      location: campground?.location || "",
+      price: campground?.price || "",
       images: [],
-      description: "",
+      description: campground?.description || "",
       deleteImages: [],
     },
+    enableReinitialize: true,
     validate,
     onSubmit: async (values) => {
       const formData = new FormData();
-      console.log(values);
       formData.append("title", values.title);
       formData.append("location", values.location);
-      formData.append("price", values.price);
+      formData.append("price", String(values.price));
       for (let i = 0; i < values.images.length; i++) {
         formData.append("images", values.images[i]);
       }
@@ -94,9 +95,9 @@ export default function CampgroundEdit() {
       }
       formData.append("longitude", String(marker.longitude));
       formData.append("latitude", String(marker.latitude));
-      for (const pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
-      }
+      // for (const pair of formData.entries()) {
+      //   console.log(pair[0], pair[1]);
+      // }
       const response = await axios.post(
         `/api/campgrounds/${id}/edit`,
         formData
@@ -113,16 +114,16 @@ export default function CampgroundEdit() {
 
   return (
     <>
-      {!campground ? (
-        <h1>...Loading...Or Is it?...idk</h1>
-      ) : (
-        <>
-          {campground.author._id !== user ? (
-            <Navigate to="/campgrounds" />
-          ) : (
-            <>
-              <Navbar />
-              <div className={`${styles.newCampgroundWrapper}`}>
+      <div className={`${styles.newCampgroundWrapper}`}>
+        {!campground ? (
+          <Loader loadingMessage={"Loading Edit Campground..."} />
+        ) : (
+          <>
+            {campground.author._id !== user ? (
+              <Navigate to="/campgrounds" />
+            ) : (
+              <>
+                <Navbar />
                 <div
                   className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}
                 >
@@ -318,11 +319,11 @@ export default function CampgroundEdit() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
-        </>
-      )}
+              </>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 }
