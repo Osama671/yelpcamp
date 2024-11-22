@@ -200,42 +200,54 @@ export const fetchCampgroundsByUserId = async (req: Request, res: Response) => {
 };
 
 async function cacheAllCampgrounds(res: Response) {
-  const cacheValue = await redisClient.get("allCampgrounds");
-  if (cacheValue) {
-    res.status(200).json(JSON.parse(cacheValue));
-    return true;
-  } else {
-    return false;
+  try {
+    const cacheValue = await redisClient.get("allCampgrounds");
+    if (cacheValue) {
+      res.status(200).json(JSON.parse(cacheValue));
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    console.error(`Error clearing campgrounds cache ${e}`);
   }
 }
 
 async function cachePaginatedCampgrounds(res: Response, pageNumber: number) {
-  const cacheValue = await redisClient.get(
-    `paginatedCampgrounds/${pageNumber}`
-  );
-  if (cacheValue) {
-    res.status(200).json(JSON.parse(cacheValue));
-    return true;
-  } else {
-    return false;
+  try {
+    const cacheValue = await redisClient.get(
+      `paginatedCampgrounds/${pageNumber}`
+    );
+    if (cacheValue) {
+      res.status(200).json(JSON.parse(cacheValue));
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    console.error(`Error clearing paginated campgrounds cache ${e}`);
   }
 }
 
 export async function clearCache() {
-  await redisClient.del("allCampgrounds");
-  const pattern = "paginatedCampgrounds/*";
-  let cursor = 0;
+  try {
+    await redisClient.del("allCampgrounds");
+    const pattern = "paginatedCampgrounds/*";
+    let cursor = 0;
 
-  do {
-    const reply = await redisClient.scan(cursor, {
-      MATCH: pattern,
-      COUNT: 100,
-    });
-    cursor = reply.cursor;
-    const keys = reply.keys;
+    do {
+      const reply = await redisClient.scan(cursor, {
+        MATCH: pattern,
+        COUNT: 100,
+      });
+      cursor = reply.cursor;
+      const keys = reply.keys;
 
-    if (keys.length > 0) {
-      await redisClient.del(keys);
-    }
-  } while (cursor !== 0);
+      if (keys.length > 0) {
+        await redisClient.del(keys);
+      }
+    } while (cursor !== 0);
+  } catch (e) {
+    console.error(`Error clearing cache ${e}`);
+  }
 }

@@ -12,7 +12,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const { username, password } = req.body;
     let { email } = req.body;
     email = email.trim();
-    
+
     if (email.includes(" "))
       throw new ExpressError(
         "Ayyo why does Email have spaces in the middle",

@@ -1,6 +1,7 @@
 import lightCampgroundsStyle from "./lightTheme/campgrounds.module.css";
 import lightNewCampgroundStyle from "./lightTheme/newCampground.module.css";
 import lightCampgroundDetailsStyle from "./lightTheme/campgroundDetails.module.css";
+import lightHomepageStyle from "./lightTheme/homepage.module.css"
 import lightEditCampgroundStyle from "./lightTheme/editcampground.module.css";
 import lightNavbarStyle from "./lightTheme/navbar.module.css";
 import lightFooterStyle from "./lightTheme/footer.module.css";
@@ -17,6 +18,7 @@ import lightPastBookingStyle from "./lightTheme/profileComponents/checkbookings/
 
 import darkCampgroundsStyle from "./darkTheme/campgrounds.module.css";
 import darkNewCampgroundStyle from "./darkTheme/newCampground.module.css";
+import darkHomepageStyle from "./darkTheme/homepage.module.css"
 import darkCampgroundDetailsStyle from "./darkTheme/campgroundDetails.module.css";
 import darkEditCampgroundStyle from "./darkTheme/editcampground.module.css";
 import darkNavbarStyle from "./darkTheme/navbar.module.css";
@@ -36,6 +38,7 @@ const themes = {
   light: {
     campgrounds: lightCampgroundsStyle,
     newCampground: lightNewCampgroundStyle,
+    homepage: lightHomepageStyle,
     campgroundDetails: lightCampgroundDetailsStyle,
     editCampground: lightEditCampgroundStyle,
     navbar: lightNavbarStyle,
@@ -54,6 +57,7 @@ const themes = {
   dark: {
     campgrounds: darkCampgroundsStyle,
     newCampground: darkNewCampgroundStyle,
+    homepage: darkHomepageStyle,
     campgroundDetails: darkCampgroundDetailsStyle,
     editCampground: darkEditCampgroundStyle,
     navbar: darkNavbarStyle,

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "./contexts/ToastProvider";
 import { useUser } from "./contexts/UserProvider";
 import { useTheme } from "./contexts/ThemeProvider";
@@ -14,14 +13,14 @@ const validate = (values: IFormikValues) => {
   const errors = {} as Partial<IFormikValues>;
   if (!values.username) {
     errors.username = "Required";
-  } else if (values.username.length >= 10) {
-    errors.username = "Must be less than 10 characters";
+  } else if (values.username.length >= 20) {
+    errors.username = "Must be less than 20 characters";
+  } else if (values.username.length < 3) {
+    errors.username = "Must be more than 2 characters";
   }
 
   if (!values.password) {
     errors.password = "Required";
-  } else if (values.password.length >= 10) {
-    errors.password = "Must be less than 10 characters";
   }
 
   return errors;
@@ -40,11 +39,19 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
     },
     validate,
     onSubmit: async (values) => {
-      const response = await axios.post("/api/login", values);
-      if (response.status === 200) {
-        if (showToast) showToast("Login sucessful", "green");
-        getUser();
-        setLoginState(!LoginState);
+      try {
+        const response = await axios.post("/api/login", values);
+        console.log(response);
+        if (response.status === 200) {
+          if (showToast) showToast("Login sucessful", "green");
+          getUser();
+          setLoginState(!LoginState);
+        }
+      } catch (e: unknown) {
+        if (showToast)
+          if (e.status === 500) {
+            showToast("Server error, please try again later", "red");
+          } else showToast("Invalid Username or Password", "red");
       }
     },
   });

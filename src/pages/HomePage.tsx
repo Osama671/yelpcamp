@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import styles from "../styles/homepage.module.css";
+import { useTheme } from "../components/contexts/ThemeProvider";
 
 export default function HomePage() {
+  const { styles: campgroundStyle } = useTheme();
+  const styles = campgroundStyle.homepage;
   return (
     <>
       <Helmet>
@@ -19,8 +21,8 @@ export default function HomePage() {
       <div
         className={`${styles.homepageWrapper} d-flex text-center bg-dark justify-content-center`}
       >
-        <Navbar stylesProp={styles}/>
-        
+        <Navbar stylesProp={styles} />
+
         <div
           className={`${styles.coverContainer} d-flex w-100 h-100 p-3 mx-auto flex-column text-white`}
         >
@@ -39,7 +41,7 @@ export default function HomePage() {
               <strong>View Campgrounds</strong>
             </Link>
           </main>
-          <Footer stylesProp={styles}/>
+          <Footer stylesProp={styles} />
         </div>
       </div>
     </>
