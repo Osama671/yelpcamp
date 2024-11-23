@@ -18,30 +18,46 @@ interface IFormikValues {
   description: string;
 }
 
+const priceRegex = /^(?!0\d)\d+(\.\d{1,2})?$/;
+
 const validate = (values: IFormikValues) => {
   const errors = {} as Partial<IFormikValues>;
   if (!values.title) {
     errors.title = "Required";
-  } else if (values.title.length <= 10) {
-    errors.title = "Must be less than 10 characters";
+  } else if (values.title.length <= 8) {
+    errors.title = "Title too short!";
+  } else if (values.title.length >= 100) {
+    errors.title = "Title too long!";
   }
 
   if (!values.location) {
     errors.location = "Required";
-  } else if (values.location.length <= 50) {
-    errors.location = "Must be less than 50 characters";
+  } else if (values.location.length <= 8) {
+    errors.location = "Location too short!";
+  } else if (values.location.length >= 150) {
+    errors.location = "Location too long!";
   }
 
   if (!values.price) {
     errors.price = "Required";
   } else if (+values.price <= 0) {
     errors.price = "Must be greater than 0";
+  } else if (+values.price > 1000000) {
+    errors.price = "A tad bit much for a campground (Max: 1,000,000)";
+  } else if (String(values.price).includes(".")) {
+    if (String(values.price).split(".")[1].length > 2) {
+      errors.price = "Price must be up to two decimal places";
+    }
+  } else if (priceRegex.test(String(values.price)) === false) {
+    errors.price = "Price can only have numbers";
   }
 
   if (!values.description) {
     errors.description = "Required";
-  } else if (values.description.length <= 5) {
+  } else if (values.description.length <= 30) {
     errors.description = "Be a bit more descriptive!";
+  } else if (values.description.length >= 1500) {
+    errors.description = "Too many characters! (Max: 1,500)";
   }
   return errors;
 };
@@ -89,15 +105,16 @@ export default function CampgroundEdit() {
       for (let i = 0; i < values.images.length; i++) {
         formData.append("images", values.images[i]);
       }
+      formData.append("longitude", String(marker.longitude));
+      formData.append("latitude", String(marker.latitude));
       formData.append("description", values.description);
       for (let i = 0; i < values.deleteImages.length; i++) {
         formData.append("deleteImages", values.deleteImages[i]);
       }
-      formData.append("longitude", String(marker.longitude));
-      formData.append("latitude", String(marker.latitude));
-      // for (const pair of formData.entries()) {
-      //   console.log(pair[0], pair[1]);
-      // }
+
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
       const response = await axios.post(
         `/api/campgrounds/${id}/edit`,
         formData

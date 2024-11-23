@@ -67,4 +67,38 @@ const validateRegisterUser = (
   }
 };
 
-export { validateCampground, validateReview, validateRegisterUser };
+const validateEditAndCreateCampground = (
+  req: Request,
+  _: Response,
+  next: NextFunction
+) => {
+  const campgroundSchema = Joi.object({
+    title: Joi.string().min(8).max(100).required(),
+    location: Joi.string().min(8).max(150).required(),
+    price: Joi.number().min(8).max(1000000).required(),
+    description: Joi.string().min(30).max(1500).required(),
+    longitude: Joi.number().min(-180).max(180).optional(),
+    latitude: Joi.number().min(-90).max(90).optional(),
+    deleteImages: Joi.optional(),
+  });
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const errorMessage = error.details
+      .map((detail) => detail.message)
+      .join(", ");
+    console.log(errorMessage);
+    throw new ExpressError(
+      "Error in the form. Please review the fields and try again.",
+      401
+    );
+  } else {
+    next();
+  }
+};
+
+export {
+  validateCampground,
+  validateReview,
+  validateRegisterUser,
+  validateEditAndCreateCampground,
+};

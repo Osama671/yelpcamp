@@ -24,30 +24,34 @@ const validate = (values: IFormikValues) => {
   const errors = {} as IErrorValues;
   if (!values.title) {
     errors.title = "Required";
-  } else if (values.title.length >= 10) {
-    errors.title = "Must be less than 10 characters";
+  } else if (values.title.length <= 8) {
+    errors.title = "Title too short!";
+  } else if (values.title.length >= 100) {
+    errors.title = "Title too long!";
   }
 
   if (!values.location) {
     errors.location = "Required";
-  } else if (values.location.length >= 20) {
-    errors.location = "Must be less than 20 characters";
+  } else if (values.location.length <= 8) {
+    errors.location = "Location too short!";
+  } else if (values.location.length >= 150) {
+    errors.location = "Location too long!";
   }
 
   if (!values.price) {
     errors.price = "Required";
   } else if (+values.price <= 0) {
     errors.price = "Must be greater than 0";
-  }
-
-  if (!values.images || values.images.length === 0) {
-    errors.images = "Required";
+  } else if (+values.price > 1000000) {
+    errors.price = "A tad bit much for a campground (Max: 1,000,000)";
   }
 
   if (!values.description) {
     errors.description = "Required";
-  } else if (values.description.length <= 5) {
+  } else if (values.description.length <= 30) {
     errors.description = "Be a bit more descriptive!";
+  } else if (values.description.length >= 1500) {
+    errors.description = "Too many characters! (Max: 1,500)";
   }
   return errors;
 };
@@ -100,7 +104,7 @@ export default function NewCampground() {
 
   return (
     <>
-      <Navbar  />
+      <Navbar />
       <div className={`${styles.newCampgroundWrapper}`}>
         <div
           className={`col-10 offset-1 col-md-8 offset-md-2 ${styles.formColumn}`}

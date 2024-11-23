@@ -81,7 +81,7 @@ export const editCampground = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "User is not logged in." });
   }
   try {
-    const { id } = req.params;
+    const { id: campgroundId } = req.params;
     const { location, description, price, title } = req.body;
     let { deleteImages } = req.body;
     if (!Array.isArray(deleteImages) && deleteImages !== undefined)
@@ -99,7 +99,7 @@ export const editCampground = async (req: Request, res: Response) => {
     }));
     await model.editCampground(
       geometry,
-      id,
+      campgroundId,
       location,
       description,
       price,
