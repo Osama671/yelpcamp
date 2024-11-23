@@ -95,7 +95,7 @@ export default function NewCampground() {
       const response = await axios.post("/api/campgrounds", formData);
       if (response.status === 200) {
         if (showToast) showToast("Campground Created", "green");
-        navigate("/campgrounds");
+        navigate(`/campground/${response.data.campgroundId}`);
       }
     },
   });

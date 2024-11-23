@@ -10,7 +10,7 @@ import { clearCache } from "../controllers/campgrounds.ts";
 const seedAmount = 50;
 
 interface IImages {
-  filename: string;
+  originalname: string;
   url: string;
 }
 
@@ -19,7 +19,7 @@ const opts = { toJSON: { virtuals: true } };
 const campgroundSchema = new Schema(
   {
     title: String,
-    images: [{ url: String, filename: String }],
+    images: [{ url: String, originalname: String }],
     geometry: {
       type: {
         type: String,
@@ -168,6 +168,7 @@ async function createCampground(
     });
 
     await newCampground.save();
+    return newCampground
   } catch (e) {
     throw new ExpressError(
       `Error in campgrounds repo with the error: ${e}`,

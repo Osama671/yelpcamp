@@ -9,9 +9,10 @@ import {
 import { validateEditAndCreateCampground } from "../repositories/schemas/schema.ts";
 import express from "express";
 import multer from "multer";
-import cloudinary from "../../src/cloudinary/cloudinary.ts";
 
-const upload = multer({ storage: cloudinary.storage });
+// const upload = multer({ storage: cloudinary.storage });
+const storage = multer.memoryStorage();
+const upload = multer({storage})
 
 const router = express.Router();
 

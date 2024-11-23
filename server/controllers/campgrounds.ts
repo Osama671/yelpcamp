@@ -3,12 +3,8 @@ import { Request, Response } from "express";
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
 import ExpressError from "../../src/util/ExpressError.ts";
 import redisClient from "../redis.ts";
+import cloudinary from "../../src/cloudinary/cloudinary.ts";
 
-interface IImageIterable {
-  filename: string;
-  url: string;
-  path: string;
-}
 export const showAllCampgrounds = async (req: Request, res: Response) => {
   try {
     const page = req.query.page ? Number(req.query.page) : 1;
@@ -93,10 +89,18 @@ export const editCampground = async (req: Request, res: Response) => {
     const userid = req.user._id;
     const files = req.files as Express.Multer.File[];
 
-    const campgroundImages = files.map((f: IImageIterable) => ({
-      url: f.path,
-      filename: f.filename,
-    }));
+    const campgroundImages = await Promise.all(
+      files.map(async (file: Express.Multer.File) => {
+        const b64 = Buffer.from(file.buffer).toString("base64");
+        const dataURI = `data:${file.mimetype};base64,${b64}`;
+        const cldRes = await cloudinary.handleUpload(dataURI);
+        return {
+          url: cldRes.url,
+          originalname: file.originalname,
+        };
+      })
+    );
+
     await model.editCampground(
       geometry,
       campgroundId,
@@ -142,11 +146,18 @@ export const createCampground = async (req: Request, res: Response) => {
 
     const files = req.files as Express.Multer.File[];
 
-    const campgroundImages = files.map((f: IImageIterable) => ({
-      url: f.path,
-      filename: f.filename,
-    }));
-    await model.createCampground(
+    const campgroundImages = await Promise.all(
+      files.map(async (file: Express.Multer.File) => {
+        const b64 = Buffer.from(file.buffer).toString("base64");
+        const dataURI = `data:${file.mimetype};base64,${b64}`;
+        const cldRes = await cloudinary.handleUpload(dataURI);
+        return {
+          url: cldRes.url,
+          originalname: file.originalname,
+        };
+      })
+    );
+    const campground = await model.createCampground(
       geometry,
       location,
       description,
@@ -156,7 +167,7 @@ export const createCampground = async (req: Request, res: Response) => {
       userid
     );
     clearCache();
-    return res.status(200).send("Campground created!");
+    return res.status(200).json({ campgroundId: campground._id });
   } catch (e) {
     ExpressErrorGeneric(res, e);
   }

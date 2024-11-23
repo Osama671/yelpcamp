@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 if (process.env.NODE_ENV !== "production") {
@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "production") {
 interface ICloudinaries {
   cloudinary: typeof cloudinary;
   storage: CloudinaryStorage;
+  handleUpload: (file: string) => Promise<UploadApiResponse>;
 }
 
 interface IFolder {
@@ -30,9 +31,18 @@ const storage = new CloudinaryStorage({
   } as IFolder,
 });
 
+async function handleUpload(file: string) {
+  const res = await cloudinary.uploader.upload(file, {
+    resource_type: "auto",
+    folder: "yelpcamp",
+  });
+  return res;
+}
+
 const cloudinaries: ICloudinaries = {
   cloudinary,
   storage,
+  handleUpload,
 };
 
 export default cloudinaries;

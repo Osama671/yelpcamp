@@ -67,9 +67,9 @@ const validateRegisterUser = (
   }
 };
 
-const validateEditAndCreateCampground = (
+const validateEditAndCreateCampground = async (
   req: Request,
-  _: Response,
+  res: Response,
   next: NextFunction
 ) => {
   const campgroundSchema = Joi.object({
