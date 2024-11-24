@@ -56,7 +56,7 @@ const validate = (values: IFormikValues) => {
     errors.description = "Required";
   } else if (values.description.length <= 30) {
     errors.description = "Be a bit more descriptive!";
-  } else if (values.description.length >= 1500) {
+  } else if (values.description.length > 1500) {
     errors.description = "Too many characters! (Max: 1,500)";
   }
   return errors;
@@ -73,6 +73,8 @@ export default function CampgroundEdit() {
     latitude: 37.7749,
     longitude: -122.4194,
   });
+
+  const [disableButton, setDisableButton] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -98,31 +100,42 @@ export default function CampgroundEdit() {
     enableReinitialize: true,
     validate,
     onSubmit: async (values) => {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("location", values.location);
-      formData.append("price", String(values.price));
-      for (let i = 0; i < values.images.length; i++) {
-        formData.append("images", values.images[i]);
-      }
-      formData.append("longitude", String(marker.longitude));
-      formData.append("latitude", String(marker.latitude));
-      formData.append("description", values.description);
-      for (let i = 0; i < values.deleteImages.length; i++) {
-        formData.append("deleteImages", values.deleteImages[i]);
-      }
+      try {
+        if (disableButton === true) {
+          if (showToast)
+            showToast("Your request is being processed...", "orange");
+          return;
+        }
+        setDisableButton(true)
+        const formData = new FormData();
+        formData.append("title", values.title);
+        formData.append("location", values.location);
+        formData.append("price", String(values.price));
+        for (let i = 0; i < values.images.length; i++) {
+          formData.append("images", values.images[i]);
+        }
+        formData.append("longitude", String(marker.longitude));
+        formData.append("latitude", String(marker.latitude));
+        formData.append("description", values.description);
+        for (let i = 0; i < values.deleteImages.length; i++) {
+          formData.append("deleteImages", values.deleteImages[i]);
+        }
 
-      for (const pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
-      }
-      const response = await axios.post(
-        `/api/campgrounds/${id}/edit`,
-        formData
-      );
+        for (const pair of formData.entries()) {
+          console.log(pair[0], pair[1]);
+        }
+        const response = await axios.post(
+          `/api/campgrounds/${id}/edit`,
+          formData
+        );
 
-      if (response.status === 200) {
-        if (showToast) showToast("Campground edited sucessfully", "green");
-        navigate(`/campground/${id}`);
+        if (response.status === 200) {
+          if (showToast) showToast("Campground edited sucessfully", "green");
+          navigate(`/campground/${id}`);
+        }
+      } catch (e) {
+        if (showToast) showToast("Something went wrong...", "red");
+        setDisableButton(true)
       }
     },
   });
@@ -237,16 +250,33 @@ export default function CampgroundEdit() {
                         ) : null}
 
                         <div className="mb-3 mt-3">
-                          <label
-                            className={`form-label fw-medium fs-3 ${styles.formDescriptionHeader}`}
-                            htmlFor="description"
-                          >
-                            Description
-                          </label>
+                          <div className="d-flex justify-content-between">
+                            <label
+                              className={`form-label fw-medium fs-3 ${styles.formDescriptionHeader}`}
+                              htmlFor="description"
+                            >
+                              Description
+                            </label>
+                            <p
+                              className="align-self-center m-0"
+                              style={{
+                                color:
+                                  formik.values.description.length === 0
+                                    ? "black"
+                                    : formik.values.description.length > 30 &&
+                                      formik.values.description.length <= 1500
+                                    ? "green"
+                                    : "red",
+                              }}
+                            >
+                              {formik.values.description.length}/1500
+                            </p>
+                          </div>
                           <textarea
                             className={`form-control ${styles.textarea}`}
                             id="description"
                             name="description"
+                            rows={4}
                             placeholder={campground.description}
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
@@ -290,7 +320,7 @@ export default function CampgroundEdit() {
                           ) : null}
                         </div>
                         <div className="container justify-content-center p-0">
-                          <div className="row ">
+                          <div className="row " style={{overflowY: "auto", maxHeight: "70vh"}}>
                             {campground.images.map((image) => (
                               <>
                                 <div className="col-lg-6 col-12">

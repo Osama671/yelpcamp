@@ -29,8 +29,10 @@ const validate = (values: IFormikValues) => {
   const errors = {} as Partial<IFormikValues>;
   if (!values.review) {
     errors.review = "Required";
-  } else if (values.review.length <= 10) {
-    errors.review = "Must be greater than 10 characters";
+  } else if (values.review.length <= 3) {
+    errors.review = "Must be greater than 3 characters";
+  } else if (values.review.length > 1000) {
+    errors.review = "Review too long!";
   }
   return errors;
 };
@@ -157,14 +159,21 @@ export default function CampgroundDetails() {
   const formik = useFormik({
     initialValues: {
       review: "",
-      rating: 1,
+      rating: 5,
     },
     validate,
     onSubmit: async (values) => {
       try {
-        await axios.post(`/api/campgrounds/${id}/review`, values);
-        if (showToast) showToast("Review Submitted!", "green");
-        getCampground();
+        const response = await axios.post(
+          `/api/campgrounds/${id}/review`,
+          values
+        );
+        if (response.status === 200) {
+          if (showToast) showToast("Review Submitted!", "green");
+          formik.values.review = ""
+          formik.values.rating = 5
+          getCampground();
+        }
       } catch (e) {
         if (e instanceof ExpressError) {
           if (showToast) showToast("Error submitting review", "red");
@@ -397,15 +406,35 @@ export default function CampgroundDetails() {
                         </label>
                       </fieldset>
                     </div>
-                    <div><h3 className={`mt-0 ${styles.ratingHeader}`}>Rating: {formik.values.rating} stars </h3></div>
+                    <div>
+                      <h3 className={`mt-0 ${styles.ratingHeader}`}>
+                        Rating: {formik.values.rating} stars{" "}
+                      </h3>
+                    </div>
 
                     <div className="mb-3">
-                      <label
-                        className={`form-label fs-4 ${styles.reviewHeader}`}
-                        htmlFor="review"
-                      >
-                        Review
-                      </label>
+                      <div className="d-flex justify-content-between">
+                        <label
+                          className={`form-label fs-4 ${styles.reviewHeader}`}
+                          htmlFor="review"
+                        >
+                          Review
+                        </label>
+                        <p
+                          className="align-self-center m-0"
+                          style={{
+                            color:
+                              formik.values.review.length === 0
+                                ? "black"
+                                : formik.values.review.length > 3 &&
+                                  formik.values.review.length <= 1000
+                                ? "green"
+                                : "red",
+                          }}
+                        >
+                          {formik.values.review.length}/1000
+                        </p>
+                      </div>
                       <textarea
                         className={`form-control ${styles.reviewTextarea} `}
                         rows={5}

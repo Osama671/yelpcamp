@@ -24,7 +24,7 @@ const validateCampground = (req: Request, _: Response, next: NextFunction) => {
 
 const validateReview = (req: Request, _: Response, next: NextFunction) => {
   const reviewSchema = Joi.object({
-    review: Joi.string().required(),
+    review: Joi.string().required().min(4).max(1000),
     rating: Joi.number().required().min(1).max(5),
   }).required();
   const { error } = reviewSchema.validate(req.body);
