@@ -10,7 +10,6 @@ import { validateEditAndCreateCampground } from "../repositories/schemas/schema.
 import express from "express";
 import multer from "multer";
 
-// const upload = multer({ storage: cloudinary.storage });
 const storage = multer.memoryStorage();
 const upload = multer({storage})
 

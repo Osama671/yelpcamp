@@ -320,7 +320,7 @@ export default function CampgroundEdit() {
                           ) : null}
                         </div>
                         <div className="container justify-content-center p-0">
-                          <div className="row " style={{overflowY: "auto", maxHeight: "70vh"}}>
+                          <div className="row " style={{overflowY: "auto", maxHeight: "100vh"}}>
                             {campground.images.map((image) => (
                               <>
                                 <div className="col-lg-6 col-12">

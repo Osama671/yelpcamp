@@ -10,7 +10,7 @@ import { clearCache } from "../controllers/campgrounds.ts";
 const seedAmount = 50;
 
 interface IImages {
-  originalname: string;
+  filename: string;
   url: string;
 }
 
@@ -19,7 +19,7 @@ const opts = { toJSON: { virtuals: true } };
 const campgroundSchema = new Schema(
   {
     title: String,
-    images: [{ url: String, originalname: String }],
+    images: [{ url: String, filename: String }],
     geometry: {
       type: {
         type: String,
@@ -168,7 +168,7 @@ async function createCampground(
     });
 
     await newCampground.save();
-    return newCampground
+    return newCampground;
   } catch (e) {
     throw new ExpressError(
       `Error in campgrounds repo with the error: ${e}`,
@@ -209,19 +209,20 @@ async function editCampground(
 
     campground.images = [...campground.images, ...images];
     await campground.save();
+    console.log("AYA:", deleteImages);
     if (deleteImages) {
       if (deleteImages.length !== 0) {
-        deleteImages.map(async (filename) => {
+        deleteImages.map(async (imageurl) => {
           //If placeholdeer image (no filename in cloud), pull img from db based on url
           //filename being passed will either be url (if placeholder) or cloud filename (if uploaded by user)
-          if (filename.startsWith("http")) {
+          if (imageurl.startsWith("http")) {
             await Campground.updateOne(
               { _id: campgroundId },
-              { $pull: { images: { url: { $in: filename } } } }
+              { $pull: { images: { url: { $in: imageurl } } } }
             );
             return;
           }
-          await cloudinary.cloudinary.uploader.destroy(filename);
+          await cloudinary.cloudinary.uploader.destroy(imageurl);
         });
         await Campground.updateOne(
           { _id: campgroundId },

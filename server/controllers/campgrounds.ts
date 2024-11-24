@@ -96,7 +96,7 @@ export const editCampground = async (req: Request, res: Response) => {
         const cldRes = await cloudinary.handleUpload(dataURI);
         return {
           url: cldRes.url,
-          originalname: file.originalname,
+          filename: cldRes.public_id,
         };
       })
     );
@@ -153,7 +153,7 @@ export const createCampground = async (req: Request, res: Response) => {
         const cldRes = await cloudinary.handleUpload(dataURI);
         return {
           url: cldRes.url,
-          originalname: file.originalname,
+          filename: cldRes.public_id,
         };
       })
     );
