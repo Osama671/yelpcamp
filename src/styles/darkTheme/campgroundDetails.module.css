@@ -144,6 +144,11 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.ratingHeader{
-  color: rgba(255,255,255,0.80)
+.ratingHeader {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.loadMoreText {
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
 }

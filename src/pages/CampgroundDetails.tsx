@@ -21,6 +21,9 @@ import Loader from "../components/Loader.tsx";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
+const reviewAmount = 1;
+let isLoadMoreDisabled = false;
+
 interface IFormikValues {
   review: string;
 }
@@ -53,6 +56,8 @@ export default function CampgroundDetails() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [reviewDisabled, setReviewDisabled] = useState(false);
+  // Default amount of reviews displayed and loaded at a time
+  const [displayedReviews, setDisplayedReviews] = useState(reviewAmount);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -492,38 +497,51 @@ export default function CampgroundDetails() {
                   )}
 
                 {Object.keys(campground).length === 0 ||
-                  campground.reviews.map((review) => (
-                    <div
-                      className={`mb-3 card ${styles.userReview}`}
-                      key={review._id}
-                    >
-                      <div className={`card-body ${styles.userReviewTitle}`}>
-                        <h5>Rating: {review.rating}</h5>
-                        <h6
-                          className={`card-subtitle mb-2 text-muted ${styles.userReviewTitle}`}
-                        >
-                          By: {review.author.username}{" "}
-                        </h6>
-                        <p
-                          className="starability-result"
-                          data-rating={review.rating}
-                        >
-                          Rated: 3
-                        </p>
-                        <pre className={` ${styles.userReviewContent}`}>
-                          {review.review}
-                        </pre>
-                        {user !== review.author._id ? null : (
-                          <button
-                            onClick={() => handleDeleteReview(review._id)}
-                            className={`btn btn-sm btn-danger ${styles.reviewDeleteButton}`}
+                  campground.reviews
+                    .filter((_, index) => index < displayedReviews)
+                    .map((review) => (
+                      <div
+                        className={`mb-3 card ${styles.userReview}`}
+                        key={review._id}
+                      >
+                        <div className={`card-body ${styles.userReviewTitle}`}>
+                          <h5>Rating: {review.rating}</h5>
+                          <h6
+                            className={`card-subtitle mb-2 text-muted ${styles.userReviewTitle}`}
                           >
-                            Delete
-                          </button>
-                        )}
+                            By: {review.author.username}{" "}
+                          </h6>
+                          <p
+                            className="starability-result"
+                            data-rating={review.rating}
+                          >
+                            Rated: 3
+                          </p>
+                          <pre className={` ${styles.userReviewContent}`}>
+                            {review.review}
+                          </pre>
+                          {user !== review.author._id ? null : (
+                            <button
+                              onClick={() => handleDeleteReview(review._id)}
+                              className={`btn btn-sm btn-danger ${styles.reviewDeleteButton}`}
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                {campground.reviews.length <= displayedReviews || (
+                  <p
+                    className={`text-center ${styles.loadMoreText}`}
+                    onClick={() => {
+                      isLoadMoreDisabled = true;
+                      setDisplayedReviews(displayedReviews + reviewAmount);
+                    }}
+                  >
+                    Load more...
+                  </p>
+                )}
               </div>
             </div>
           </main>

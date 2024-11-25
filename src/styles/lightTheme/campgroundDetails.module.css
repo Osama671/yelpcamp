@@ -130,3 +130,8 @@
 .ratingHeader{
   color: black
 }
+
+.loadMoreText {
+  color: black;
+  cursor: pointer;
+}
