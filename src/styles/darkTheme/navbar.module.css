@@ -24,7 +24,7 @@
   }
   
   .navbar {
-    width: 100vw;
+    width: 100%;
     position: sticky;
     color: white;
     align-content: center;

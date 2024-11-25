@@ -102,7 +102,7 @@ export default function Navbar({
                 <ul className={`navbar-nav ${styles.navbarNav}`}>
                   <li className={`nav-item ${styles.navItem}`}>
                     <Link
-                      to=""
+                      to="#"
                       className={`${styles.navLink} active `}
                       aria-current="page"
                       onClick={() => changeTheme()}

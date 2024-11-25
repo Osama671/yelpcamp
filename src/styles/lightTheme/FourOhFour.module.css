@@ -1,0 +1,70 @@
+.FourOhFourWrapper {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.FourOhFourWrapper::before {
+  content: "";
+  position: absolute;
+  background-attachment: fixed;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("../../assets/images/lightmode/404.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(70%);
+  z-index: -9999;
+}
+
+.text {
+  color: white;
+}
+
+.homepageButton,
+.homepageButton:hover {
+  color: black;
+  background-color: green;
+}
+
+.campgroundsButton, .campgroundsButton:hover {
+    color: black;
+    background-color: #f5f5dcb3;
+}
+
+.footer {
+  background-color: transparent !important;
+  margin-top: 0px !important;
+}
+.navbar {
+  width: 100%;
+  background-color: transparent !important;
+  position: sticky;
+  color: white;
+  align-content: center;
+  padding-right: 1rem;
+}
+
+.navLink {
+  padding: 0.25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  margin-left: 1rem;
+  border-bottom: 0.25rem solid transparent;
+}
+
+.navLink:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+  border-bottom: 0.2rem;
+}
+
+.navLink:active {
+  color: white;
+  border-bottom-color: white;
+}
+
+.navItem {
+  align-self: center;
+}

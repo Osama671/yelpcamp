@@ -52,6 +52,8 @@ export default function CampgroundDetails() {
   const mapRef = useRef<mapboxgl.Map>();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const [reviewDisabled, setReviewDisabled] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -113,16 +115,23 @@ export default function CampgroundDetails() {
 
   const handleDeleteReview = async (reviewid: string) => {
     try {
+      if (reviewDisabled === true) {
+        if (showToast) showToast("Request is being processed...", "orange");
+        return;
+      }
+      setReviewDisabled(true);
       const response = await axios.delete(
         `/api/campgrounds/${id}/review/${reviewid}`
       );
       if (response.status === 200) {
         if (showToast) showToast("Review deleted sucessfully", "green");
+        setReviewDisabled(false);
         getCampground();
       }
     } catch (e) {
       if (e instanceof ExpressError) {
         if (showToast) showToast("Error deleting reviewing", "red");
+        setReviewDisabled(false);
         console.error(e);
       }
     }
@@ -164,20 +173,27 @@ export default function CampgroundDetails() {
     validate,
     onSubmit: async (values) => {
       try {
+        if (reviewDisabled === true) {
+          if (showToast) showToast("Request is being processed...", "orange");
+          return;
+        }
+        setReviewDisabled(true);
         const response = await axios.post(
           `/api/campgrounds/${id}/review`,
           values
         );
         if (response.status === 200) {
           if (showToast) showToast("Review Submitted!", "green");
-          formik.values.review = ""
-          formik.values.rating = 5
+          formik.values.review = "";
+          formik.values.rating = 5;
+          setReviewDisabled(false);
           getCampground();
         }
       } catch (e) {
         if (e instanceof ExpressError) {
           if (showToast) showToast("Error submitting review", "red");
           console.error(e);
+          setReviewDisabled(false);
         }
       }
     },
@@ -195,7 +211,7 @@ export default function CampgroundDetails() {
 
   return (
     <>
-      <div className={`${styles.campgroundsWrapper}`}>
+      <div className={`${styles.campgroundsWrapper} `}>
         <Navbar />
         {!campground ? (
           <Loader loadingMessage="Loading Campground Details..." />
@@ -296,12 +312,12 @@ export default function CampgroundDetails() {
                   ) : (
                     <>
                       <div
-                        className={`row col-12 text-center ${styles.bookingHeader}`}
+                        className={`row col-12 m-0 text-center ${styles.bookingHeader}`}
                       >
                         <h2>Book Campground?</h2>
                       </div>
                       <div className="row">
-                        <div className="col-6 d-flex flex-column align-items-center">
+                        <div className="col-sm-6 col-12 d-flex flex-column align-items-center">
                           <h4 className={`p-0 mb-2 ${styles.bookingStartDate}`}>
                             Start date:
                           </h4>
@@ -313,7 +329,7 @@ export default function CampgroundDetails() {
                             className={`${styles.datePicker}`}
                           />
                         </div>
-                        <div className="col-6 d-flex flex-column align-items-center">
+                        <div className="col-sm-6 col-12 mt-sm-0 mt-5 d-flex flex-column align-items-center">
                           <h4 className={`p-0 mb-2 ${styles.bookingEndDate}`}>
                             End date:
                           </h4>
@@ -338,7 +354,7 @@ export default function CampgroundDetails() {
                   )}
                 </div>
               </div>
-              <div className={`${styles.reviewWrapper} p-3 mt-3`}>
+              <div className={`${styles.reviewWrapper} p-3 mt-3  `}>
                 <h2 className={`${styles.reviewHeader}`}>Reviews:</h2>
 
                 {!user || user === campground.author._id || (

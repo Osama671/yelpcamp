@@ -16,6 +16,7 @@ import lightRedirectBoxStyle from "./lightTheme/profileComponents/redirectBox.mo
 import lightFutureBookingStyle from "./lightTheme/profileComponents/checkbookings/futurebookings.module.css"
 import lightPastBookingStyle from "./lightTheme/profileComponents/checkbookings/pastbookings.module.css"
 import lightLoaderStyle from "./lightTheme/loader.module.css"
+import lightFourOhFourStyle from "./lightTheme/FourOhFour.module.css"
 
 import darkCampgroundsStyle from "./darkTheme/campgrounds.module.css";
 import darkNewCampgroundStyle from "./darkTheme/newCampground.module.css";
@@ -35,6 +36,7 @@ import darkRedirectBoxStyle from "./darkTheme/profileComponents/redirectBox.modu
 import darkFutureBookingStyle from "./darkTheme/profileComponents/checkbookings/futurebookings.module.css"
 import darkPastBookingStyle from "./darkTheme/profileComponents/checkbookings/pastbookings.module.css"
 import darkLoaderStyle from "./darkTheme/loader.module.css"
+import darkFourOhFourStyle from "./darkTheme/FourOhFour.module.css"
 
 const themes = {
   light: {
@@ -56,6 +58,7 @@ const themes = {
     futureBooking: lightFutureBookingStyle,
     pastBooking: lightPastBookingStyle,
     loader: lightLoaderStyle,
+    fourOhFour: lightFourOhFourStyle,
   },
   dark: {
     campgrounds: darkCampgroundsStyle,
@@ -76,6 +79,7 @@ const themes = {
     futureBooking: darkFutureBookingStyle,
     pastBooking: darkPastBookingStyle,
     loader: darkLoaderStyle,
+    fourOhFour: darkFourOhFourStyle,
   },
 };
 
