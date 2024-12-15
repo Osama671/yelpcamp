@@ -115,24 +115,35 @@ async function findAllCampgrounds(
   productsPerPage: number = 0,
   searchQuery: string = ""
 ) {
-  const query: {
-    $or?: Array<{ title?: { $regex: RegExp }; location?: { $regex: RegExp } }>;
-  } = {};
+  try {
+    const query: {
+      $or?: Array<{
+        title?: { $regex: RegExp };
+        location?: { $regex: RegExp };
+      }>;
+    } = {};
 
-  if (searchQuery) {
-    query.$or = [
-      { title: { $regex: new RegExp(searchQuery, "i") } },
-      { location: { $regex: new RegExp(searchQuery, "i") } },
-    ];
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { location: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+    const campgrounds = await Campground.find(query)
+      .populate("author")
+      .skip((page - 1) * productsPerPage)
+      .limit(productsPerPage);
+
+    const campgroundsCount = await Campground.find(query).countDocuments();
+    const queryData = { campgrounds: campgrounds, count: campgroundsCount };
+    return queryData;
+  } catch (e) {
+    console.error(e);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
-  const campgrounds = await Campground.find(query)
-    .populate("author")
-    .skip((page - 1) * productsPerPage)
-    .limit(productsPerPage);
-
-  const campgroundsCount = await Campground.find(query).countDocuments();
-  const queryData = { campgrounds: campgrounds, count: campgroundsCount };
-  return queryData;
 }
 
 async function findCampgroundById(id: string) {
@@ -143,7 +154,11 @@ async function findCampgroundById(id: string) {
       .populate("bookings");
     return campground;
   } catch (e) {
-    throw new ExpressError(`Database Error: ${e}`, 404);
+    console.error(e);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
 }
 
@@ -209,7 +224,6 @@ async function editCampground(
 
     campground.images = [...campground.images, ...images];
     await campground.save();
-    console.log("AYA:", deleteImages);
     if (deleteImages) {
       if (deleteImages.length !== 0) {
         deleteImages.map(async (imageurl) => {
@@ -232,7 +246,11 @@ async function editCampground(
     }
     return;
   } catch (e) {
-    throw new ExpressError(`Problem occured in DB : ${e}`, 500);
+    console.error(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
 }
 
@@ -241,20 +259,28 @@ export async function deleteReviewInCampground(
   reviewid: string,
   userid: string
 ) {
-  const review = await findReviewById(reviewid, userid);
+  try {
+    const review = await findReviewById(reviewid, userid);
 
-  if (!review.author.equals(userid)) {
-    throw new ExpressError("You are not the author of this review", 403);
+    if (!review.author.equals(userid)) {
+      throw new ExpressError("You are not the author of this review", 403);
+    }
+    await Campground.findOneAndUpdate(
+      { _id: campgroundid },
+      { $pull: { reviews: reviewid } }
+    );
+  } catch (e) {
+    console.error(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
-  await Campground.findOneAndUpdate(
-    { _id: campgroundid },
-    { $pull: { reviews: reviewid } }
-  );
 }
 
 async function deleteCampgroundById(id: string, userid: string) {
   const campground = await findCampgroundById(id);
-  if (!campground) throw new ExpressError("Campground not found", 500);
+  if (!campground) throw new ExpressError("Campground not found", 404);
   if (!campground.author.equals(userid)) {
     throw new ExpressError("You are not the author of this campground", 403);
   }
@@ -266,78 +292,93 @@ async function fetchCampgroundsByUserId(
   page: number = 1,
   productsPerPage: number = 0
 ) {
-  const campgrounds = await Campground.aggregate([
-    {
-      $match: {
-        author: new mongoose.Types.ObjectId(userId),
-      },
-    },
-
-    {
-      $lookup: {
-        from: "reviews",
-        localField: "reviews",
-        foreignField: "_id",
-        as: "reviews",
-      },
-    },
-    {
-      $addFields: {
-        avgReviewRating: {
-          $ifNull: [
-            {
-              $trunc: [
-                {
-                  $avg: {
-                    $map: {
-                      input: "$reviews",
-                      as: "review",
-                      in: "$$review.rating",
-                    },
-                  },
-                },
-                2,
-              ],
-            },
-            "N/A",
-          ],
+  try {
+    const campgrounds = await Campground.aggregate([
+      {
+        $match: {
+          author: new mongoose.Types.ObjectId(userId),
         },
       },
-    },
-    {
-      $lookup: {
-        from: "bookings",
-        localField: "bookings",
-        foreignField: "_id",
-        as: "bookings",
+
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "reviews",
+          foreignField: "_id",
+          as: "reviews",
+        },
       },
-    },
-    {
-      $addFields: {
-        upcomingBookings: {
-          $size: {
-            $filter: {
-              input: "$bookings",
-              as: "booking",
-              cond: {
-                $gte: [
-                  "$$booking.startDate",
-                  new Date(new Date().setHours(0, 0, 0, 0)),
+      {
+        $addFields: {
+          avgReviewRating: {
+            $ifNull: [
+              {
+                $trunc: [
+                  {
+                    $avg: {
+                      $map: {
+                        input: "$reviews",
+                        as: "review",
+                        in: "$$review.rating",
+                      },
+                    },
+                  },
+                  2,
                 ],
+              },
+              "N/A",
+            ],
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "bookings",
+          localField: "bookings",
+          foreignField: "_id",
+          as: "bookings",
+        },
+      },
+      {
+        $addFields: {
+          upcomingBookings: {
+            $size: {
+              $filter: {
+                input: "$bookings",
+                as: "booking",
+                cond: {
+                  $gte: [
+                    "$$booking.startDate",
+                    new Date(new Date().setHours(0, 0, 0, 0)),
+                  ],
+                },
               },
             },
           },
         },
       },
-    },
-  ])
-    .skip((page - 1) * productsPerPage)
-    .limit(productsPerPage);
-  const campgroundsCount = await Campground.find({
-    author: userId,
-  }).countDocuments();
-  const queryData = { campgrounds: campgrounds, count: campgroundsCount };
-  return queryData;
+    ])
+      .skip((page - 1) * productsPerPage)
+      .limit(productsPerPage);
+    const campgroundsCount = await Campground.find({
+      author: userId,
+    }).countDocuments();
+    const queryData = { campgrounds: campgrounds, count: campgroundsCount };
+    return queryData;
+  } catch (e) {
+    console.error(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
+  }
+}
+
+async function fetchSearchDropdownResults(searchQuery: string) {
+  const searchResults = Campground.find({
+    title: { $regex: new RegExp(searchQuery, "i") },
+  });
+  return searchResults
 }
 
 const campgroundModel = {
@@ -348,6 +389,7 @@ const campgroundModel = {
   deleteCampgroundById,
   deleteReviewInCampground,
   fetchCampgroundsByUserId,
+  fetchSearchDropdownResults,
 };
 
 export default campgroundModel;

@@ -21,8 +21,7 @@ import Loader from "../components/Loader.tsx";
 
 const mapboxEnv = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const reviewAmount = 1;
-let isLoadMoreDisabled = false;
+const reviewAmount = 3;
 
 interface IFormikValues {
   review: string;
@@ -62,9 +61,9 @@ export default function CampgroundDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  let isLoadMoreDisabled = false;
+
   const submitBooking = async () => {
-    console.log("Start dateF: ", moment(startDate).format("L"));
-    console.log("End DateF: ", moment(endDate).format("L"));
     try {
       const response = await axios.post(`/api/booking/${id}`, {
         startDate: moment(startDate).format("L"),
@@ -535,6 +534,9 @@ export default function CampgroundDetails() {
                   <p
                     className={`text-center ${styles.loadMoreText}`}
                     onClick={() => {
+                      if (isLoadMoreDisabled === true) {
+                        return;
+                      }
                       isLoadMoreDisabled = true;
                       setDisplayedReviews(displayedReviews + reviewAmount);
                     }}

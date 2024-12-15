@@ -13,8 +13,6 @@ export const createReview = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({ message: "User is not logged in." });
     }
-    console.log("reqL", req.user);
-    console.log("camp:", campground.author._id);
     if (req.user._id.toString() === campground.author._id.toString()) {
       return res
         .status(403)

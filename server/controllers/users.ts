@@ -63,8 +63,11 @@ export const fetchUserData = async (req: Request, res: Response) => {
 
 export const resetUserPassword = async (req: Request, res: Response) => {
   try {
-    const { userId, oldPassword, newPassword } = req.body;
-    const user = await fetchUserDataFromDB(userId);
+    const { oldPassword, newPassword } = req.body;
+    if(!req.user){
+      throw new ExpressError("User not found", 404)
+    }
+    const user = await fetchUserDataFromDB(req.user._id.toString());
     await user.changePassword(oldPassword, newPassword);
     res.status(200).json({ message: "Password changed sucessfully" });
   } catch (e) {

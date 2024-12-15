@@ -19,11 +19,19 @@ const reviewSchema = new Schema({
 const Review = mongoose.model("Review", reviewSchema);
 
 export async function findReviewById(id: string, userid?: string) {
-  const review = await Review.findById(id);
-  if (!review.author.equals(userid)) {
-    throw new ExpressError("You are not the author of this review", 403);
+  try {
+    const review = await Review.findById(id);
+    if (!review.author.equals(userid)) {
+      throw new ExpressError("You are not the author of this review", 403);
+    }
+    return review;
+  } catch (e) {
+    console.error(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
-  return review;
 }
 
 export async function modelFetchReviewsByUserId(
@@ -31,22 +39,23 @@ export async function modelFetchReviewsByUserId(
   page: number = 1,
   productsPerPage: number = 0
 ) {
-  const reviews = await Review.find({ author: userId })
-    .populate({ path: "campground", select: "_id images title" })
-    .skip((page - 1) * productsPerPage)
-    .limit(productsPerPage);
-  const reviewsCount = await Review.find({
-    author: userId,
-  }).countDocuments();
-  const queryData = { reviews: reviews, count: reviewsCount };
-  return queryData;
+  try {
+    const reviews = await Review.find({ author: userId })
+      .populate({ path: "campground", select: "_id images title" })
+      .skip((page - 1) * productsPerPage)
+      .limit(productsPerPage);
+    const reviewsCount = await Review.find({
+      author: userId,
+    }).countDocuments();
+    const queryData = { reviews: reviews, count: reviewsCount };
+    return queryData;
+  } catch (e) {
+    console.log(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
+  }
 }
-// async function createReview(review, rating) {
-//   const newReview = new Review({
-//     review: review,
-//     rating: rating,
-//   });
-//   return newReview
-// }
 
 export default Review;

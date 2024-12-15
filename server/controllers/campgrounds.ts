@@ -27,7 +27,7 @@ export const showAllCampgrounds = async (req: Request, res: Response) => {
         if (cachceSuccess === true) return;
       }
     }
-    console.log("Fetching campgrounds...");
+    console.log("Fetching campgrounds from db...");
     const campgrounds = await model.findAllCampgrounds(
       page,
       productsPerPage,
@@ -209,6 +209,18 @@ export const fetchCampgroundsByUserId = async (req: Request, res: Response) => {
     ExpressErrorGeneric(res, e);
   }
 };
+
+export async function fetchSearchDropdownResults(req: Request, res: Response) {
+  try {
+    const searchQuery = String(req.query.searchQuery);
+    console.log(searchQuery)
+    const searchResults = await model.fetchSearchDropdownResults(searchQuery);
+    res.status(200).json(searchResults)
+  } catch (e) {
+    console.error(`Error in server: `, e);
+    ExpressErrorGeneric(res, e);
+  }
+}
 
 async function cacheAllCampgrounds(res: Response) {
   try {

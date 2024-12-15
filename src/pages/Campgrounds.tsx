@@ -1,6 +1,6 @@
 import "normalize.css";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar.tsx";
 import Footer from "../components/Footer.tsx";
@@ -29,18 +29,57 @@ export default function Campgrounds() {
     null
   );
   const [pageCount, setPageCount] = useState(1);
+
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [dropdownSearchResults, setDropdownSearchResults] = useState<
+    Campground[] | []
+  >([]);
+
   const productsPerPage = 16;
 
   const [, setSearchParams] = useSearchParams();
 
-  const searchRef = useRef("");
+  const searchRef = useRef<string>("");
+
+  const removeSearchDropdown = () => {
+    setShowSearchResults(false);
+  };
+
+  const handleBodyClick = () => {
+    removeSearchDropdown();
+    document.body.removeEventListener("click", handleBodyClick);
+  };
 
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
+  const debounce = (fetchResults: () => void, delay: number) => {
+    let timer: ReturnType<typeof setTimeout>;
+    return () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fetchResults(), delay);
+    };
+  };
+
+  const debouncedLog = debounce(
+    () => fetchSearchDropdownResults(searchRef.current),
+    400
+  );
+
+  const onSearchKeyStroke = (e: React.ChangeEvent<HTMLFormElement>) => {
+    searchRef.current = e.target.value;
+    if (searchRef.current.length > 2) {
+      setShowSearchResults(true);
+      debouncedLog();
+    } else {
+      setShowSearchResults(false);
+    }
+  };
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPageCount(1);
     fetchCampgrounds();
+    setShowSearchResults(false);
   };
 
   const fetchCampgrounds = useCallback(async () => {
@@ -73,6 +112,18 @@ export default function Campgrounds() {
 
   const onPageChange = (num: number) => {
     setPageCount(num);
+  };
+
+  const fetchSearchDropdownResults = async (searchQuery: string) => {
+    try {
+      const response = await axios.get("/api/campgrounds/dropdown", {
+        params: { searchQuery },
+      });
+      setDropdownSearchResults(response.data);
+      console.log("Heya:", response.data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
@@ -119,7 +170,11 @@ export default function Campgrounds() {
                     className="shadow-sm"
                     role="search"
                     onSubmit={handleSearch}
-                    onChange={(e) => (searchRef.current = e.target.value)}
+                    onChange={onSearchKeyStroke}
+                    onClick={() =>
+                      searchRef.current.length > 2 && setShowSearchResults(true)
+                    }
+                    style={{ position: "relative" }}
                   >
                     <div className="d-flex">
                       <input
@@ -130,6 +185,51 @@ export default function Campgrounds() {
                         name="search"
                       />
                     </div>
+                    {showSearchResults && (
+                      <>
+                        {document.body.addEventListener(
+                          "click",
+                          handleBodyClick
+                        )}
+                        <div
+                          style={{
+                            position: "absolute",
+                            width: "100%",
+                            backgroundColor: "white",
+                            textAlign: "left",
+                            overflowY: "auto",
+                            maxHeight: "30vh",
+                            zIndex: "9999",
+                          }}
+                        >
+                          {dropdownSearchResults.length <= 0 ? (
+                            <h4 style={{ textAlign: "center" }}>
+                              No Campgrounds found :(
+                            </h4>
+                          ) : (
+                            <>
+                              {dropdownSearchResults.map(
+                                (result: Campground) => (
+                                  <>
+                                    <Link to={`/campground/${result._id}`}>
+                                      <div
+                                        style={{
+                                          paddingLeft: "20px",
+                                          padding: "1em",
+                                        }}
+                                      >
+                                        {result.title}
+                                      </div>
+                                    </Link>
+                                    <hr style={{ margin: "0px" }} />
+                                  </>
+                                )
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </form>
                 </div>
                 <div
@@ -148,7 +248,7 @@ export default function Campgrounds() {
                         />
                       ))
                     ) : (
-                      <p>No campgrounds available :(</p>
+                      <h3>No Campgrounds found :(</h3>
                     )}
                   </div>
                 </div>

@@ -5,13 +5,14 @@ import {
   showCampgroundDetails,
   createCampground,
   deleteCampground,
+  fetchSearchDropdownResults,
 } from "../controllers/campgrounds.ts";
 import { validateEditAndCreateCampground } from "../repositories/schemas/schema.ts";
 import express from "express";
 import multer from "multer";
 
 const storage = multer.memoryStorage();
-const upload = multer({storage})
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -23,6 +24,8 @@ router.post(
   validateEditAndCreateCampground,
   createCampground
 );
+
+router.get("/dropdown", fetchSearchDropdownResults);
 
 router.get("/:id", showCampgroundDetails);
 

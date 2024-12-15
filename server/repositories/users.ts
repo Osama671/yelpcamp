@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
+import ExpressError from "../../src/util/ExpressError.ts";
 
 const Schema = mongoose.Schema;
 
@@ -21,6 +22,10 @@ export async function fetchUserDataFromDB(userId: string) {
     return user;
   } catch (e) {
     console.log(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
 }
 
@@ -30,17 +35,25 @@ export async function checkIfEmailExists(email: string) {
     return fetchedUser;
   } catch (e) {
     console.log(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
 }
 
 export async function checkIfUsernameExists(username: string) {
   try {
     const fetchedUser = await userModel.findOne({
-      username: { $regex: `^${username}$`, $options: 'i' },
+      username: { $regex: `^${username}$`, $options: "i" },
     });
     return fetchedUser;
   } catch (e) {
     console.log(`Error in DB: ${e}`);
+    throw new ExpressError(
+      `Error in campgrounds repo with the error: ${e}`,
+      500
+    );
   }
 }
 

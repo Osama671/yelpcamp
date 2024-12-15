@@ -145,8 +145,6 @@ export default function Profile() {
         oldPassword: formData.get("oldPassword"),
         newPassword: formData.get("newPassword"),
       });
-      console.log("response", response);
-      console.log("SHOW TOAST");
 
       if (showToast) showToast("Passwowrd reset sucessfully", "green");
     } catch (e) {

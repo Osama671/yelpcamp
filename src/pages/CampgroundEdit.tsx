@@ -69,6 +69,8 @@ export default function CampgroundEdit() {
   const { user } = useUser();
   const [campground, setCampground] = useState<Campground | null>(null);
 
+  const [mapLoading, setMapLoading] = useState(true);
+
   const [marker, setMarker] = useState({
     latitude: 37.7749,
     longitude: -122.4194,
@@ -82,6 +84,9 @@ export default function CampgroundEdit() {
   const getCampgroundInfo = useCallback(async () => {
     const info = await axios.get(`/api/campgrounds/${id}/edit`);
     setCampground(info.data);
+    const [longitude, latitude] = info.data.geometry.coordinates;
+    setMarker(() => ({ latitude: latitude, longitude: longitude }));
+    setMapLoading(false);
   }, [id]);
 
   useEffect(() => {
@@ -106,7 +111,7 @@ export default function CampgroundEdit() {
             showToast("Your request is being processed...", "orange");
           return;
         }
-        setDisableButton(true)
+        setDisableButton(true);
         const formData = new FormData();
         formData.append("title", values.title);
         formData.append("location", values.location);
@@ -121,9 +126,9 @@ export default function CampgroundEdit() {
           formData.append("deleteImages", values.deleteImages[i]);
         }
 
-        for (const pair of formData.entries()) {
-          console.log(pair[0], pair[1]);
-        }
+        // for (const pair of formData.entries()) {
+        //   console.log(pair[0], pair[1]);
+        // }
         const response = await axios.post(
           `/api/campgrounds/${id}/edit`,
           formData
@@ -135,7 +140,7 @@ export default function CampgroundEdit() {
         }
       } catch (e) {
         if (showToast) showToast("Something went wrong...", "red");
-        setDisableButton(true)
+        setDisableButton(true);
       }
     },
   });
@@ -213,11 +218,13 @@ export default function CampgroundEdit() {
                             </div>
                           ) : null}
                         </div>
-                        <LocationPicker
-                          marker={marker}
-                          onMapClick={setMarker}
-                          styles={styles}
-                        />
+                        {!mapLoading && (
+                          <LocationPicker
+                            marker={marker}
+                            onMapClick={setMarker}
+                            styles={styles}
+                          />
+                        )}
                         <label
                           className={`form-label mt-3 fw-medium fs-3 ${styles.formPriceHeader}`}
                           htmlFor="price"
@@ -320,7 +327,10 @@ export default function CampgroundEdit() {
                           ) : null}
                         </div>
                         <div className="container justify-content-center p-0">
-                          <div className="row " style={{overflowY: "auto", maxHeight: "100vh"}}>
+                          <div
+                            className="row "
+                            style={{ overflowY: "auto", maxHeight: "100vh" }}
+                          >
                             {campground.images.map((image) => (
                               <>
                                 <div className="col-lg-6 col-12">

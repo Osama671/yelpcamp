@@ -41,7 +41,6 @@ export default function Login({ LoginState, setLoginState, switchForms }) {
     onSubmit: async (values) => {
       try {
         const response = await axios.post("/api/login", values);
-        console.log(response);
         if (response.status === 200) {
           if (showToast) showToast("Login sucessful", "green");
           getUser();

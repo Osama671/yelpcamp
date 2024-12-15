@@ -27,6 +27,7 @@
 }
 
 .searchBar {
+  color: black !important;
   border: none;
   background-color: rgba(240, 240, 240, 0.6);
   padding: 10px 20px;
