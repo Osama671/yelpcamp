@@ -41,12 +41,16 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response, next: NextFunction) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-  });
-  res.status(200).send("Logged out sucessfully");
+  try {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+    });
+    res.status(200).send("Logged out sucessfully");
+  } catch (e) {
+    ExpressErrorGeneric(res, e);
+  }
 };
 
 export const fetchUserData = async (req: Request, res: Response) => {
@@ -64,8 +68,8 @@ export const fetchUserData = async (req: Request, res: Response) => {
 export const resetUserPassword = async (req: Request, res: Response) => {
   try {
     const { oldPassword, newPassword } = req.body;
-    if(!req.user){
-      throw new ExpressError("User not found", 404)
+    if (!req.user) {
+      throw new ExpressError("User not found", 404);
     }
     const user = await fetchUserDataFromDB(req.user._id.toString());
     await user.changePassword(oldPassword, newPassword);

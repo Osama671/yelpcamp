@@ -270,12 +270,17 @@ export async function deleteReviewInCampground(
 }
 
 async function deleteCampgroundById(id: string, userid: string) {
-  const campground = await findCampgroundById(id);
-  if (!campground) throw new ExpressError("Campground not found", 404);
-  if (!campground.author.equals(userid)) {
-    throw new ExpressError("You are not the author of this campground", 403);
+  try {
+    const campground = await findCampgroundById(id);
+    if (!campground) throw new ExpressError("Campground not found", 404);
+    if (!campground.author.equals(userid)) {
+      throw new ExpressError("You are not the author of this campground", 403);
+    }
+    await Campground.findByIdAndDelete({ _id: id });
+  } catch (e) {
+    console.error(`Error in DB: ${e}`);
+    throw new ExpressError(`Database error`, 500);
   }
-  await Campground.findByIdAndDelete({ _id: id });
 }
 
 async function fetchCampgroundsByUserId(
@@ -366,19 +371,24 @@ async function fetchCampgroundsByUserId(
 }
 
 async function fetchSearchDropdownResults(searchQuery: string) {
-  const query: {
-    $or?: Array<{
-      title?: { $regex: RegExp };
-      location?: { $regex: RegExp };
-    }>;
-  } = {};
+  try {
+    const query: {
+      $or?: Array<{
+        title?: { $regex: RegExp };
+        location?: { $regex: RegExp };
+      }>;
+    } = {};
 
-  query.$or = [
-    { title: { $regex: new RegExp(searchQuery, "i") } },
-    { location: { $regex: new RegExp(searchQuery, "i") } },
-  ];
-  const searchResults = Campground.find(query);
-  return searchResults;
+    query.$or = [
+      { title: { $regex: new RegExp(searchQuery, "i") } },
+      { location: { $regex: new RegExp(searchQuery, "i") } },
+    ];
+    const searchResults = Campground.find(query);
+    return searchResults;
+  } catch (e) {
+    console.error(`Error in DB: ${e}`);
+    throw new ExpressError("Error in DB", 500);
+  }
 }
 
 const campgroundModel = {

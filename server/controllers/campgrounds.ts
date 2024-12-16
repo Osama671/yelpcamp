@@ -73,10 +73,11 @@ export const showCampgroundEdit = async (req: Request, res: Response) => {
 };
 
 export const editCampground = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return res.status(401).json({ message: "User is not logged in." });
-  }
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User is not logged in." });
+    }
+
     const { id: campgroundId } = req.params;
     const { location, description, price, title } = req.body;
     let { deleteImages } = req.body;
@@ -213,9 +214,9 @@ export const fetchCampgroundsByUserId = async (req: Request, res: Response) => {
 export async function fetchSearchDropdownResults(req: Request, res: Response) {
   try {
     const searchQuery = String(req.query.searchQuery);
-    console.log(searchQuery)
+    console.log(searchQuery);
     const searchResults = await model.fetchSearchDropdownResults(searchQuery);
-    res.status(200).json(searchResults)
+    res.status(200).json(searchResults);
   } catch (e) {
     console.error(`Error in server: `, e);
     ExpressErrorGeneric(res, e);

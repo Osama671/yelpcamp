@@ -18,7 +18,6 @@ import User from "./repositories/users.ts";
 import mongoSanitize from "express-mongo-sanitize";
 import { clearCache } from "./controllers/campgrounds.ts";
 import MongoStore from "connect-mongo";
-import path from "path"
 const dbUrl = process.env.DB_URL!;
 
 interface IExpressError extends Error {
@@ -56,7 +55,7 @@ const store = MongoStore.create({
   crypto: { secret: "pleasedontreadthisthankyou" },
 });
 
-app.use(express.static('dist'));
+app.use(express.static("dist"));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

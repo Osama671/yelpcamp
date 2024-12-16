@@ -29,7 +29,6 @@ export const validateBooking = async (
     const newEndDate = Date.parse(endDate);
     const newCurrentDate = Date.parse(currentDate);
 
-
     if (newStartDate > newEndDate)
       throw new ExpressError("Start date can't be ahead of end date", 400);
     else if (newStartDate < newCurrentDate || newEndDate < newCurrentDate)
