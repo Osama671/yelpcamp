@@ -17,6 +17,7 @@ import helmet from "helmet";
 import User from "./repositories/users.ts";
 import mongoSanitize from "express-mongo-sanitize";
 import { clearCache } from "./controllers/campgrounds.ts";
+import path from "path";
 import MongoStore from "connect-mongo";
 const dbUrl = process.env.DB_URL!;
 
@@ -56,6 +57,7 @@ const store = MongoStore.create({
 });
 
 app.use(express.static("dist"));
+
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -74,19 +76,27 @@ const sessionConfig: ISessionConfig = {
 };
 app.use(session(sessionConfig));
 
-app.use(passport.initialize());
-app.use(passport.session());
+const apiRouter = express.Router();
+
 passport.use(new Strategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(mongoSanitize());
+app.use("/api", apiRouter);
 
-app.use("/api/", userRouter);
-app.use("/api/booking", bookingRouter);
-app.use("/api/campgrounds", campgroundRouter);
-app.use("/api/campgrounds/:id/review", reviewRouter);
+apiRouter.use(passport.initialize());
+apiRouter.use(passport.session());
+
+apiRouter.use("/", userRouter);
+apiRouter.use("/booking", bookingRouter);
+apiRouter.use("/campgrounds", campgroundRouter);
+apiRouter.use("/campgrounds/:id/review", reviewRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve("./dist", "index.html"));
+});
 clearCache();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
