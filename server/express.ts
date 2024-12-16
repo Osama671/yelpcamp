@@ -18,6 +18,7 @@ import User from "./repositories/users.ts";
 import mongoSanitize from "express-mongo-sanitize";
 import { clearCache } from "./controllers/campgrounds.ts";
 import path from "path";
+import { fileURLToPath } from "url";
 import MongoStore from "connect-mongo";
 const dbUrl = process.env.DB_URL!;
 
@@ -55,6 +56,9 @@ const store = MongoStore.create({
   touchAfter: 24 * 60 * 60,
   crypto: { secret: "pleasedontreadthisthankyou" },
 });
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 app.use(express.static("dist"));
 
@@ -95,7 +99,7 @@ apiRouter.use("/campgrounds", campgroundRouter);
 apiRouter.use("/campgrounds/:id/review", reviewRouter);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve("./dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../", "dist", "index.html"));
 });
 clearCache();
 
