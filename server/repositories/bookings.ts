@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import campgroundRepo, { Campground } from "./mongoose.ts";
+import campgroundRepo, { Campground } from "./campgrounds.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 
 interface IBooking {

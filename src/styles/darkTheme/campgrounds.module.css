@@ -78,3 +78,41 @@
   border: 0px;
   background-color: #2d3269b3 !important;
 }
+
+.searchDropdown {
+  position: absolute;
+  width: 100%;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 30vh;
+  z-index: 9999;
+  border-radius: 4px;
+  background: linear-gradient(45deg, #2631b2, #010901);
+  scrollbar-color: rgba(30, 8, 204, 0.436) #02020046;
+}
+
+.searchDropdownResult {
+  padding-left: 20px;
+  padding: 1em;
+  color: white;
+  border-bottom: 0px;
+}
+
+.searchDropdownResult:hover {
+  animation: searchDropdownHover 0.2s forwards;
+}
+
+.searchDropdownNoCampground {
+  color: #ffffffc5;
+  text-align: center;
+  padding-top: 8px;
+}
+
+@keyframes searchDropdownHover {
+  from {
+    background: linear-gradient(45deg, #2534d1, #010901);
+  }
+  to {
+    background: linear-gradient(45deg, #2e3de7, #010901);
+  }
+}

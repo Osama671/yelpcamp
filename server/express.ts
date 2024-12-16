@@ -1,7 +1,5 @@
-if (process.env.NODE_ENV !== "production") {
-  const dotenv = await import("dotenv");
-  dotenv.config();
-}
+const dotenv = await import("dotenv");
+dotenv.config();
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import morgan from "morgan";
@@ -12,13 +10,16 @@ import session from "express-session";
 import campgroundRouter from "./routes/campgrounds.js";
 import reviewRouter from "./routes/reviews.js";
 import userRouter from "./routes/users.ts";
-import bookingRouter from "./routes/bookings.ts"
+import bookingRouter from "./routes/bookings.ts";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import helmet from "helmet";
 import User from "./repositories/users.ts";
 import mongoSanitize from "express-mongo-sanitize";
 import { clearCache } from "./controllers/campgrounds.ts";
+import MongoStore from "connect-mongo";
+const secret = process.env.SESSION_SECRET!;
+const dbUrl = process.env.DB_URL!;
 
 interface IExpressError extends Error {
   status: number;
@@ -26,6 +27,7 @@ interface IExpressError extends Error {
 
 interface ISessionConfig {
   secret: string;
+  store: MongoStore;
   resave: boolean;
   saveUninitialized: boolean;
   cookie: {
@@ -42,9 +44,17 @@ main()
   .then(() => console.log(`DB Connected sucessfully`))
   .catch((err) => console.log(`DB Failed to connect: ${err}`));
 
+//"mongodb://127.0.0.1:27017/myProject"
+
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/myProject");
+  await mongoose.connect(dbUrl);
 }
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: { secret: secret },
+});
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -52,7 +62,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const sessionConfig: ISessionConfig = {
-  secret: "asecret",
+  secret: secret,
+  store: store,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -73,11 +84,10 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.use(mongoSanitize());
 
 app.use("/api/", userRouter);
-app.use("/api/booking", bookingRouter)
+app.use("/api/booking", bookingRouter);
 app.use("/api/campgrounds", campgroundRouter);
 app.use("/api/campgrounds/:id/review", reviewRouter);
-clearCache()
-
+clearCache();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {

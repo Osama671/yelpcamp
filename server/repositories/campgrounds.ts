@@ -1,13 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 import cities from "../../src/seeds/cities.ts";
-import { faker } from "@faker-js/faker";
 import Review, { findReviewById } from "./review.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 import cloudinary from "../../src/cloudinary/cloudinary.ts";
 import { Booking } from "./bookings.ts";
 import { clearCache } from "../controllers/campgrounds.ts";
+import data from "../../src/seeds/seedData.ts";
 
-const seedAmount = 50;
+const seedAmount = 80;
 
 interface IImages {
   filename: string;
@@ -73,30 +73,21 @@ async function seedCampgrounds() {
   clearCache();
   Array(seedAmount)
     .fill(undefined)
-    .map(async (_, i) => {
+    .map(async () => {
       const random = Math.floor(Math.random() * 1000);
       const randomPrice = Math.floor(Math.random() * 30) + 5;
       const newCampground = new Campground({
-        title: `Title${i}`,
+        title: data.title[Math.floor(Math.random() * data.title.length)],
         location: `${cities[random].city}, ${cities[random].state}`,
-        description: `${faker.company.catchPhraseDescriptor()}, ${faker.animal.bear()}`,
+        description:
+          data.description[Math.floor(Math.random() * data.description.length)],
         images: [
-          {
-            url: `https://picsum.photos/900?random=${Math.random()}`,
-            filename: "",
-          },
-          {
-            url: `https://picsum.photos/900/1200?random=${Math.random()}`,
-            filename: "",
-          },
-          {
-            url: `https://picsum.photos/300/1500?random=${Math.random()}`,
-            filename: "",
-          },
-          {
-            url: `https://picsum.photos/1900/300?random=${Math.random()}`,
-            filename: "",
-          },
+          ...Array(Math.ceil(Math.random() * 5))
+            .fill(undefined)
+            .map(() => ({
+              url: `https://picsum.photos/900?random=${Math.random()}`,
+              filename: "",
+            })),
         ],
         geometry: {
           type: "Point",
@@ -108,7 +99,6 @@ async function seedCampgrounds() {
       await newCampground.save();
     });
 }
-seedCampgrounds();
 
 async function findAllCampgrounds(
   page: number = 1,
@@ -375,10 +365,19 @@ async function fetchCampgroundsByUserId(
 }
 
 async function fetchSearchDropdownResults(searchQuery: string) {
-  const searchResults = Campground.find({
-    title: { $regex: new RegExp(searchQuery, "i") },
-  });
-  return searchResults
+  const query: {
+    $or?: Array<{
+      title?: { $regex: RegExp };
+      location?: { $regex: RegExp };
+    }>;
+  } = {};
+
+  query.$or = [
+    { title: { $regex: new RegExp(searchQuery, "i") } },
+    { location: { $regex: new RegExp(searchQuery, "i") } },
+  ];
+  const searchResults = Campground.find(query);
+  return searchResults;
 }
 
 const campgroundModel = {

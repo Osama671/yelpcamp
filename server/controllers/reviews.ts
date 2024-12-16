@@ -1,5 +1,5 @@
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
-import model from "../repositories/mongoose.js";
+import model from "../repositories/campgrounds.js";
 import Review, { modelFetchReviewsByUserId } from "../repositories/review.ts";
 import ExpressError from "../../src/util/ExpressError.ts";
 import { Request, Response } from "express";

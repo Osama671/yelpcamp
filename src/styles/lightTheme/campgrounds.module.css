@@ -54,3 +54,41 @@
   color: rgba(108,117,125,1)
 }
 
+.searchDropdown {
+  position: absolute;
+  width: 100%;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 30vh;
+  z-index: 9999;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.searchDropdownResult {
+  padding-left: 20px;
+  padding: 1em;
+  color: black;
+  border-bottom: 0px;
+}
+
+.searchDropdownResult:hover {
+  animation: searchDropdownHover 0.2s forwards;
+}
+
+.searchDropdownNoCampground {
+  color: black;
+  text-align: center;
+  padding-top: 8px;
+}
+
+@keyframes searchDropdownHover {
+  from {
+    background-color: white;
+  }
+  to {
+    background-color: lightblue
+  }
+}
+
+

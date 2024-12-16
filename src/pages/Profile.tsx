@@ -140,8 +140,7 @@ export default function Profile() {
       e.preventDefault();
       const formData = new FormData(e.target);
 
-      const response = await axios.post("/api/changepassword", {
-        userId: user,
+      await axios.post("/api/changepassword", {
         oldPassword: formData.get("oldPassword"),
         newPassword: formData.get("newPassword"),
       });

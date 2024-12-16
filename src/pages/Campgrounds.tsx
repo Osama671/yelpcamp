@@ -120,7 +120,6 @@ export default function Campgrounds() {
         params: { searchQuery },
       });
       setDropdownSearchResults(response.data);
-      console.log("Heya:", response.data);
     } catch (e) {
       console.error(e);
     }
@@ -135,6 +134,7 @@ export default function Campgrounds() {
     getAPI();
   }, [pageCount]);
 
+  //TODO: Actually make this work properly lmao
   useEffect(() => {
     setPageNumInURL();
     async function fetchCampgroundsAPI() {
@@ -171,18 +171,21 @@ export default function Campgrounds() {
                     role="search"
                     onSubmit={handleSearch}
                     onChange={onSearchKeyStroke}
-                    onClick={() =>
-                      searchRef.current.length > 2 && setShowSearchResults(true)
-                    }
                     style={{ position: "relative" }}
                   >
                     <div className="d-flex">
                       <input
                         className={`${styles.searchBar} form-control rounded text-white`}
                         type="search"
-                        placeholder="Search..."
+                        placeholder="Search by title or location..."
                         aria-label="Search"
                         name="search"
+                        onClick={() => {
+                          if (searchRef.current.length > 2) {
+                            setShowSearchResults(true);
+                            console.log(showSearchResults);
+                          }
+                        }}
                       />
                     </div>
                     {showSearchResults && (
@@ -191,19 +194,11 @@ export default function Campgrounds() {
                           "click",
                           handleBodyClick
                         )}
-                        <div
-                          style={{
-                            position: "absolute",
-                            width: "100%",
-                            backgroundColor: "white",
-                            textAlign: "left",
-                            overflowY: "auto",
-                            maxHeight: "30vh",
-                            zIndex: "9999",
-                          }}
-                        >
+                        <div className={`${styles.searchDropdown}`}>
                           {dropdownSearchResults.length <= 0 ? (
-                            <h4 style={{ textAlign: "center" }}>
+                            <h4
+                              className={`${styles.searchDropdownNoCampground}`}
+                            >
                               No Campgrounds found :(
                             </h4>
                           ) : (
@@ -211,12 +206,12 @@ export default function Campgrounds() {
                               {dropdownSearchResults.map(
                                 (result: Campground) => (
                                   <>
-                                    <Link to={`/campground/${result._id}`}>
+                                    <Link
+                                      to={`/campground/${result._id}`}
+                                      style={{ textDecoration: "none" }}
+                                    >
                                       <div
-                                        style={{
-                                          paddingLeft: "20px",
-                                          padding: "1em",
-                                        }}
+                                        className={`${styles.searchDropdownResult}`}
                                       >
                                         {result.title}
                                       </div>

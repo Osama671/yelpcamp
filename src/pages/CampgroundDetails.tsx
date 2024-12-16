@@ -40,7 +40,7 @@ const validate = (values: IFormikValues) => {
 };
 
 export default function CampgroundDetails() {
-  const { styles: campgroundStyles, mapboxStyle } = useTheme();
+  const { styles: campgroundStyles, mapboxStyle, theme } = useTheme();
   const styles = campgroundStyles.campgroundDetails;
 
   const [startDate, setStartDate] = useState(new Date());
@@ -77,7 +77,6 @@ export default function CampgroundDetails() {
       if (showToast) {
         if (e.status === 403) {
           showToast(`${errorMessage}`, "red");
-          navigate("/login");
         }
         if (e.status === 400) {
           showToast(`${errorMessage}`, "red");
@@ -215,6 +214,7 @@ export default function CampgroundDetails() {
 
   return (
     <>
+    {console.log("Theme", theme)}
       <div className={`${styles.campgroundsWrapper} `}>
         <Navbar />
         {!campground ? (
@@ -249,7 +249,7 @@ export default function CampgroundDetails() {
                       <li
                         className={`list-group-item ${styles.listGroupItem} `}
                       >
-                        <strong>Created by:</strong>{" "}
+                        <strong>Created by: </strong>
                         {campground.author.username}
                       </li>
                       <li
@@ -428,7 +428,8 @@ export default function CampgroundDetails() {
                     </div>
                     <div>
                       <h3 className={`mt-0 ${styles.ratingHeader}`}>
-                        Rating: {formik.values.rating} stars{" "}
+                        Rating: {formik.values.rating}{" "}
+                        {formik.values.rating == 1 ? "Star" : "Stars"}
                       </h3>
                     </div>
 
@@ -445,7 +446,9 @@ export default function CampgroundDetails() {
                           style={{
                             color:
                               formik.values.review.length === 0
-                                ? "black"
+                                ? theme === "dark"
+                                  ? "white"
+                                  : "black"
                                 : formik.values.review.length > 3 &&
                                   formik.values.review.length <= 1000
                                 ? "green"
@@ -455,6 +458,7 @@ export default function CampgroundDetails() {
                           {formik.values.review.length}/1000
                         </p>
                       </div>
+                      
                       <textarea
                         className={`form-control ${styles.reviewTextarea} `}
                         rows={5}
@@ -508,7 +512,7 @@ export default function CampgroundDetails() {
                           <h6
                             className={`card-subtitle mb-2 text-muted ${styles.userReviewTitle}`}
                           >
-                            By: {review.author.username}{" "}
+                            By: {review.author.username}
                           </h6>
                           <p
                             className="starability-result"

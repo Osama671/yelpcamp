@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import ExpressError from "../../src/util/ExpressError.ts";
 import BookingRepo from "../repositories/bookings.ts";
-import CampgroundRepo from "../repositories/mongoose.ts";
+import CampgroundRepo from "../repositories/campgrounds.ts";
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.ts";
 import moment from "moment";
 

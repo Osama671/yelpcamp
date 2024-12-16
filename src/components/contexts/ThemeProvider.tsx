@@ -16,11 +16,11 @@ export const ThemeProvider = ({ children }) => {
   const changeTheme = () => {
     const newtheme = theme === "light" ? "dark" : "light";
     setTheme(newtheme);
-    setStyles(themes[theme]);
-    setMapboxStyle(mapboxTheme[theme]);
+    setStyles(themes[newtheme]);
+    setMapboxStyle(mapboxTheme[newtheme]);
   };
   return (
-    <ThemeContext.Provider value={{ styles, changeTheme, mapboxStyle }}>
+    <ThemeContext.Provider value={{ styles, changeTheme, mapboxStyle, theme }}>
       {children}
     </ThemeContext.Provider>
   );

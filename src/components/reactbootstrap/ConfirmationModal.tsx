@@ -19,7 +19,6 @@ function ConfirmationModal({
   modalItems: IModalItems;
 }) {
   const [show, setShow] = useState(false);
-  // const styles = modalItems.styles?.styles;
   const { styles: campgroundStyles } = useTheme();
   const styles = campgroundStyles.confirmationModal;
 

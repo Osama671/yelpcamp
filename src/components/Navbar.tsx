@@ -78,10 +78,11 @@ export default function Navbar({
                   onClick={(e) => {
                     if (!user) {
                       e.preventDefault();
-                      showToast(
-                        "You must be logged in to create a campground",
-                        "red"
-                      );
+                      if (showToast)
+                        showToast(
+                          "You must be logged in to create a campground",
+                          "red"
+                        );
                       setShowLogin(!showLogin);
                     }
                   }}
@@ -105,7 +106,10 @@ export default function Navbar({
                       to="#"
                       className={`${styles.navLink} active `}
                       aria-current="page"
-                      onClick={() => changeTheme()}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        changeTheme();
+                      }}
                     >
                       Switch Theme
                     </Link>

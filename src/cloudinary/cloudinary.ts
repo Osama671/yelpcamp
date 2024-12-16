@@ -1,10 +1,8 @@
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-if (process.env.NODE_ENV !== "production") {
-  const dotenv = await import("dotenv");
-  dotenv.config();
-}
+const dotenv = await import("dotenv");
+dotenv.config();
 
 interface ICloudinaries {
   cloudinary: typeof cloudinary;

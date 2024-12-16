@@ -126,9 +126,6 @@ export default function CampgroundEdit() {
           formData.append("deleteImages", values.deleteImages[i]);
         }
 
-        // for (const pair of formData.entries()) {
-        //   console.log(pair[0], pair[1]);
-        // }
         const response = await axios.post(
           `/api/campgrounds/${id}/edit`,
           formData

@@ -1,4 +1,4 @@
-import model from "../repositories/mongoose.js";
+import model from "../repositories/campgrounds.js";
 import { Request, Response } from "express";
 import ExpressErrorGeneric from "../../src/util/ExpressErrorGeneric.js";
 import ExpressError from "../../src/util/ExpressError.ts";

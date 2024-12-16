@@ -15,7 +15,7 @@ export default function RedirectBox({
   return (
     <>
       <div className="d-flex flex-column align-items-center mb-3 py-3">
-        <h1 className={`${styles.message}`}>{message}</h1>
+        <h1 className={`${styles.message} text-center`}>{message}</h1>
         <Link to={`${redirectLink}`}>
           <button className={`btn btn-success ${styles.redirectButton}`}>
             {buttonText}

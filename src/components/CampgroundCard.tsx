@@ -20,7 +20,7 @@ export default function CampgroundCard({
     <>
       <div className="row d-flex flex-column col-12 col-sm-6 col-md-4 col-lg-3 ">
         <Link
-          to={`/campground/${campground._id}`}
+          to={`/campground/${campground?._id}`}
           style={{ textDecoration: "none", color: "black" }}
         >
           <div className="col-12 ">
@@ -45,16 +45,16 @@ export default function CampgroundCard({
               <p
                 className={`card-text my-0 text-truncate ${styles?.cardAuthor}`}
               >
-                <em> By: {campground.author.username}</em>
+                <em> By: {campground.author?.username}</em>
               </p>
               <p
                 className={`card-text my-0 text-truncate ${styles?.cardLocation}`}
               >
-                Location: {campground.location}
+                Location: {campground?.location}
               </p>
 
               <p className={`card-text my-0 ${styles?.cardPrice}`}>
-                Price: ${campground.price}/night
+                Price: ${campground?.price}/night
               </p>
             </div>
           </div>
