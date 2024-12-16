@@ -5,6 +5,7 @@ A fun MERN stack project that I spent way too much time on.
 This website allows users to browse available campgrounds that are created by others, book them for certain dates and also leave reviews. A user can freely browse and explore what's available, but to book or create their own campground, they must regsiter. Users can also see all their created campgrounds, bookings and reviews in the profile page. Has both Light and Dark theme! (toooo much CSS involved)
 
 ### Live link of website yelpcamp: http://yelpcamp.zapto.org
+This website is hosted on my rented Ubuntu machine from Hetzner
 
 ### Technologies used:
 
