@@ -94,11 +94,12 @@ async function seedCampgrounds() {
           coordinates: [cities[random].longitude, cities[random].latitude],
         },
         price: randomPrice,
-        author: "66e607e21575667c3d0a7dc6",
+        author: "675f8050a44a61eb60a4487a",
       });
       await newCampground.save();
     });
 }
+seedCampgrounds();
 
 async function findAllCampgrounds(
   page: number = 1,

@@ -139,7 +139,7 @@ export default function Campgrounds() {
     setPageNumInURL();
     async function fetchCampgroundsAPI() {
       const pageTimer = new Promise((resolve) => {
-        setTimeout(() => resolve(""), 5000);
+        setTimeout(() => resolve(""), 25000);
       });
       const promiseResult = await Promise.all([fetchCampgrounds(), pageTimer]);
       if (promiseResult[0] === false) {

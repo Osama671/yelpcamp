@@ -18,7 +18,6 @@ import User from "./repositories/users.ts";
 import mongoSanitize from "express-mongo-sanitize";
 import { clearCache } from "./controllers/campgrounds.ts";
 import MongoStore from "connect-mongo";
-const secret = process.env.SESSION_SECRET!;
 const dbUrl = process.env.DB_URL!;
 
 interface IExpressError extends Error {
@@ -53,7 +52,7 @@ async function main() {
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   touchAfter: 24 * 60 * 60,
-  crypto: { secret: secret },
+  crypto: { secret: "asecret" },
 });
 
 app.use(morgan("dev"));
@@ -62,7 +61,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const sessionConfig: ISessionConfig = {
-  secret: secret,
+  secret: "asecret",
   store: store,
   resave: false,
   saveUninitialized: true,
