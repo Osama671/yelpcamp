@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "skipDefaultLibCheck": true
+    "noCheck": true
   },
   "files": [],
   "references": [
